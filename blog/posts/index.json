@@ -14,11 +14,24 @@
         "langs": ["en", "zh"]
     },
     {
-        "slug": "group-theory/01",
-        "title": { "en": "Group Theory (1) - Semigroup, Monoid, Group", "zh": "群论 (1) - 半群, 幺半群, 群" },
+        "slug": "ring-theory/01",
+        "title": { "en": "Ring Theory (1) - What is a Ring?", "zh": "环论 (1) - 什么是环?" },
         "date": "2026-04-23",
         "tag": "math",
         "langs": ["en", "zh"]
-
+    },
+    {
+        "slug": "ring-theory/02",
+        "title": { "en": "Ring Theory (2) - Arithmetics on Rings", "zh": "环论 (2) - 环上的算术" },
+        "date": "2026-04-23",
+        "tag": "math",
+        "langs": ["en", "zh"]
+    },
+    {
+        "slug": "ring-theory/03",
+        "title": { "en": "Ring Theory (3) - Ideals", "zh": "环论 (3) - 理想" },
+        "date": "2026-04-23",
+        "tag": "math",
+        "langs": ["en", "zh"]
     }
 ]

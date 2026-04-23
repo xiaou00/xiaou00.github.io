@@ -48,4 +48,24 @@
             throwOnError: false
         });
     }
+
+    // replace <lastnextpages> elements with series prev/next navigation
+    const prefix = slug.includes('/') ? slug.slice(0, slug.lastIndexOf('/') + 1) : null;
+    const series = prefix ? posts.filter(p => p.slug.startsWith(prefix)) : [];
+    const idx = series.findIndex(p => p.slug === slug);
+    const page = lang === 'zh' ? 'post.zh.html' : 'post.html';
+    for (const el of main.querySelectorAll('lastnextpages')) {
+        const prev = idx > 0 ? series[idx - 1] : null;
+        const next = idx < series.length - 1 ? series[idx + 1] : null;
+        const prevHtml = prev
+            ? `<a href="${page}?slug=${prev.slug}">[← ${prev.title?.[lang] ?? prev.title?.en}]</a>`
+            : '<span></span>';
+        const nextHtml = next
+            ? `<a href="${page}?slug=${next.slug}">[${next.title?.[lang] ?? next.title?.en} →]</a>`
+            : '<span></span>';
+        const nav = document.createElement('nav');
+        nav.className = 'post-nav';
+        nav.innerHTML = prevHtml + nextHtml;
+        el.replaceWith(nav);
+    }
 })();
