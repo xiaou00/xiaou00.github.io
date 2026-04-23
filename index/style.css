@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ── Light palette from neovim theme ──────────────────────────────────────── *
+ *  bg   #ffffff   bg2  #eeeeee   bg3  #e4e4e4                                *
+ *  fg   #111111   fg2  #444444   fg3  #777777                                *
+ *  red  #cc0000   blue #0055cc   teal #007777                                *
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "JetBrains Mono", monospace;
+    background: #ffffff;
+    color: #111111;
+    line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ── Header ── */
+header {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+header p {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    color: #777777;
+}
+
+header nav {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.2rem;
+}
+
+header nav a {
+    font-size: 0.85rem;
+    color: #444444;
+    transition: color 0.15s;
+}
+
+header nav a:hover { color: #cc0000; }
+
+/* ── Post list ── */
+main { padding: 2rem 0 4rem; }
+
+.year-group { margin-bottom: 2.5rem; }
+
+.year-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #777777;
+    margin-bottom: 0.8rem;
+}
+
+.post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-item {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.post-item:first-child { border-top: 1px solid #e4e4e4; }
+
+.post-date {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    color: #777777;
+    width: 4.5rem;
+}
+
+.post-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.15s;
+}
+
+.post-item:hover .post-title { color: #cc0000; }
+
+.post-tag {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    color: #007777;
+    background: #eeeeee;
+    border-radius: 3px;
+    padding: 0.1rem 0.45rem;
+}
+
+/* ── Single post ── */
+.post-header { padding: 3.5rem 0 1.5rem; }
+
+.post-header h1 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+}
+
+.post-meta {
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    color: #777777;
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.post-meta .post-tag { margin-left: 0; }
+
+.post-body {
+    padding: 1.5rem 0 4rem;
+    border-top: 1px solid #e4e4e4;
+}
+
+.post-body h2 { font-size: 1.1rem; margin: 2rem 0 0.6rem; color: #111111; }
+.post-body h3 { font-size: 0.95rem; margin: 1.5rem 0 0.4rem; color: #444444; }
+.post-body p  { margin-bottom: 1rem; font-size: 0.95rem; }
+.post-body ul, .post-body ol { margin: 0 0 1rem 1.4rem; font-size: 0.95rem; }
+.post-body li { margin-bottom: 0.3rem; }
+.post-body a  { color: #0055cc; text-decoration: underline; text-underline-offset: 2px; }
+
+.post-body code {
+    font-family: inherit;
+    font-size: 0.85em;
+    background: #eeeeee;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+}
+
+.post-body pre {
+    background: #eeeeee;
+    border: 1px solid #e4e4e4;
+    border-radius: 5px;
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    margin-bottom: 1.2rem;
+}
+
+.post-body pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.85rem;
+    color: #444444;
+}
+
+.post-body blockquote {
+    border-left: 3px solid #e4e4e4;
+    padding-left: 1rem;
+    color: #777777;
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    color: #777777;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+}
+
+.back-link:hover { color: #cc0000; }
+
+/* ── Footer ── */
+footer {
+    padding: 1.5rem 0;
+    border-top: 1px solid #e4e4e4;
+    font-size: 0.8rem;
+    color: #777777;
+}
