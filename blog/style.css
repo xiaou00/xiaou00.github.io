@@ -56,7 +56,7 @@ header nav a {
 
 header nav a:hover { color: #cc0000; }
 
-.lang-sep { color: #e4e4e4; font-size: 0.85rem; }
+.lang-sep { color: #e4e4e4; font-size: 0.85rem; margin-left: auto; }
 
 .lang-active { color: #cc0000 !important; }
 
@@ -199,4 +199,24 @@ footer {
     border-top: 1px solid #e4e4e4;
     font-size: 0.8rem;
     color: #777777;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+    header { padding: 2rem 0 1.2rem; }
+
+    header nav {
+        flex-wrap: wrap;
+        gap: 0 0.8rem;
+    }
+
+    header nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.5rem;
+    }
+
+    .lang-sep { display: none; }
+
+    .post-tag { display: none; }
 }

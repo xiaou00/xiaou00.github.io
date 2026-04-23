@@ -261,21 +261,58 @@ a { color: inherit; text-decoration: none; }
     border-top: 1px solid #e4e4e4;
 }
 
+/* ── KaTeX: allow horizontal scroll on display math ── */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25rem 0; }
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
     body { display: flex; flex-direction: column; }
 
     .sidebar {
-        position: static;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #ffffff;
         width: 100%;
         height: auto;
         border-right: none;
         border-bottom: 1px solid #e4e4e4;
-        padding: 1.5rem 1.2rem;
+        padding: 0.75rem 1rem;
     }
 
-    .sidebar-inner { flex-direction: row; align-items: center; gap: 1.5rem; }
-    .sidebar nav   { flex-direction: row; }
+    .sidebar-inner {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+    }
 
-    .content { margin-left: 0; padding: 2rem 1.2rem 3rem; }
+    .site-title { font-size: 0.88rem; }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.2rem 0.7rem;
+    }
+
+    .sidebar nav a,
+    .post-nav a { padding: 0.25rem 0; }
+
+    .lang-nav {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        padding-left: 0.7rem;
+        border-left: 1px solid #e4e4e4;
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 1.5rem 1rem 3rem;
+        overflow-wrap: break-word;
+    }
+
+    .content h1 { font-size: 1.4rem; }
+
+    .post-nav { flex-direction: column; gap: 0.6rem; }
 }
