@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xiaou0 的博客</title>
+    <title> xiaou0的博客</title>
     <link rel="icon" href="resources/icon.png">
     <link rel="stylesheet" href="post.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -12,9 +12,10 @@
     <aside class="sidebar">
         <div class="sidebar-inner">
             <a class="site-title" href="index.zh.html">
-                <span class="site-title-hash" aria-hidden="true"># </span>xiaou0 的博客
+                <span class="site-title-hash" aria-hidden="true"># </span>xiaou0的博客
             </a>
             <nav>
+                <button class="nav-toggle">[-]</button>
                 <a href="index.zh.html">[首页]</a>
                 <a href="http://localhost:8080/post.zh.html?slug=about">[关于]</a>
                 <a href="https://github.com/xiaou00/xiaou00.github.io">[GitHub]</a>
@@ -39,6 +40,12 @@
             document.getElementById('lang-en').href = 'post.html?slug=' + slug;
             document.getElementById('lang-zh').href = 'post.zh.html?slug=' + slug;
         }
+        document.querySelectorAll('.nav-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const collapsed = btn.closest('.sidebar').classList.toggle('collapsed');
+                btn.textContent = collapsed ? '[+]' : '[-]';
+            });
+        });
     </script>
 </body>
 </html>

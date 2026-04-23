@@ -15,6 +15,7 @@
                 <span class="site-title-hash" aria-hidden="true"># </span>xiaou0's blog
             </a>
             <nav>
+                <button class="nav-toggle">[-]</button>
                 <a href="index.html">[Home]</a>
                 <a href="http://localhost:8080/post.html?slug=about">[About]</a>
                 <a href="https://github.com/xiaou00/xiaou00.github.io">[GitHub]</a>
@@ -39,6 +40,12 @@
             document.getElementById('lang-en').href = 'post.html?slug=' + slug;
             document.getElementById('lang-zh').href = 'post.zh.html?slug=' + slug;
         }
+        document.querySelectorAll('.nav-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const collapsed = btn.closest('.sidebar').classList.toggle('collapsed');
+                btn.textContent = collapsed ? '[+]' : '[-]';
+            });
+        });
     </script>
 </body>
 </html>
