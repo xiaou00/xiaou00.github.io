@@ -52,6 +52,7 @@ header nav {
 header nav a {
     font-size: 0.85rem;
     color: #444444;
+    white-space: nowrap;
     transition: color 0.15s;
 }
 
