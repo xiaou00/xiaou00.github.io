@@ -405,15 +405,13 @@ a { color: inherit; text-decoration: none; }
 
     .post-meta { flex-wrap: wrap; gap: 0.5rem; }
 
-    /* mobile: don't collapse to thin strip, just hide nav links */
+    /* mobile: fold up to a compact bar with just [+] */
     .sidebar.collapsed {
         width: 100%;
-        padding: 0.6rem 1.1rem 0.5rem;
+        padding: 0 1.1rem;
         align-items: unset;
-        overflow: unset;
+        overflow: hidden;
     }
-
-    .sidebar.collapsed .site-title { display: flex; }
 
     .sidebar.collapsed ~ .content { margin-left: 0; }
 }
