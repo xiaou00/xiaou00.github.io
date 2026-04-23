@@ -2,7 +2,7 @@
 set -e
 
 PORT=${PORT:-8080}
-DIR="$(cd "$(dirname "$0")" && pwd)/index"
+DIR="$(cd "$(dirname "$0")" && pwd)/blog"
 
 if command -v python3 &>/dev/null; then
   echo "Serving at http://localhost:$PORT"

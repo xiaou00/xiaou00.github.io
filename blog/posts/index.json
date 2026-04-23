@@ -1,0 +1,24 @@
+[
+    {
+        "slug": "about",
+        "title": { "en": "About the Blog", "zh": "关于这个博客" },
+        "date": "2026-04-23",
+        "tag": "meta",
+        "langs": ["en", "zh"]
+    },
+    {
+        "slug": "algebra-1",
+        "title": { "en": "Introduction to Algebra - Abstraaaaaaction!!", "zh": "代数导论 - 玩的就是抽象!" },
+        "date": "2026-04-23",
+        "tag": "math",
+        "langs": ["en", "zh"]
+    },
+    {
+        "slug": "group-theory/01",
+        "title": { "en": "Group Theory (1) - Semigroup, Monoid, Group", "zh": "群论 (1) - 半群, 幺半群, 群" },
+        "date": "2026-04-23",
+        "tag": "math",
+        "langs": ["en", "zh"]
+
+    }
+]

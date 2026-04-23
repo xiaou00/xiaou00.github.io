@@ -14,8 +14,6 @@ body {
     background: #ffffff;
     color: #111111;
     line-height: 1.6;
-    display: flex;
-    min-height: 100vh;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -72,10 +70,11 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Main content ── */
 .content {
-    margin-left: 200px;
-    flex: 1;
+    margin-left: 250px;
+    margin-right: 50px;
     padding: 3.5rem 4rem 4rem;
-    max-width: 760px;
+    min-height: 100vh;
+    counter-reset: definition theorem;
 }
 
 /* ── Markdown typography ── */
@@ -87,14 +86,22 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 0.5rem;
 }
 
+.content h1::before { content: "# ";   color: #cc0000; }
+.content h2::before { content: "## ";  color: #cc0000; }
+.content h3::before { content: "### "; color: #cc0000; }
+
 .content h2 { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 0.6rem; }
 .content h3 { font-size: 0.95rem; font-weight: 700; margin: 1.5rem 0 0.4rem; color: #444444; }
 
-.content p  { font-size: 0.95rem; margin-bottom: 1rem; }
+.content p  { margin-bottom: 1rem; }
 
-.content ul,
+.content ul  { margin: 0.3rem 0 0.3rem 0; font-size: 0.95rem; list-style: none; }
 .content ol  { margin: 0 0 1rem 1.4rem; font-size: 0.95rem; }
-.content li  { margin-bottom: 0.3rem; }
+.content ul > li { margin-bottom: 0.3rem; padding-left: 1.2rem; position: relative; }
+.content ul > li::before { content: ">"; position: absolute; left: 0; color: #cc0000; }
+.content ol > li { margin-bottom: 0.3rem; }
+
+.content .katex { font-size: 1.1em; }
 
 .content a   { color: #0055cc; text-decoration: underline; text-underline-offset: 2px; }
 .content a:hover { color: #cc0000; }
@@ -136,6 +143,93 @@ a { color: inherit; text-decoration: none; }
     margin: 2rem 0;
 }
 
+/* ── Math environments ── */
+.content definition,
+.content theorem,
+.content lemma,
+.content proposition,
+.content corollary,
+.content proof {
+    display: block;
+    margin: 1.4rem 0;
+    padding: 0.5rem 0 0.5rem 1rem;
+    font-size: 0.95rem;
+}
+
+.content definition {
+    border-left: 3px solid #0055cc;
+    counter-increment: definition;
+}
+
+.content definition::before {
+    content: "Definition " counter(definition) ". ";
+    font-weight: 700;
+    color: #0055cc;
+}
+
+:lang(zh) .content definition::before { content: "定义 " counter(definition) ". "; }
+
+.content theorem,
+.content lemma,
+.content proposition,
+.content corollary {
+    border-left: 3px solid #007777;
+    counter-increment: theorem;
+}
+
+.content theorem::before {
+    content: "Theorem " counter(theorem) ". ";
+    font-weight: 700;
+    color: #007777;
+}
+
+:lang(zh) .content theorem::before { content: "定理 " counter(theorem) ". "; }
+
+.content lemma::before {
+    content: "Lemma " counter(theorem) ". ";
+    font-weight: 700;
+    color: #007777;
+}
+
+:lang(zh) .content lemma::before { content: "引理 " counter(theorem) ". "; }
+
+.content proposition::before {
+    content: "Proposition " counter(theorem) ". ";
+    font-weight: 700;
+    color: #007777;
+}
+
+:lang(zh) .content proposition::before { content: "命题 " counter(theorem) ". "; }
+
+.content corollary::before {
+    content: "Corollary " counter(theorem) ". ";
+    font-weight: 700;
+    color: #007777;
+}
+
+:lang(zh) .content corollary::before { content: "推论 " counter(theorem) ". "; }
+
+.content proof {
+    border-left: 3px solid #e4e4e4;
+    color: #111111;
+}
+
+.content proof::before {
+    content: "Proof. ";
+    font-weight: 700;
+    color: #444444;
+}
+
+:lang(zh) .content proof::before { content: "证明. "; }
+
+.content proof::after {
+    content: "Q.E.D.";
+    display: block;
+    text-align: right;
+    color: #444444;
+    margin-top: 0.3rem;
+}
+
 .post-meta {
     font-size: 0.82rem;
     color: #777777;
@@ -157,7 +251,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Responsive ── */
 @media (max-width: 640px) {
-    body { flex-direction: column; }
+    body { display: flex; flex-direction: column; }
 
     .sidebar {
         position: static;

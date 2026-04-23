@@ -141,6 +141,10 @@ main { padding: 2rem 0 4rem; }
     border-top: 1px solid #e4e4e4;
 }
 
+.post-body h1::before { content: "# ";   color: #cc0000; }
+.post-body h2::before { content: "## ";  color: #cc0000; }
+.post-body h3::before { content: "### "; color: #cc0000; }
+
 .post-body h2 { font-size: 1.1rem; margin: 2rem 0 0.6rem; color: #111111; }
 .post-body h3 { font-size: 0.95rem; margin: 1.5rem 0 0.4rem; color: #444444; }
 .post-body p  { margin-bottom: 1rem; font-size: 0.95rem; }

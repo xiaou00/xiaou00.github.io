@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>xiaou0 的博客</title>
     <link rel="stylesheet" href="post.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 </head>
 <body>
     <aside class="sidebar">
@@ -15,7 +16,8 @@
             <nav>
                 <a href="index.zh.html">[首页]</a>
                 <a href="index.zh.html">[文章]</a>
-                <a href="post.zh.html?slug=hello-world">[关于]</a>
+                <a href="http://localhost:8080/post.zh.html?slug=about">[关于]</a>
+                <a href="https://github.com/xiaou00/xiaou00.github.io">[GitHub]</a>
             </nav>
             <nav class="lang-nav">
                 <a id="lang-en" href="post.html">[English]</a>
@@ -28,6 +30,9 @@
         <!-- 文章内容在此渲染 -->
     </main>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <script defer src="js/render-post.js"></script>
     <script>
         const slug = new URLSearchParams(location.search).get('slug');
         if (slug) {
