@@ -264,24 +264,6 @@ a { color: inherit; text-decoration: none; }
 /* ── KaTeX: allow horizontal scroll on display math ── */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25rem 0; }
 
-/* ── Nav toggle ── */
-.nav-toggle {
-    background: none;
-    border: none;
-    font-family: inherit;
-    font-size: 0.82rem;
-    color: #777777;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.15s;
-    align-self: flex-start;
-    line-height: 1.6;
-}
-
-.nav-toggle:hover { color: #cc0000; }
-
-nav.collapsed > a { display: none; }
-
 /* ── Responsive ── */
 @media (max-width: 640px) {
     body { display: flex; flex-direction: column; }
