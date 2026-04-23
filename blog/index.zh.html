@@ -10,21 +10,22 @@
 <body>
     <div class="container">
         <header>
-            <h1><color style="color: #cc0000;">#</color> xiaou0的博客</h1>
-            
-            <p>// 数学笔记, 以及其他一些东西.</p>
-            <br>
-            <nav>
+            <div class="header-top">
+                <h1><span style="color:#cc0000">#</span> xiaou0的博客</h1>
+                <nav class="lang-nav">
+                    <a href="index.html">[English]</a>
+                    <a href="index.zh.html" class="lang-active">[中文]</a>
+                </nav>
+            </div>
+            <p class="header-desc">// 数学笔记, 以及其他一些东西.</p>
+            <nav class="header-nav">
                 <a href="index.zh.html">[首页]</a>
-                <a href="http://localhost:8080/post.zh.html?slug=about">[关于]</a>
+                <a href="post.zh.html?slug=about">[关于]</a>
                 <a href="https://github.com/xiaou00/xiaou00.github.io">[GitHub]</a>
-                <span class="lang-sep">|</span>
-                <a href="index.html">[English]</a>
-                <a href="index.zh.html" class="lang-active">[中文]</a>
             </nav>
         </header>
 
-        <main id="post-list"></main> <!-- 文章列表 -->
+        <main id="post-list"></main>
 
         <footer>&copy; 2026 xiaou0</footer>
     </div>

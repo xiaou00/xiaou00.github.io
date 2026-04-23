@@ -10,21 +10,22 @@
 <body>
     <div class="container">
         <header>
-            <h1><color style="color: #cc0000;">#</color> xiaou0's Blog</h1>
-
-            <p>// Notes on mathematics, and something else.</p>
-            <br>
-            <nav>
+            <div class="header-top">
+                <h1><span style="color:#cc0000">#</span> xiaou0's Blog</h1>
+                <nav class="lang-nav">
+                    <a href="index.html" class="lang-active">[English]</a>
+                    <a href="index.zh.html">[中文]</a>
+                </nav>
+            </div>
+            <p class="header-desc">// Notes on mathematics, and something else.</p>
+            <nav class="header-nav">
                 <a href="index.html">[Home]</a>
-                <a href="http://localhost:8080/post.html?slug=about">[About]</a>
+                <a href="post.html?slug=about">[About]</a>
                 <a href="https://github.com/xiaou00/xiaou00.github.io">[GitHub]</a>
-                <span class="lang-sep">|</span>
-                <a href="index.html" class="lang-active">[English]</a>
-                <a href="index.zh.html">[中文]</a>
             </nav>
         </header>
 
-        <main id="post-list"></main> <!-- A List of Posts -->
+        <main id="post-list"></main>
 
         <footer>&copy; 2026 xiaou0</footer>
     </div>

@@ -277,33 +277,49 @@ a { color: inherit; text-decoration: none; }
         height: auto;
         border-right: none;
         border-bottom: 1px solid #e4e4e4;
-        padding: 0.75rem 1rem;
+        padding: 0.6rem 1rem;
     }
 
+    /* Grid: title+lang on row 1, main nav on row 2 */
     .sidebar-inner {
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: 1fr auto;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 0.4rem 1rem;
+        row-gap: 0.2rem;
     }
 
-    .site-title { font-size: 0.88rem; }
-
-    .sidebar nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.2rem 0.7rem;
+    .site-title {
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 0.9rem;
     }
-
-    .sidebar nav a,
-    .post-nav a { padding: 0.25rem 0; }
 
     .lang-nav {
+        grid-column: 2;
+        grid-row: 1;
+        flex-direction: row;
         margin-top: 0;
         padding-top: 0;
         border-top: none;
         padding-left: 0.7rem;
         border-left: 1px solid #e4e4e4;
+        gap: 0.5rem;
+    }
+
+    .sidebar nav:not(.lang-nav) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0 0.7rem;
+    }
+
+    .sidebar nav a,
+    .post-nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.2rem;
+        white-space: nowrap;
     }
 
     .content {
