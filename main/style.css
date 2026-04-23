@@ -1,4 +1,5 @@
-import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css');
 
 /* ── Light palette from neovim theme ──────────────────────────────────────── *
  *  bg   #ffffff   bg2  #eeeeee   bg3  #e4e4e4                                *
@@ -9,7 +10,7 @@ import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: "JetBrains Mono", monospace;
+    font-family: "JetBrains Mono", "LXGW WenKai Screen", monospace;
     background: #ffffff;
     color: #111111;
     line-height: 1.6;
@@ -54,6 +55,10 @@ header nav a {
 }
 
 header nav a:hover { color: #cc0000; }
+
+.lang-sep { color: #e4e4e4; font-size: 0.85rem; }
+
+.lang-active { color: #cc0000 !important; }
 
 /* ── Post list ── */
 main { padding: 2rem 0 4rem; }

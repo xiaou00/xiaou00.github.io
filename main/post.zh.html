@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xiaou0 的博客</title>
+    <link rel="stylesheet" href="post.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-inner">
+            <a class="site-title" href="index.zh.html">
+                <span class="site-title-hash" aria-hidden="true"># </span>xiaou0 的博客
+            </a>
+            <nav>
+                <a href="index.zh.html">[首页]</a>
+                <a href="index.zh.html">[文章]</a>
+                <a href="post.zh.html?slug=hello-world">[关于]</a>
+            </nav>
+            <nav class="lang-nav">
+                <a id="lang-en" href="post.html">[English]</a>
+                <a id="lang-zh" href="post.zh.html" class="lang-active">[中文]</a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="content">
+        <!-- 文章内容在此渲染 -->
+    </main>
+
+    <script>
+        const slug = new URLSearchParams(location.search).get('slug');
+        if (slug) {
+            document.getElementById('lang-en').href = 'post.html?slug=' + slug;
+            document.getElementById('lang-zh').href = 'post.zh.html?slug=' + slug;
+        }
+    </script>
+</body>
+</html>

@@ -9,12 +9,17 @@
 <body>
     <aside class="sidebar">
         <div class="sidebar-inner">
-            <a class="site-title" href="../index/index.html">
+            <a class="site-title" href="index.html">
                 <span class="site-title-hash" aria-hidden="true"># </span>xiaou0's blog
             </a>
             <nav>
                 <a href="index.html">[Home]</a>
+                <a href="index.html">[Post]</a>
                 <a href="post.html?slug=hello-world">[About]</a>
+            </nav>
+            <nav class="lang-nav">
+                <a id="lang-en" href="post.html" class="lang-active">[English]</a>
+                <a id="lang-zh" href="post.zh.html">[中文]</a>
             </nav>
         </div>
     </aside>
@@ -22,5 +27,13 @@
     <main class="content">
         <!-- markdown content rendered here -->
     </main>
+
+    <script>
+        const slug = new URLSearchParams(location.search).get('slug');
+        if (slug) {
+            document.getElementById('lang-en').href = 'post.html?slug=' + slug;
+            document.getElementById('lang-zh').href = 'post.zh.html?slug=' + slug;
+        }
+    </script>
 </body>
 </html>
