@@ -163,14 +163,6 @@ a { color: inherit; text-decoration: none; }
     counter-increment: definition;
 }
 
-.content definition::before {
-    content: "Definition " counter(definition) ". ";
-    font-weight: 700;
-    color: #0055cc;
-}
-
-:lang(zh) .content definition::before { content: "定义 " counter(definition) ". "; }
-
 .content theorem,
 .content lemma,
 .content proposition,
@@ -179,50 +171,59 @@ a { color: inherit; text-decoration: none; }
     counter-increment: theorem;
 }
 
-.content theorem::before {
-    content: "Theorem " counter(theorem) ". ";
+/* Labels: block-level so content starts on next line */
+.content definition::before,
+.content theorem::before,
+.content lemma::before,
+.content proposition::before,
+.content corollary::before,
+.content proof::before {
+    display: block;
     font-weight: 700;
-    color: #007777;
+    margin-bottom: 0.3rem;
 }
 
-:lang(zh) .content theorem::before { content: "定理 " counter(theorem) ". "; }
+.content definition::before              { color: #0055cc; }
+.content theorem::before,
+.content lemma::before,
+.content proposition::before,
+.content corollary::before               { color: #007777; }
+.content proof::before                   { color: #444444; }
 
-.content lemma::before {
-    content: "Lemma " counter(theorem) ". ";
-    font-weight: 700;
-    color: #007777;
-}
+/* English — without name */
+.content definition:not([name])::before  { content: "Definition " counter(definition) "."; }
+.content theorem:not([name])::before     { content: "Theorem "    counter(theorem) "."; }
+.content lemma:not([name])::before       { content: "Lemma "      counter(theorem) "."; }
+.content proposition:not([name])::before { content: "Proposition " counter(theorem) "."; }
+.content corollary:not([name])::before   { content: "Corollary "  counter(theorem) "."; }
+.content proof::before                   { content: "Proof."; }
 
-:lang(zh) .content lemma::before { content: "引理 " counter(theorem) ". "; }
+/* English — with name */
+.content definition[name]::before        { content: "Definition " counter(definition) " (" attr(name) ")."; }
+.content theorem[name]::before           { content: "Theorem "    counter(theorem) " (" attr(name) ")."; }
+.content lemma[name]::before             { content: "Lemma "      counter(theorem) " (" attr(name) ")."; }
+.content proposition[name]::before       { content: "Proposition " counter(theorem) " (" attr(name) ")."; }
+.content corollary[name]::before         { content: "Corollary "  counter(theorem) " (" attr(name) ")."; }
 
-.content proposition::before {
-    content: "Proposition " counter(theorem) ". ";
-    font-weight: 700;
-    color: #007777;
-}
+/* Chinese — without name */
+:lang(zh) .content definition:not([name])::before  { content: "定义 " counter(definition) "."; }
+:lang(zh) .content theorem:not([name])::before      { content: "定理 " counter(theorem) "."; }
+:lang(zh) .content lemma:not([name])::before        { content: "引理 " counter(theorem) "."; }
+:lang(zh) .content proposition:not([name])::before  { content: "命题 " counter(theorem) "."; }
+:lang(zh) .content corollary:not([name])::before    { content: "推论 " counter(theorem) "."; }
+:lang(zh) .content proof::before                    { content: "证明."; }
 
-:lang(zh) .content proposition::before { content: "命题 " counter(theorem) ". "; }
-
-.content corollary::before {
-    content: "Corollary " counter(theorem) ". ";
-    font-weight: 700;
-    color: #007777;
-}
-
-:lang(zh) .content corollary::before { content: "推论 " counter(theorem) ". "; }
+/* Chinese — with name */
+:lang(zh) .content definition[name]::before         { content: "定义 " counter(definition) " (" attr(name) ")."; }
+:lang(zh) .content theorem[name]::before             { content: "定理 " counter(theorem) " (" attr(name) ")."; }
+:lang(zh) .content lemma[name]::before               { content: "引理 " counter(theorem) " (" attr(name) ")."; }
+:lang(zh) .content proposition[name]::before         { content: "命题 " counter(theorem) " (" attr(name) ")."; }
+:lang(zh) .content corollary[name]::before           { content: "推论 " counter(theorem) " (" attr(name) ")."; }
 
 .content proof {
     border-left: 3px solid #e4e4e4;
     color: #111111;
 }
-
-.content proof::before {
-    content: "Proof. ";
-    font-weight: 700;
-    color: #444444;
-}
-
-:lang(zh) .content proof::before { content: "证明. "; }
 
 .content proof::after {
     content: "Q.E.D.";

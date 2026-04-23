@@ -1,1 +1,28 @@
+我们来看一下环论中基本的运算规律, 基本上, 环上运算规律和我们对于数的直觉相符. 本节中我们来介绍一些琐碎的定理, 这些定理在后续的章节中会经常用到. 这些定理的证明都非常简单, 但是它们的结论却非常重要.
+
+<h2>二项式定理</h2>
+
+<theorem name="二项式定理">
+对于环 $R$ 中的任意元素 $a,b$ 和任意非负整数 $n$, 有
+$$(a+b)^n =\sum_{k=0}^n \binom{n}{k} a^k b^{n-k}$$
+</theorem>
+
+<proof>
+我们使用数学归纳法来证明这个定理. 当 $n=0$ 时, 等式左边为 $1$, 右边也为 $1$, 因此等式成立. 假设当 $n=k$ 时等式成立, 即
+$$(a+b)^k =\sum_{j=0}^k \binom{k}{j} a^j b^{k-j}$$
+我们来证明当 $n=k+1$ 时等式也成立. 根据定义, 我们有
+$$
+\begin{aligned}
+(a+b)^{k+1} &= (a+b)(a+b)^k \\
+&= (a+b)\sum_{j=0}^k \binom{k}{j} a^j b^{k-j} \\
+&= \sum_{j=0}^k \binom{k}{j} a^{j+1} b^{k-j} + \sum_{j=0}^k \binom{k}{j} a^j b^{k-j+1} \\
+&= \sum_{j=1}^{k+1} \binom{k}{j-1} a^j b^{k+1-j} + \sum_{j=0}^k \binom{k}{j} a^j b^{k+1-j} \\
+&= \sum_{j=0}^{k+1} \left( \binom{k}{j-1} + \binom{k}{j} \right) a^j b^{k+1-j} \\
+&= \sum_{j=0}^{k+1} \binom{k+1}{j} a^j b^{k+1-j}
+\end{aligned}
+$$
+其中, 在第四步中我们将两个求和式合并, 并且在第五步中我们使用了二项式系数的性质 $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$. 因此, 当 $n=k+1$ 时等式也成立. 根据数学归纳法, 二项式定理对于所有非负整数 $n$ 都成立.
+</proof>
+
+
 <lastnextpages></lastnextpages>

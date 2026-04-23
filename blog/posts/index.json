@@ -28,10 +28,10 @@
         "langs": ["en", "zh"]
     },
     {
-        "slug": "ring-theory/03",
-        "title": { "en": "Ring Theory (3) - Ideals", "zh": "环论 (3) - 理想" },
-        "date": "2026-04-23",
-        "tag": "math",
+        "slug": "algebraic-geometry-misc/jacobian-matrix-on-variety",
+        "title": { "en": "Jacobian Matrix on Varieties", "zh": "代数簇上的Jacobi矩阵" },
+        "date": "2026-04-24",
+        "tag": ["math"],
         "langs": ["en", "zh"]
     }
 ]
