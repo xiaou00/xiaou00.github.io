@@ -1,0 +1,109 @@
+<p>
+接下来我们来逐步分析如何开始搭建Minecraft Mod项目. 此教程基于Arch Linux系统, 但大多数步骤在其他操作系统上也适用. 我个人习惯使用NeoVim作为代码编辑器, 但你也可以使用任何你喜欢的IDE, 如IntelliJ IDEA或Eclipse. 在这个教程中, 我将使用命令行工具来展示如何设置项目结构和编译代码, 以帮助你更好地理解整个过程. 
+</p>
+
+<h2>什么是MDK?</h2>
+
+<p>
+<b>MDK</b> (Mod Development Kit) 是一个包含了必要工具和模板的包, 用于帮助开发者快速开始Minecraft Mod开发. MDK通常包含了一个预配置的Gradle项目, 以及一些示例代码和资源, 以便开发者可以直接开始编写他们的Mod. 一般来说, 开发模组的第一步就是下载MDK.
+</p>
+
+<p>
+我们可以在<a href="https://github.com/NeoForgeMDKs">MDK的GitHub页面</a>直接下载我们需要的版本, 在此不过多赘述了. 本教程选用MDK-26.1.2-NeoGradle来进行演示. 首先, <code>cd</code> 进入你的终端命令行, 接着执行git clone
+</p>
+
+<pre><code class="language-bash">git clone git@github.com:NeoForgeMDKs/MDK-26.1.2-NeoGradle.git</code></pre>
+
+<p>
+接下来你可以修改这个文件夹的名称, 以便更好地识别你的项目. 例如, 你可以将它重命名为 <code>MyMod</code>. 然后, 进入这个文件夹, 你会看到一个预配置的Gradle项目结构, 类似这样:
+</p>
+
+<box name="项目结构">
+<ul>
+    <li>gradle/ <span style="float:right">Gradle Wrapper相关文件夹</span></li>
+    <li>src/ <span style="float:right">源代码文件夹</div></li>
+    <li>build.gradle <span style="float:right">Gradle构建脚本</span></li>
+    <li>gradle.properties <span style="float:right">Gradle属性文件</span></li>
+    <li>gradlew <span style="float:right">Gradle Wrapper脚本 (Linux/Mac)</span></li>
+    <li>gradlew.bat <span style="float:right">Gradle Wrapper脚本 (Windows)</span></li>
+    <li>README.md <span style="float:right">项目说明文件(可以忽略)</span></li>
+    <li>settings.gradle <span style="float:right">Gradle设置文件</span></li>
+    <li>TEMPLATE_LICENSE <span style="float:right">许可证模板文件(可以忽略)</span></li>
+</ul>
+</box>
+
+<h2>gradle.properties</h2>
+
+<p>
+现在我们创建了一个空的Minecraft Mod项目, 接下来我们需要进行一些基本的配置. 首先, 打开 <code>gradle.properties</code> 文件, 你会看到一些预定义的属性, 这些属性用于配置你的Mod的基本信息,如下:</p>
+
+<pre><code class="language-properties">org.gradle.jvmargs=-Xmx1G
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.configuration-cache=true
+
+minecraft_version=26.1.2
+minecraft_version_range=[26.1.2]
+neo_version=26.1.2.22-beta
+
+mod_id=examplemod
+mod_name=Example Mod
+mod_license=All Rights Reserved
+mod_version=1.0.0
+mod_group_id=com.example.examplemod
+</code></pre>
+
+<p>
+这个文件大体可以分为三个部分, 第一部分 <code>org.gradle</code> 开头的属性是Gradle的配置, 决定了Gradle的运行参数和行为. 第二部分是Minecraft版本相关的配置, 你可以根据你想要开发的Minecraft版本来修改这些属性. 第三部分是你的Mod的基本信息, 包括Mod ID、名称、许可证、版本和Group ID. 你需要根据你的Mod的实际情况来修改这些属性, 以便正确地构建和发布你的Mod.
+</p>
+
+<p>
+重点来关注一下第三部分:
+<ul>
+    <li><code>mod_id</code>: 这是你的Mod的唯一标识符, 通常使用小写字母和下划线. 例如, 如果你的Mod叫做 "Example Mod", 那么你可以将它设置为 <code>examplemod</code>.</li>
+    <li><code>mod_name</code>: 这是你的Mod的显示名称, 可以包含空格和大写字母. 例如, "Example Mod".</li>
+    <li><code>mod_license</code>: 这是你的Mod的许可证信息, 你可以选择一个开源许可证或者使用 "All Rights Reserved" 来表示保留所有权利.</li>
+    <li><code>mod_version</code>: 这是你的Mod的版本号, 通常使用语义化版本控制 (SemVer) 的格式, 如 <code>1.0.0</code>.</li>
+    <li><code>mod_group_id</code>: 这是你的Mod的Group ID, 通常使用反向域名的格式, 如 <code>com.example.examplemod</code>.</li>
+</ul>
+
+修改完这些后, 你就完成了你的Mod的基本配置. 恭喜你! 我们的Mod已经可以被构建了.
+
+<h2>构建项目</h2>
+
+<p>
+现在我们已经完成了Mod的基本配置, 接下来我们来构建我们的项目. 首先确保你安装了对应版本的Java开发工具包 (JDK), NeoForge通常需要Java 17或更高版本. 你可以在终端中运行以下命令来检查你的Java版本:
+</p>
+<pre><code class="language-bash">java -version</code></pre>
+<p>如果你没有安装Java, 或者你的Java版本过低 (或过高, 我第一次安装的时候发现这玩意不支持Java 26), 你需要先安装对应的版本. 例如对于演示的版本, 我们需要安装Java 21, 你可以使用你的包管理器来安装它, 例如在Arch Linux上, 你可以运行:</p>
+<pre><code class="language-bash">sudo pacman -S jdk21-openjdk</code></pre>
+<p>
+然后在 gradle.properties 文件中, 你需要将 <code>org.gradle.java.home</code> 属性设置为你的Java安装路径. 例如, 如果你的Java安装在 <code>/usr/lib/jvm/java-21-openjdk</code>, 那么你可以添加以下行到 gradle.properties 文件中:
+</p>
+<pre><code class="language-properties">org.gradle.java.home=/usr/lib/jvm/java-21-openjdk</code></pre>
+<p>
+接下来, <code>cd</code> 到你的项目根目录, 你可以使用Gradle Wrapper来构建你的项目. 运行以下命令来构建你的Mod:
+</p>
+<pre><code class="language-bash">./gradlew build</code></pre>
+<p>
+第一次构建可能会下载一些依赖项, 所以可能需要一些时间. 构建完成后, 你可以在 <code>build/libs</code> 目录下找到你的Mod的JAR文件, 这个文件就是你可以放到Minecraft的mods文件夹中来测试的Mod文件了.
+</p>
+
+<p>
+build完成之后, 我们会多几个目录:
+</p>
+
+<box name="项目结构">
+<ul>
+    <li>build/ <span style="float:right">构建输出目录</span></li>
+    <li>runs/ <span style="float:right">运行配置目录</span></li>
+</ul>
+</box>
+
+<p>
+最后, 将生成的JAR文件复制到你的Minecraft的mods文件夹中, 然后启动Minecraft, 你应该能够在游戏中看到你的Mod已经被加载了. 恭喜你! 你已经成功地搭建了一个Minecraft Mod项目并构建了你的第一个Mod!
+</p>
+
+<center><img src="posts/minecraft-mods/resources/02.1.png" width="600"></center>
+<lastnextpages>

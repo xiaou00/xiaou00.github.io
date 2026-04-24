@@ -35,10 +35,10 @@ $$\frac{\partial}{\partial x_i}(p)=\frac{\partial}{\partial y_i}(0)$$
 
 接下来我们来建立一些记号和代数关系:
 <ul>
-    <li>外围的多项式 $R=k[x_1,\ldots,x_n]$.
-    <li>定义 $I=(f_1,\ldots,f_r)$, 那么 $X$ 的局部结构由商环 $R/I$ 给出.
-    <li>原点 $p=(0,\ldots,0)$ 的极大理想 $\mathfrak n=(x_1,\ldots,x_n)$.
-    <li>$X$ 的坐标环 $A=R/I$.
+    <li>外围的多项式 $R=k[x_1,\ldots,x_n]$.</li>
+    <li>定义 $I=(f_1,\ldots,f_r)$, 那么 $X$ 的局部结构由商环 $R/I$ 给出.</li>
+    <li>原点 $p=(0,\ldots,0)$ 的极大理想 $\mathfrak n=(x_1,\ldots,x_n)$.</li>
+    <li>$X$ 的坐标环 $A=R/I$.</li>
 </ul>
 而点 $p$ 落在 $X$ 上, 这等价于是说对任何 $i$ 都有 $f_i(p)=0$. 这里我们假设了 $p$ 是原点, 从而迫使 $f_i$ 的常数项为零. 因此 $I\subset\mathfrak n$. 而 $p$ 在 $A$ 中所对应的极大理想很显然就是 $\mathfrak m=\mathfrak n/I$. Zariski切空间 $T_pX$ 就是 $\mathfrak m/\mathfrak m^2$. 
 <br>
@@ -68,8 +68,54 @@ $$\mathfrak m/\mathfrak m^2\simeq \frac{\mathfrak n/\mathfrak n^2}{(\mathfrak n^
 
 <theorem>
 假设 $A$ 是一个有限生成的 $k$-代数, 由 $x_1,\ldots,x_n$ 生成, 理想由 $f_1,\ldots,f_r$ 生成. $p$ 为 $\operatorname{Spec} A$ 中的一点. 那么对于一个多项式 $g\in I$, 我们可以作 $g$ 的梯度向量
-$$\nabla g(p)=\begin{pmatrix}\frac{\partial g}{\partial x_1}(p)\\ \vdots\\ \frac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
+$$\nabla g(p)=\begin{pmatrix}\dfrac{\partial g}{\partial x_1}(p)\\ \vdots\\ \dfrac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
 那么将这个梯度向量附加到Jacobi矩阵中, 得到一个新的矩阵
-$$\begin{pmatrix}\frac{\partial f_1}{\partial x_1}(p) & \cdots & \frac{\partial f_r}{\partial x_1}(p) & \frac{\partial g}{\partial x_1}(p)\\ \vdots & \ddots & \vdots & \vdots\\ \frac{\partial f_1}{\partial x_n}(p) & \cdots & \frac{\partial f_r}{\partial x_n}(p) & \frac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
+$$\begin{pmatrix}\dfrac{\partial f_1}{\partial x_1}(p) & \cdots & \dfrac{\partial f_r}{\partial x_1}(p) & \dfrac{\partial g}{\partial x_1}(p)\\ \vdots & \ddots & \vdots & \vdots\\ \dfrac{\partial f_1}{\partial x_n}(p) & \cdots & \dfrac{\partial f_r}{\partial x_n}(p) & \dfrac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
 这个矩阵的秩和Jacobi矩阵的秩相同. 换言之, 矩阵在 $p$ 的余秩不依赖生成元 $f_1,\ldots,f_r$ 的选取.
 </theorem>
+
+<proof>
+首先, 由于多项式 $g$ 属于 $f_1,\ldots,f_r$ 生成的理想 $I$, 因此 $g$ 可以表示为
+$$g=\sum_{i=1}^r{a_if_i}$$
+对上式求偏导数, 显然由乘积法则, 可以得到
+$$\frac{\partial g}{\partial x_j}=\sum_{i=1}^r{\left(\frac{\partial a_i}{\partial x_j}f_i+a_i\frac{\partial f_i}{\partial x_j}\right)}\tag{II}$$
+由于 $p$ 是 $\operatorname{Spec} A$ 中的一点, 对所有 $f_i$, $f_i(p)=0$, 因此在 (II) 中
+$$\frac{\partial g}{\partial x_j}(p)=\sum_{i=1}^r{\left(\frac{\partial a_i}{\partial x_j}\cdot 0+a_i(p)\frac{\partial f_i}{\partial x_j}(p)\right)}=
+\sum_{i=1}^r{a_i(p)\frac{\partial f_i}{\partial x_j}(p)}$$
+推广到所有的变量 $x_j$, 我们就得到了整个梯度向量的关系式
+$$\nabla g(p)=\sum_{i=1}^r{a_i(p)\nabla f_i(p)}$$
+这表明新加入的梯度向量 $\nabla g(p)$ 可以由原来Jacobi矩阵的列向量线性表示出来, 从而新矩阵的秩和原来Jacobi矩阵的秩相同.
+</proof>
+
+<theorem>
+假设 $A$ 是一个有限生成的 $k$-代数, 由 $x_1,\ldots,x_n$ 生成, 理想由 $f_1,\ldots,f_r$ 生成. $p$ 为 $\operatorname{Spec} A$ 中的一点. 假设 $q(x_1,\ldots,x_n)\in k[x_1,\ldots,x_n]$, 设 $h$ 为多项式 $y-q(x_1,\ldots,x_n)\in k[x_1,\ldots,x_n,y]$. 那么 $(f_1,\ldots,f_r,h)$ 关于变量 $x_1,\ldots,x_n,y$ 的在 $p$ 处的Jacobi矩阵的秩和 $(f_1,\ldots,f_r)$ 关于变量 $x_1,\ldots,x_n$ 的在 $p$ 处的Jacobi矩阵的秩相同. 换言之, 在上述情形下, Jacobi矩阵的秩不依赖于生成元的选取.
+</theorem>
+
+<proof>
+我们的目标矩阵是:
+$$J'=\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1} & \dots & \dfrac{\partial f_r}{\partial x_1} & \dfrac{\partial h}{\partial x_1} \\
+\vdots & \ddots & \vdots & \vdots \\
+\dfrac{\partial f_1}{\partial x_n} & \dots & \dfrac{\partial f_r}{\partial x_n} & \dfrac{\partial h}{\partial x_n} \\
+\dfrac{\partial f_1}{\partial y} & \dots & \dfrac{\partial f_r}{\partial y} & \dfrac{\partial h}{\partial y}
+\end{pmatrix}$$
+观察 $J'$ 中涉及新变量 $y$ 和新方程 $h$ 的部分, 可以发现
+<ul>
+    <li>由于 $f_i$ 完全由 $x_1,\ldots,x_n$ 组成, 所以 $\dfrac{\partial f_i}{\partial y}=0$.</li>
+    <li>由于 $h=y-q(x_1,\ldots,x_n)$, 所以 $\dfrac{\partial h}{\partial y}=1$.</li>
+    <li>由于 $h=y-q(x_1,\ldots,x_n)$, 所以 $\dfrac{\partial h}{\partial x_j}=-\dfrac{\partial q}{\partial x_j}$.</li>
+</ul>
+将这些结果代入结果矩阵 $J'$ 中, 可以得到如下矩阵
+$$J'(p)=\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1}(p) & \dots
+& \dfrac{\partial f_r}{\partial x_1}(p) & -\dfrac{\partial q}{\partial x_1}(p) \\
+\vdots & \ddots & \vdots & \vdots \\
+\dfrac{\partial f_1}{\partial x_n}(p) & \dots & \dfrac{\partial f_r}{\partial x_n}(p) & -\dfrac{\partial q}{\partial x_n}(p) \\
+0 & \dots & 0 & 1
+\end{pmatrix}$$
+由初等变换可知 $\operatorname{rank} J'(p) = \operatorname{rank} J(p)+1$. 而余秩为 $n-\operatorname{rank} J(p)$ 和 $n+1-\operatorname{rank} J'(p)$, 显然两者相同.
+</proof>
+
+<definition name="Jacobi余秩函数">
+每个有限型的 $k$-概形 $X$ 都自带一个从 $X$ 的底集打到 $\Z^{\ge 0}$ 的函数, 称为<b>Jacobi余秩函数</b> (Jacobian corank function). 其在 $k$-点 $p$ 上的取值为 $\dim_kT_pX$. 不妨记作 $\mathrm{cork}:X\to\Z^{\ge 0}$, 他是凝聚微分层 $\Omega_{X/k}$ 的秩.
+</definition>

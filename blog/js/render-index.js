@@ -8,7 +8,7 @@
         return;
     }
 
-    const byYear = posts.reduce((acc, p) => {
+    const byYear = posts.filter(p => !p.langs || p.langs.includes(lang)).reduce((acc, p) => {
         const y = p.date.slice(0, 4);
         (acc[y] ??= []).push(p);
         return acc;

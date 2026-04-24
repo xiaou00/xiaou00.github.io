@@ -33,5 +33,19 @@
         "date": "2026-04-24",
         "tag": ["math"],
         "langs": ["en", "zh"]
+    },
+    {
+        "slug": "minecraft-mods/01",
+        "title": { "en": "", "zh": "Minecraft NeoForge 模组开发 (1) Java基础" },
+        "date": "2026-04-24",
+        "tag": ["minecraft"],
+        "langs": ["zh"]
+    },
+    {
+        "slug": "minecraft-mods/02",
+        "title": { "en": "", "zh": "Minecraft NeoForge 模组开发 (2) 创建一个空Mod" },
+        "date": "2026-04-24",
+        "tag": ["minecraft"],
+        "langs": ["zh"]
     }
 ]

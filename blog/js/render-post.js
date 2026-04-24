@@ -1,3 +1,56 @@
+function processCodeBlocks(container) {
+    for (const pre of container.querySelectorAll('pre')) {
+        const code = pre.querySelector('code');
+        if (!code) continue;
+
+        const lang = [...code.classList]
+            .find(c => c.startsWith('language-'))
+            ?.slice('language-'.length) ?? '';
+
+        if (typeof hljs !== 'undefined') hljs.highlightElement(code);
+
+        // Wrap in .code-block
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block';
+        pre.replaceWith(wrapper);
+        wrapper.appendChild(pre);
+
+        // Toolbar: lang label + copy button
+        const toolbar = document.createElement('div');
+        toolbar.className = 'code-toolbar';
+
+        const label = document.createElement('span');
+        label.className = 'code-lang';
+        label.textContent = lang;
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = '[copy]';
+        btn.addEventListener('click', () => {
+            const text = code.textContent;
+            const reset = () => setTimeout(() => { btn.textContent = '[copy]'; }, 1800);
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text)
+                    .then(() => { btn.textContent = '[copied]'; reset(); })
+                    .catch(() => { btn.textContent = '[error]'; reset(); });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); btn.textContent = '[copied]'; }
+                catch { btn.textContent = '[error]'; }
+                document.body.removeChild(ta);
+                reset();
+            }
+        });
+
+        toolbar.append(label, btn);
+        wrapper.insertBefore(toolbar, pre);
+    }
+}
+
 (async () => {
     const lang = document.documentElement.lang.startsWith('zh') ? 'zh' : 'en';
     const slug = new URLSearchParams(location.search).get('slug');
@@ -38,6 +91,8 @@
         </div>` : '';
 
     main.innerHTML = `<h1>${title}</h1>${metaHtml}${html}`;
+
+    processCodeBlocks(main);
 
     if (typeof renderMathInElement === 'function') {
         renderMathInElement(main, {
