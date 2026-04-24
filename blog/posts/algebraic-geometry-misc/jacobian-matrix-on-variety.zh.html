@@ -119,3 +119,43 @@ $$J'(p)=\begin{pmatrix}
 <definition name="Jacobi余秩函数">
 每个有限型的 $k$-概形 $X$ 都自带一个从 $X$ 的底集打到 $\Z^{\ge 0}$ 的函数, 称为<b>Jacobi余秩函数</b> (Jacobian corank function). 其在 $k$-点 $p$ 上的取值为 $\dim_kT_pX$. 不妨记作 $\mathrm{cork}:X\to\Z^{\ge 0}$, 他是凝聚微分层 $\Omega_{X/k}$ 的秩.
 </definition>
+
+我们来回顾一下上半连续函数的定义. 设 $X$ 是一个集合, $f:X\to\Z^{\ge 0}$ 是一个函数, 如果对于任意 $n\in\Z^{\ge 0}$, 集合 $\{x\in X:f(x)\ge n\}$ 都是闭集, 那么称 $f$ 是一个<b>上半连续函数</b>. 上半连续函数的一个重要性质是, 他的最大值总是可以达到的. Jacobi余秩也满足这个性质:
+
+<theorem>
+设 $X$ 是一个有限型的 $k$-概形, 那么Jacobi余秩函数 $\mathrm{cork}:X\to\Z^{\ge 0}$ 是一个上半连续函数. 因此 $\mathrm{cork}$ 的最大值总是可以达到的.
+</theorem>
+
+<proof>
+显然上半连续性是一个局部的性质, 我们可以假设 $X$ 是仿射的, 由 $x_1,\ldots,x_n$ 生成, 理想由 $f_1,\ldots,f_r$ 生成. 那么Jacobi余秩函数 $\mathrm{cork}$ 在 $p$ 处的取值就是Jacobi矩阵 $J_p$ 的余秩. 因此对于任意 $n\in\Z^{\ge 0}$, 集合 $\{p\in X:\mathrm{cork}(p)\ge n\}$ 就是集合 $\{p\in X:\operatorname{rank} J_p\le n\}$, 这是一个闭集.
+</proof>
+
+<theorem>
+$\mathrm{cork}$ 在域扩张下保持不变. 即, 设 $X$ 是一个有限型的 $k$-概形, 并且 $\ell/k$ 是域扩张, 则在基变换
+$$X\times_k\ell\to X,\quad p\mapsto q$$
+下, 总有$\mathrm{cork}(p)=\mathrm{cork}(q)$.
+</theorem>
+
+<proof>
+显然我们可以下放到仿射的情形, 设 $X$ 是仿射的, 由 $x_1,\ldots,x_n$ 生成, 理想由 $f_1,\ldots,f_r$ 生成. 经过基变换 $\ell/k$ 后, 对应的仿射开子集 $U_\ell=X\times_k\ell$ 的坐标环为
+$$A_\ell=A\otimes_k\ell\simeq\ell[x_1,\ldots,x_n]/(f_1,\ldots,f_r)$$
+需要注意的是 $f_1,\ldots,f_2$ 的系数在 $k$ 中, 但在 $A_\ell$ 中被视作是 $\ell$ 系数的多项式. 设基变换映射 $\pi:X_\ell\to X$, 取 $p\in X$, 令 $q=\pi(p)$. 那么
+<ul>
+    <li>
+        点 $q$ 对应 $A$ 的一个素理想 $\mathfrak q$, 其剩余域记作 $\kappa(q)$. 
+    </li>
+    <li>
+        点 $p$ 对应 $A_\ell$ 的一个素理想 $\mathfrak p$, 其剩余域记作 $\kappa(p)$.
+    </li>
+</ul>
+显然这诱导了自然的域扩张 $\kappa(q)\hookrightarrow\kappa(p)$. 我们在 $q,p$ 分别构造Jacobi矩阵 $J_q$ 和 $J_p$.
+<ul>
+    <li>
+        在 $q\in X$ 处, Jacobi矩阵 $J_q$ 的元素为 $\dfrac{\partial f_i}{\partial x_j}$, 在 $\kappa(q)$ 中取值.
+    </li>
+    <li>
+        在 $p\in X_\ell$ 处, Jacobi矩阵 $J_p$ 的元素为 $\dfrac{\partial f_i}{\partial x_j}$, 在 $\kappa(p)$ 中取值.
+    </li>
+</ul>
+由于 $f_i$ 的系数都在 $k$ 中, 偏导数 $\dfrac{\partial f_i}{\partial x_j}$ 的系数也在 $k$ 中, 从而 $J_p$ 的每个条目实际上都是 $J_q$ 的对应条目在域扩张 $\kappa(q)\hookrightarrow\kappa(p)$ 下的像. 因此由平凡的代数验证,  $J_p$ 的秩和 $J_q$ 的秩相同, 从而 $\mathrm{cork}(p)=\mathrm{cork}(q)$.
+</proof>
