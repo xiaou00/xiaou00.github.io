@@ -62,4 +62,14 @@ $$\begin{pmatrix}\frac{\partial f_j}{\partial x_1}(0)\\
 $$\mathfrak m/\mathfrak m^2\simeq \frac{\mathfrak n/\mathfrak n^2}{(\mathfrak n^2+I)/\mathfrak n^2}\simeq k^n/\operatorname{im} J_p=\operatorname{coker}J_p$$
 </proof>
 
-注意, 在更多语境下, Jacobi矩阵一般是上述矩阵的转置 (但这里是余切空间, 因此是列向量).
+<p>注意, 在更多语境下, Jacobi矩阵一般是上述矩阵的转置 (但这里是余切空间, 因此是列向量).</p>
+
+<h2>Jacobi余秩函数</h2>
+
+<theorem>
+假设 $A$ 是一个有限生成的 $k$-代数, 由 $x_1,\ldots,x_n$ 生成, 理想由 $f_1,\ldots,f_r$ 生成. $p$ 为 $\operatorname{Spec} A$ 中的一点. 那么对于一个多项式 $g\in I$, 我们可以作 $g$ 的梯度向量
+$$\nabla g(p)=\begin{pmatrix}\frac{\partial g}{\partial x_1}(p)\\ \vdots\\ \frac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
+那么将这个梯度向量附加到Jacobi矩阵中, 得到一个新的矩阵
+$$\begin{pmatrix}\frac{\partial f_1}{\partial x_1}(p) & \cdots & \frac{\partial f_r}{\partial x_1}(p) & \frac{\partial g}{\partial x_1}(p)\\ \vdots & \ddots & \vdots & \vdots\\ \frac{\partial f_1}{\partial x_n}(p) & \cdots & \frac{\partial f_r}{\partial x_n}(p) & \frac{\partial g}{\partial x_n}(p)\end{pmatrix}$$
+这个矩阵的秩和Jacobi矩阵的秩相同. 换言之, 矩阵在 $p$ 的余秩不依赖生成元 $f_1,\ldots,f_r$ 的选取.
+</theorem>
