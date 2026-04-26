@@ -28,7 +28,7 @@
         "langs": ["en", "zh"]
     },
     {
-        "slug": "algebraic-geometry-misc/jacobian-matrix-on-variety",
+        "slug": "math-misc/jacobian-matrix-on-variety",
         "title": { "en": "Jacobian Matrix on Varieties", "zh": "代数簇上的Jacobi矩阵" },
         "date": "2026-04-24",
         "tag": ["math"],
@@ -47,5 +47,12 @@
         "date": "2026-04-24",
         "tag": ["minecraft"],
         "langs": ["zh"]
+    },
+    {
+        "slug": "math-misc/circular-points",
+        "title": { "en": "Circular Points at Infinity", "zh": "浅谈虚圆点" },
+        "date": "2026-04-25",
+        "tag": ["math"],
+        "langs": ["en", "zh"]
     }
 ]

@@ -2,7 +2,7 @@
 
 <p>设 $X$ 是有限型的 $k$-概形. 那么局部地, $X$ 具有形式
 $$\operatorname{Spec}k[x_1,\ldots,x_n]/(f_1,\ldots,f_n)$$
-设 $p:\operatorname{Spec}k\to X$ 是 $X$ 上的一个 $k$-点, 那么在点 $p$ 处有<b>Zariski切空间</b> $T_pX:=\mathfrak{m}/\mathfrak{m}^2$, 其中 $\mathfrak{m}$ 是 $p$ 处的极大理想.</p>
+设 $p:\operatorname{Spec}k\to X$ 是 $X$ 上的一个 $k$-点, 那么在点 $p$ 处有<b>Zariski余切空间</b> $T_p^\lor X:=\mathfrak{m}/\mathfrak{m}^2$, 其中 $\mathfrak{m}$ 是 $p$ 处的极大理想.</p>
 
 <p>还是概形 $X$ 和 $k$-点 $p$, 我们可以定义形式偏导数
 $$\frac{\partial}{\partial x_i}(ax_i^n)=nax_i^{n-1}$$
@@ -23,7 +23,7 @@ $$J_p=\begin{pmatrix}
 </proof>
 
 <theorem>
-上述线性映射的余核就是切空间 $T_pX$. 即 $\operatorname{coker} J_p=\mathfrak m/\mathfrak m^2$.
+上述线性映射的余核就是余切空间 $T_p^\lor X$. 即 $\operatorname{coker} J_p=\mathfrak m/\mathfrak m^2$.
 </theorem>
 
 <proof>
@@ -40,7 +40,7 @@ $$\frac{\partial}{\partial x_i}(p)=\frac{\partial}{\partial y_i}(0)$$
     <li>原点 $p=(0,\ldots,0)$ 的极大理想 $\mathfrak n=(x_1,\ldots,x_n)$.</li>
     <li>$X$ 的坐标环 $A=R/I$.</li>
 </ul>
-而点 $p$ 落在 $X$ 上, 这等价于是说对任何 $i$ 都有 $f_i(p)=0$. 这里我们假设了 $p$ 是原点, 从而迫使 $f_i$ 的常数项为零. 因此 $I\subset\mathfrak n$. 而 $p$ 在 $A$ 中所对应的极大理想很显然就是 $\mathfrak m=\mathfrak n/I$. Zariski切空间 $T_pX$ 就是 $\mathfrak m/\mathfrak m^2$. 
+而点 $p$ 落在 $X$ 上, 这等价于是说对任何 $i$ 都有 $f_i(p)=0$. 这里我们假设了 $p$ 是原点, 从而迫使 $f_i$ 的常数项为零. 因此 $I\subset\mathfrak n$. 而 $p$ 在 $A$ 中所对应的极大理想很显然就是 $\mathfrak m=\mathfrak n/I$. Zariski余切空间 $T_p^\lor X$ 就是 $\mathfrak m/\mathfrak m^2$. 
 <br>
 我们接下来的任务就是计算 $\mathfrak m/\mathfrak m^2$. 首先由引理1, 我们有
 $$\mathfrak m/\mathfrak m^2=(\mathfrak n/I)/(\mathfrak n^2+I)/I\tag{I}$$
@@ -159,3 +159,37 @@ $$A_\ell=A\otimes_k\ell\simeq\ell[x_1,\ldots,x_n]/(f_1,\ldots,f_r)$$
 </ul>
 由于 $f_i$ 的系数都在 $k$ 中, 偏导数 $\dfrac{\partial f_i}{\partial x_j}$ 的系数也在 $k$ 中, 从而 $J_p$ 的每个条目实际上都是 $J_q$ 的对应条目在域扩张 $\kappa(q)\hookrightarrow\kappa(p)$ 下的像. 因此由平凡的代数验证,  $J_p$ 的秩和 $J_q$ 的秩相同, 从而 $\mathrm{cork}(p)=\mathrm{cork}(q)$.
 </proof>
+
+<h2>正则性的Jacobi判别法</h2>
+
+接下来是这个理论的一个重要的应用, 他能够帮我们判断一个点是否是概形的正则点.
+
+<theorem name="正则性的Jacobi判别法">
+一个有限型的 $k$-概形 $X=\operatorname{Spec}k[x_1,\ldots,x_n]/(f_1,\ldots,f_r)$ 若具有纯维数 $d$, 则一个 $k$-点 $p$ 是 $X$ 的正则点, 当且仅当 $\mathrm{cork}(p)=d$.
+</theorem>
+
+<proof>
+我们不妨假设 $p$ 是原点, 对应极大理想 $\mathfrak m=(x_1,\ldots,x_n)$. 首先, 对于 $I$ 的生成元 $f_i$, 我们作原点处的Taylor展开
+$$f_i=\sum_{j=1}^n\frac{\partial f_i}{\partial x_j}(p)x_j+\text{高阶项}$$
+由于 $f_i(p)=0$, 且高次项消灭, 因此 $f_i$ 在 $\mathfrak m/\mathfrak m^2$ 中的像就是其线性部分
+$$\overline f_i=\sum_{j=1}^n\frac{\partial f_i}{\partial x_j}(p)\overline{x}_j$$
+其中 $\set{\overline{x}_1,\ldots,\overline{x}_n}$ 是 $\mathfrak m/\mathfrak m^2$ 的基底 ($x_1,\ldots,x_n$ 的像). 注意到 $\overline f_i$ 在 $\set{\overline{x}_1,\ldots,\overline{x}_n}$ 中的坐标就是Jacobi矩阵 $J_p$ 的第 $i$ 行. 
+$$J_p=\begin{pmatrix}\dfrac{\partial f_1}{\partial x_1}(p) & \cdots & \dfrac{\partial f_1}{\partial x_n}(p)\\
+\vdots & \ddots & \vdots\\
+\dfrac{\partial f_r}{\partial x_1}(p) & \cdots & \dfrac{\partial f_r}{\partial x_n}(p)\end{pmatrix}$$
+线性空间 $(I+\mathfrak m^2)/\mathfrak m^2$ 是 $\mathfrak m/\mathfrak m^2$ 的一个子空间, 由 $\overline f_1,\ldots,\overline f_r$ 张成. 由线性代数, 其维数
+$$\dim_k\frac{I+\mathfrak m^2}{\mathfrak m^2}=\operatorname{rk}J_p$$
+回到概形 $X$, $X$ 在点 $p$ 的局部环 $\mathscr O_{X,p}$ 的极大理想可以表示为 $\overline{\mathfrak m}=\mathfrak m/I$, 它的余切空间是 $\overline{\mathfrak m}/\overline{\mathfrak m}^2$. 从而有
+$$\overline{\mathfrak m}/\overline{\mathfrak m}^2\simeq\frac{\mathfrak m/I}{(\mathfrak m^2+I)/I}\simeq\frac{\mathfrak m}{\mathfrak m^2+I}$$
+利用短正合列
+$$0\to\frac{I+\mathfrak m^2}{\mathfrak m^2}\to\mathfrak m/\mathfrak m^2\to\frac{\mathfrak m}{\mathfrak m^2+I}\to 0$$
+我们得到了维数公式
+$$\dim_k\overline{\mathfrak m}/\overline{\mathfrak m}^2=\dim_k\mathfrak m/\mathfrak m^2-\dim_k\frac{I+\mathfrak m^2}{\mathfrak m^2}=n-\operatorname{rk}J_p$$
+因此 $\mathrm{cork}(p)=\dim_k\overline{\mathfrak m}/\overline{\mathfrak m}^2$.
+</proof>
+
+<corollary>
+设 $k=\overline k$, 那么 $\mathbb A^n_k$ 中的仿射超曲面 $X=V(f)$ 的正则闭点 $p$ 就是满足 $\nabla f(p)= 0$ 的点.
+</corollary>
+
+

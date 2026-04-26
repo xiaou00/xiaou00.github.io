@@ -100,7 +100,41 @@ function processCodeBlocks(container) {
                 { left: '$$', right: '$$', display: true },
                 { left: '$',  right: '$',  display: false }
             ],
-            throwOnError: false
+            throwOnError: false,
+            macros: {
+                // ── Sets ──
+                "\\RR": "\\mathbb{R}",
+                "\\CC": "\\mathbb{C}",
+                "\\ZZ": "\\mathbb{Z}",
+                "\\QQ": "\\mathbb{Q}",
+                "\\NN": "\\mathbb{N}",
+                "\\FF": "\\mathbb{F}",
+                // ── Common operators ──
+                "\\id":   "\\mathrm{id}",
+                "\\im":   "\\operatorname{im}",
+                "\\ker":  "\\operatorname{ker}",
+                "\\coker":"\\operatorname{coker}",
+                "\\rank": "\\operatorname{rank}",
+                "\\spec": "\\operatorname{Spec}",
+                "\\hom":  "\\operatorname{Hom}",
+                "\\End":  "\\operatorname{End}",
+                "\\Aut":  "\\operatorname{Aut}",
+                // ── Algebra ──
+                "\\iso":  "\\cong",
+                "\\normal": "\\trianglelefteq",
+                "\\gen":  "\\langle #1 \\rangle",
+                "\\ideal":"\\trianglelefteq",
+                // ── Delimiters ──
+                "\\abs":  "\\left|#1\\right|",
+                "\\norm": "\\left\\|#1\\right\\|",
+                "\\ang":  "\\langle #1 \\rangle",
+                "\\floor":"\\left\\lfloor #1 \\right\\rfloor",
+                "\\ceil": "\\left\\lceil  #1 \\right\\rceil",
+                // ── Arrows ──
+                "\\inject":    "\\hookrightarrow",
+                "\\surject":   "\\twoheadrightarrow",
+                "\\xto":       "\\xrightarrow{#1}",
+            }
         });
     }
 
