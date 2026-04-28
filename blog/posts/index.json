@@ -54,5 +54,12 @@
         "date": "2026-04-25",
         "tag": ["math"],
         "langs": ["en", "zh"]
+    },
+    {
+        "slug": "math-misc/tangents-on-variety",
+        "title": { "en": "Tangents on Varieties", "zh": "代数簇的切线" },
+        "date": "2026-04-28",
+        "tag": ["math"],
+        "langs": ["en" ]
     }
 ]
