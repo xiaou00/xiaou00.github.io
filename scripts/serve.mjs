@@ -85,7 +85,7 @@ const server = createServer(async (request, response) => {
   }
 });
 server.on('error', error => { console.error(`无法启动预览: ${error.message}`); process.exit(1); });
-server.listen(port, host, () => console.log(`\n  Ain Soph Aur\n  http://${host}:${port}${base}\n  ${dev ? '监听笔记, 引用, 模板与页面文件; 保存后自动编译.' : '静态站点预览'}\n`));
+server.listen(port, host, () => console.log(`\n  Liber 777\n  http://${host}:${port}${base}\n  ${dev ? '监听笔记, 引用, 模板与页面文件; 保存后自动编译.' : '静态站点预览'}\n`));
 
 const watchers = [];
 let timer;

@@ -64,8 +64,7 @@ export function homePage(site, notes, dev) {
   return layout(site, { dev, body: `<main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="cover-wrap"><img src="${href(site, 'cover.png')}" width="2048" height="1153" alt="象牙白的哥特式拱廊, 石像与深红色星纹旗帜" fetchpriority="high" class="cover-image">
-        <div class="cover-frame" aria-hidden="true"></div><div class="cover-label"><span>THE MATHEMATICAL NOTEBOOK</span><span>VOL. I <i>-</i> ${new Date().getFullYear()}</span></div>
-        <span class="cover-bottom" aria-hidden="true">STRUCTURE &nbsp; / &nbsp; CONNECTION &nbsp; / &nbsp; INFINITY</span>
+        <div class="cover-frame" aria-hidden="true"></div><div class="cover-label"><span>THE MATHEMATICAL NOTEBOOK</span></div>
       </div>
       <div class="hero-intro"><span class="intro-star">${star}</span><p class="eyebrow">A PERSONAL COLLECTION OF MATHEMATICAL WRITINGS</p>
         <h1 id="hero-title">${e(site.title)}</h1><p class="hero-chinese">于抽象之中, 寻找结构与联系.</p>

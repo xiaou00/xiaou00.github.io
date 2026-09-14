@@ -1,5 +1,5 @@
 export default {
-  title: 'Ain Soph Aur',
+  title: 'Liber 777',
   author: 'xiaou0',
   description: '关于数学的笔记, 片段与思考. 于抽象之中, 寻找结构与联系.',
   // Public site origin, used for canonical URLs.

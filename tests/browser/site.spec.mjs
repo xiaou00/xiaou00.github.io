@@ -30,7 +30,7 @@ test('file directory, filename search and reading navigation work without metada
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page.locator('h1')).toHaveText('Ain Soph Aur');
+  await expect(page.locator('h1')).toHaveText('Liber 777');
   await expect(page.getByRole('navigation', { name: '笔记文件目录' })).toBeVisible();
   await expect(page.locator('details[data-directory][open]')).toHaveCount(0);
   await expect(page.locator('.file-link:visible')).toHaveCount(0);

@@ -1,4 +1,4 @@
-# Ain Soph Aur
+# Liber 777
 
 个人数学 writings 网站. 以 `cover.png` 和 `参考/template.typ` 中的象牙白, 石灰色, 深红与四芒星为视觉基础.
 
