@@ -215,6 +215,32 @@ dist/                      构建产物, 可以整体部署
 
 ## 部署与验证
 
+### GitHub Pages
+
+已提供自动部署工作流 `.github/workflows/pages.yml`. GitHub Actions 安装 Node.js 22 和 Typst 0.15.1, 执行 `npm ci` 和 `npm run build`, 然后发布 `dist/`. 无需提交构建产物, 也无需单独创建 `gh-pages` 分支或填写个人访问令牌.
+
+当前仓库为 `xiaou00/xiaou00.github.io`, 对应站点地址 <https://xiaou00.github.io/>. `site.config.mjs` 已设置 `url: 'https://xiaou00.github.io'` 和 `base: '/'`.
+
+首次部署:
+
+1. 打开 [仓库 Pages 设置](https://github.com/xiaou00/xiaou00.github.io/settings/pages), 在 **Build and deployment > Source** 选择 **GitHub Actions**. 免费 GitHub 账户需要使用公开仓库.
+2. 将当前使用的 `master` 设置为仓库默认分支. 工作流支持 `master` 和 `main`, 仅从默认分支部署; 若以后改名为 `main`, 在 GitHub 中同步修改默认分支.
+3. 提交并推送部署配置:
+
+   ```sh
+   git add .github/workflows/pages.yml site.config.mjs README.md
+   git commit -m "Configure GitHub Pages deployment"
+   git push -u origin master
+   ```
+
+4. 打开仓库 **Actions**, 等待 **Deploy to GitHub Pages** 中的 `build` 和 `deploy` 都成功, 然后访问 <https://xiaou00.github.io/>. 也可以在该工作流页面选择 **Run workflow** 手动触发.
+
+以后把笔记的新增, 修改或删除提交并推送到默认分支, 网站就会自动更新. 仅在本地保存会更新本地预览, 发布需要推送到 GitHub. 如果构建失败, 在 Actions 的失败步骤查看 Typst 诊断; 上一次部署的网站仍然保留.
+
+设置步骤参见 [GitHub Pages 官方文档](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+
+### 其他静态托管与本地验证
+
 执行 `npm ci && npm run build`, 把 `dist/` 部署到任意支持目录 `index.html` 的静态服务. 构建环境必须安装 Typst; 线上服务器只需托管静态文件. 将 `404.html` 配置为自定义错误页即可; 无需 SPA 路由回退.
 
 部署到子目录(例如 GitHub Pages 项目路径)时, 将 `site.config.mjs` 中的 `base` 改成 `/repository-name/`, 重新构建. 填写 `url` 后会生成 canonical URL.
