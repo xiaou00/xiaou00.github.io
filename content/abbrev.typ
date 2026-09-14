@@ -25,6 +25,7 @@
 #let SL = $"SL"$
 
 #let et = "ét"
+#let DK = "DK"
 #let Ner = $"N"_bullet$
 #let fib = $"fib"$
 #let cofib = $"cofib"$
@@ -111,11 +112,13 @@
 #let Lie = $bold(sans("Lie"))$
 #let Perf = $bold(sans("Perf"))$
 #let LMod = $bold(sans("LMod"))$
+#let dga = $bold(sans("dgAlg"))$
+#let cdga = $bold(sans("cdgAlg"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
 
-
+#let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$
 
 

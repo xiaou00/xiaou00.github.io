@@ -26,7 +26,7 @@ test.afterAll(async ({ request }) => {
   await expect.poll(async () => (await (await request.get('/')).text()).includes(`data-directory="${fixture.folder}"`), { timeout: 15000 }).toBe(false);
 });
 
-test('file directory, filename search and reading navigation work without metadata', async ({ page }) => {
+test('file directory, filename search and reading navigation work without metadata', async ({ page, baseURL }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
@@ -49,7 +49,7 @@ test('file directory, filename search and reading navigation work without metada
   await page.getByRole('searchbox').fill(`${fixture.folder} 一致化参数`);
   await expect(page.locator('.file-link:visible')).toHaveCount(1);
   await page.locator('.file-link:visible').click();
-  await expect(page).toHaveURL(`http://127.0.0.1:5173${noteRoute(specimen)}`);
+  await expect(page).toHaveURL(`${baseURL}${noteRoute(specimen)}`);
   await expect(page.locator('.typst-content math').first()).toBeVisible();
   await expect(page.locator('time, .article-meta, .article-status')).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -229,10 +229,10 @@ test('desktop and mobile have no horizontal page overflow or missing assets', as
   await page.screenshot({ path: '/tmp/ain-soph-note-mobile.png', fullPage: true });
 });
 
-test('content is readable without JavaScript', async ({ browser }) => {
+test('content is readable without JavaScript', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(`${baseURL}/`);
   await expect(page.locator('.file-link')).toHaveCount(noteCount);
   await page.locator(`[data-directory="${fixture.folder}"] > summary`).click();
   await page.locator(`[data-directory="${fixture.folder}/写作"] > summary`).click();
@@ -245,7 +245,7 @@ test('content is readable without JavaScript', async ({ browser }) => {
   await context.close();
 });
 
-test('nested notebooks, filename and folder renames, references and live changes work', async ({ page, request }) => {
+test('nested notebooks, filename and folder renames, references and live changes work', async ({ page, request, baseURL }) => {
   test.setTimeout(60000);
   const folder = `browser-fixture-${randomUUID()}`;
   const movedFolder = `${folder}-改名后的笔记本`;
@@ -278,7 +278,7 @@ test('nested notebooks, filename and folder renames, references and live changes
     const noJsContext = await page.context().browser().newContext({ javaScriptEnabled: false });
     const noJsPage = await noJsContext.newPage();
     await noJsPage.bringToFront();
-    await noJsPage.goto('http://127.0.0.1:5173/');
+    await noJsPage.goto(`${baseURL}/`);
     await expect(noJsPage.locator('.file-link').filter({ hasText: '自动编译验证' })).not.toBeVisible();
     await noJsPage.locator(`[data-directory="${folder}"] > summary`).click();
     await expect(noJsPage.locator('.file-link').filter({ hasText: '自动编译验证' })).toBeVisible();
@@ -295,13 +295,13 @@ test('nested notebooks, filename and folder renames, references and live changes
     await expect(page.locator('.article-notebook')).toHaveText(folder);
     await expect(page.locator('.note-reference')).toContainText('目标 笔记 / 定理');
     await page.locator('.note-reference').click();
-    await expect(page).toHaveURL(`http://127.0.0.1:5173/notes/${encodeNotePath(targetSlug)}/#external-only`);
+    await expect(page).toHaveURL(`${baseURL}/notes/${encodeNotePath(targetSlug)}/#external-only`);
     await expect(page.locator('.article-header h1')).toHaveText('目标 笔记');
     await expect(page.locator('.article-notebook')).toHaveText('子目录');
     await expect(page.locator('#external-only')).toBeInViewport();
     expect((await request.get(`/sources/notes/${encodeNotePath(targetSlug)}.typ`)).status()).toBe(200);
     await page.locator('[data-direction="incoming"] a').click();
-    await expect(page).toHaveURL(`http://127.0.0.1:5173${noteRoute(slug)}`);
+    await expect(page).toHaveURL(`${baseURL}${noteRoute(slug)}`);
     const oldTargetSlug = targetSlug;
     targetSlug = `${folder}/子目录/目标标题已更新`;
     const renamedFile = resolve(`content/notes/${targetSlug}.typ`);
@@ -361,5 +361,32 @@ test('nested notebooks, filename and folder renames, references and live changes
   } finally {
     await rm(resolve(`content/notes/${folder}`), { recursive: true, force: true });
     await rm(resolve(`content/notes/${movedFolder}`), { recursive: true, force: true });
+  }
+});
+
+test('a save with unchanged output preserves expanded folders and search without reloading', async ({ page }) => {
+  await page.goto('/');
+  const search = page.getByRole('searchbox');
+  await search.fill(fixture.folder);
+  const folder = page.locator(`details[data-directory="${fixture.folder}"]`);
+  await expect(folder).toHaveAttribute('open', '');
+  await page.evaluate(() => {
+    window.testBuildEvents = [];
+    window.testBuildStream = new EventSource('/__dev/events');
+    window.testBuildStream.onmessage = ({ data }) => window.testBuildEvents.push(JSON.parse(data));
+  });
+  try {
+    await expect.poll(() => page.evaluate(() => window.testBuildEvents?.length || 0)).toBeGreaterThan(0);
+    const revision = await page.evaluate(() => window.testBuildEvents[0].revision);
+    const input = resolve(`content/notes/${specimen}.typ`);
+    await writeFile(input, await readFile(input));
+    // Wait for the actual rebuild event, instead of a fixed delay or a retry.
+    await expect.poll(() => page.evaluate(() => window.testBuildEvents?.length || 0), { timeout: 15000 }).toBeGreaterThan(1);
+    expect(await page.evaluate(() => window.testBuildEvents.map(event => event.revision))).toEqual(expect.arrayContaining([revision, revision]));
+    expect(await page.evaluate(() => window.testBuildEvents.every(event => event.revision === window.testBuildEvents[0].revision))).toBe(true);
+    await expect(search).toHaveValue(fixture.folder);
+    await expect(folder).toHaveAttribute('open', '');
+  } finally {
+    await page.evaluate(() => window.testBuildStream?.close());
   }
 });

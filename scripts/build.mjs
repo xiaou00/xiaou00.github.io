@@ -1,4 +1,5 @@
-import { cp, mkdir, rename, rm, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { cp, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseHTML } from 'linkedom';
@@ -8,6 +9,25 @@ import { TypstCompiler } from './typst-compiler.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
+
+async function outputFingerprint(root) {
+  const hash = createHash('sha256');
+  async function visit(folder) {
+    const entries = await readdir(join(root, folder), { withFileTypes: true });
+    entries.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+    for (const entry of entries) {
+      const path = join(folder, entry.name);
+      if (entry.isDirectory()) await visit(path);
+      else {
+        const bytes = await readFile(join(root, path));
+        hash.update(JSON.stringify([path, bytes.length]));
+        hash.update(bytes);
+      }
+    }
+  }
+  await visit('');
+  return hash.digest('hex');
+}
 
 function namespaceSvg(svg, prefix) {
   const ids = new Map([...svg.querySelectorAll('[id]')].map(element => [element.id, `${prefix}${element.id}`]));
@@ -153,6 +173,9 @@ async function buildSite({ dev, session, fresh }) {
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, 'index.html'), notePage(site, note, notes, dev));
   }
+  // File watchers and Typst can both report the same save. Compare output
+  // bytes, including assets and downloads, rather than rebuilding timestamps.
+  const fingerprint = dev ? await outputFingerprint(stage) : null;
   // Only replace the last working site after every note has compiled successfully.
   const previous = join(ROOT, dev ? '.build/previous-dev' : '.build/previous');
   await rm(previous, { recursive: true, force: true });
@@ -163,7 +186,7 @@ async function buildSite({ dev, session, fresh }) {
   }
   await rm(previous, { recursive: true, force: true });
   console.log(`✓ ${notes.length} 篇文稿 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
-  return { site, notes, outputDir, compilation };
+  return { site, notes, outputDir, compilation, fingerprint };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

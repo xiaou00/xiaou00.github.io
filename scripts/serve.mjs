@@ -33,6 +33,7 @@ catch (error) {
 }
 let base = result.site.base;
 let revision = 0;
+let fingerprint = result.fingerprint;
 let latestError = startupError;
 const clients = new Set();
 const publish = () => {
@@ -115,7 +116,10 @@ async function rebuild() {
     const output = await build({ dev: true, compilerSession });
     base = output.site.base;
     latestError = null;
-    revision++;
+    if (output.fingerprint !== fingerprint) {
+      fingerprint = output.fingerprint;
+      revision++;
+    }
   } catch (error) {
     latestError = error.message;
     console.error(`\n${latestError}\n保留上次成功构建, 等待修正.`);

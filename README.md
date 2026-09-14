@@ -271,4 +271,4 @@ npm test                   # 实际编译, 文件发现, 路径解析, MathML �
 npm run test:browser        # Chromium: 笔记本, 搜索, 中文路径, 改名, 手机, 无 JS 和自动编译
 ```
 
-浏览器测试默认使用 `/usr/bin/chromium`. 其他路径可设置 `CHROMIUM_PATH`. 测试会短暂新建使用随机名称的相互引用的笔记, 并在结束后清理.
+浏览器测试默认使用 `/usr/bin/chromium`. 其他路径可设置 `CHROMIUM_PATH`. `npm run test:browser` 会复制程序和公共模板到临时目录, 只放入测试样稿, 并使用独立端口启动预览. 测试不会复用日常预览或向个人笔记目录写入样稿, 可以边写作边运行. 临时目录在结束后清理, 失败截图和日志保留在项目的 `test-results/` 下.
