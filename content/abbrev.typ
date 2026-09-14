@@ -110,6 +110,7 @@
 #let Rep = $bold(sans("Rep"))$
 #let Lie = $bold(sans("Lie"))$
 #let Perf = $bold(sans("Perf"))$
+#let LMod = $bold(sans("LMod"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$

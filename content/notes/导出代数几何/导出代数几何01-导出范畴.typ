@@ -149,5 +149,135 @@ $ Fun_W (cal(C),cal(D)) subset Fun(cal(C),cal(D)) $
 是全体将 $W$ 中态射映为等价的函子张成的全子 $oo$-范畴.
 
 #definition(title:[$oo$-范畴的局部化])[
-  
+  给定一个 $oo$-范畴 $cal(C)$ 以及一族 $W subset "Mor"(cal(C))$, 我们定义 *$oo$-范畴的局部化*是一个函子
+  $ L:cal(C)->cal(C)[W^(-1)] $
+  满足对每个 $w in W$, $L(w)$ 是 $cal(C)[W^(-1)]$ 是等价, 并且满足泛性质
+  $ Fun(cal(C)[W^(-1)],cal(D)) tilde.eq Fun_W (cal(C),cal(D)) $
+  对任意 $oo$-范畴 $cal(D)$ 成立.
+]
+
+也就是说, $cal(C)[W^(-1)]$ 就是普遍地将 $W$ 中所有态射变成等价的 $oo$-范畴, 这个构造在范畴等价的意义下显然是唯一的.
+
+== 导出范畴
+
+现在我们通过之前介绍的 dg-方法将 $Ch(cal(A))$ 视作 $oo$-范畴, 记 $"qis"$ 是所有拟同构的族, 我们可以给出导出范畴的定义:
+
+#definition(title:[导出范畴])[
+  固定一个Abel范畴 $cal(A)$, 其*导出范畴* (derived category) 定义为
+  $ Dcat(cal(A)) := Ch(cal(A))["qis"^(-1)] $
+]
+
+#proposition[
+  若 $cal(A)$ 是良好的 Abel 范畴, 例如 Grothendieck 范畴, 那么导出 $oo$-范畴通常是可呈示的稳定 $oo$-范畴, 即 $Dcat(cal(A)) in cat("Pr")^"L"_"st"$.
+]
+
+上述结论保证了导出范畴有任意的小极限, 并且可以使用伴随函子定理: 若 $F:cal(C)->cal(D)$ 保持余极限并满足可达性, 通常自动有右伴随.
+
+== 导出范畴的 $t$-结构
+
+#definition(title:[导出范畴的 $t$-结构])[
+  给定 Abel 范畴 $cal(A)$, 我们可以在 $Dcat(cal(A))$ 上定义
+  $
+  Dcat_(<=0)(cal(A)) = {X | H^i (X) = 0 "对于" i>0} \
+  Dcat_(>=0)(cal(A)) = {X | H^i (X) = 0 "对于" i<0} \
+  Dcat_(<=n)(cal(A)) = Dcat_(<=0)(cal(A))[-n], quad
+  Dcat_(>=n)(cal(A)) = Dcat_(>=0)(cal(A))[-n]
+  $
+  称之为导出范畴的*典范 $t$-结构*.
+]
+
+#theorem[
+  $Dcat(cal(A))^suit.heart tilde.eq cal(A)$.
+]
+
+直观下, 设有复形
+$ ... --> X^(-1) -->^(d^(-1)) X^0 -->^(d^0) X^1 --> ... $
+且 $H^i (X) = 0$ 对 $i!=0$ 成立, 做好的截断
+$ tau_(<=0) X = (... -> X^(-1) -> ker(d^0) -> 0 -> ...) $
+再作 $tau_(>=0)$ 就只剩
+$ coker(X^(-1) -> ker(d^0)) = H^0 (X) $
+从而 $tau_(<=0)tau_(>=0) X = H^0(X)[0]$, 而由于 $X$ 没有其他上同调, 所有的截断态射都是拟同构, 因此在导出范畴中 $X tilde.eq H^0 (X)[0]$.
+
+通常来说, $"h"Dcat(cal(A))$ 就是同调代数里引入过的三角范畴意义下的导出范畴, 不过从现在开始我们统一使用 $Dcat(cal(A))$ 作为导出 $oo$-范畴的语言.
+
+= 环谱的模范畴
+
+== 环谱
+
+#remark[
+  在之后的笔记中, 我们默认读者熟悉高阶代数 (Higher Algebra) 的部分基础知识
+]
+
+#definition(title:[环谱])[
+  *环谱* (ring spectra) 是环的概念在稳定 $oo$-范畴语境的自然推广. 具体地, 他们是谱的对称幺半稳定 $oo$-范畴 $(Sp, smash, SS)$ 的 $EE_k$ 代数对象, 其中 $k in NN^* union {oo}$, 其中最常见的是 *$EE_1$-环谱*
+  $ Alg(Sp) := Alg_(EE_1) (Sp) $
+  和 *$EE_oo$-环谱*, 或称*交换环谱*
+  $ CAlg(Sp) := Alg_(EE_oo) (Sp) $
+]
+
+一个普通的环可以通过 Eilenberg-MacLane 谱典范地视作一个环谱: 令 $K(A,n)$ 是只有第 $n$ 个同伦群是 $A$ 的 Eilenberg-MacLane 生象, 令 $K(A,0)$ 是离散生象, 标准等价
+$ K(A,n) tilde.eq Omega K(A,n+1) $
+给出 $Omega$-谱 
+$ H A = (A,K(A,1),K(A,2),...) $
+环结构所诱导的代数结构典范地经此提升, 这可以理解作一对伴随
+$ pi_0 : Sp_(>=0) arrows.lr Ab : H $
+以及
+$ 
+pi_0 : Alg(Sp)_(>=0) arrows.lr cat("Ring") : H \
+pi_0 : CAlg(Sp)_(>=0) arrows.lr cat("CRing") : H
+$
+它还诱导了心层面的等价
+$ pi_0 : Sp^suit.heart <->^~ Ab : H $
+
+显示地, 一个 $EE_1$-环谱 $A$ 可以视作一个谱指定了运算和单位
+$ mu : A smash A -> A quad eta : SS -> A $
+再配备一系列同伦信息,  例如存在决定结合律的同伦
+$ mu(mu smash 1) tilde.eq mu(1 smash mu) $
+以及更多高阶同伦. $EE_oo$-环谱还要添加更高阶相干的交换律 $mu tilde.eq mu compose tau$ 等.
+
+#definition(title:[同伦分次环])[
+  设 $A$ 是一个 $EE_1$-环谱, 则
+  $ pi_* A = plus.o.big_(n in ZZ) pi_n A $
+  带有分次乘法
+  $ pi_p A times.o pi_q A -> pi_(p+q) A $
+  从而是一个 $ZZ$-分次环. 若 $A$ 还是 $EE_oo$-环谱, 则这个分次环满足Koszul符号律
+  $ x y = (-1)^(p q) y x, quad x in pi_p A, quad y in pi_q A $
+]
+
+具体地, 由于同伦群定义为 $pi_p A = [S^p, A]$, 一个元素 $a in pi_p A$ 可以由谱映射 $a:S^p -> A$ 表示, 乘积 $a b in pi_(p+q) A$ 就定义为
+$ S^(p+q) tilde.eq S^p smash S^q larr^(a smash b) A smash A -->^mu A $
+
+这个构造通过广义上同调理论, 就诱导了我们熟悉的(上)同调环, 而dga通过取 $H^*$ 也天然诱导(上)同调环. 其间有关系图
+
+#web-diagram(diagram({
+	node((-1, -1), [$k"-dga" B$])
+	node((0, -1), [$H^*(B)$])
+	node((0, 0), [$pi_* A$])
+	node((-1, 0), [$"algebra" A "over" H k$])
+	edge((-1, -1), (0, -1), "~>")
+	edge((-1, -1), (-1, 0), "<~>")
+	edge((0, -1), (0, 0), "<~>")
+	edge((-1, 0), (0, 0), "~>")
+}))
+
+== 环谱的模
+
+现在我们希望定义的左模是带有同伦相干的作用
+$ alpha : A smash M -> M $
+的一种谱 $M$.
+
+#definition(title:[模谱])[
+  一个 $cat("LM")^times.o$-*模谱* (module spectra) 是对称幺半稳定 $oo$-范畴 $(Sp, smash, SS)$ 中的 $cat("LM")^times.o$-模对象, 即
+  $ Alg_(cat("LM")^times.o) (Sp) $
+]
+
+由于我们有忘却函子 $Alg_(cat("LM")^times.o) (Sp) -> Alg_(EE_1) (Sp)$, 定义为 $(A,M)|->A$, 我们定义
+$ LMod_A (Sp) := Alg_(cat("LM")^times.o) (Sp) times_(Alg_(EE_1) (Sp)) {A} $
+
+上述定义也可换算畴为 $cat("RM")^times.o$ 或 $cat("BM")^times.o$, 得到的就是右模, 双模的对应物.
+
+下面我们用符号 $Mod_A$ 默认代表 $LMod_A$.
+
+#theorem[
+  对任意 $EE_1$-环谱 $A$, $Mod_A$ 是可呈示的稳定无穷范畴, 即 $Mod_A in cat("Pr")^"L"_"st"$.
 ]

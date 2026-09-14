@@ -8,6 +8,7 @@ import { build, prepareDocument, ROOT } from '../scripts/build.mjs';
 import { resolveNoteLinks } from '../scripts/note-links.mjs';
 import { discoverNoteFiles, encodeNotePath, noteIdentity, resolveNotePath, validateNotePath } from '../scripts/note-paths.mjs';
 import { createNotebookFixture } from './fixtures.mjs';
+import './typst-compiler.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
   const document = prepareDocument('<html><head></head><body><h2 id="native">1 定理</h2><h2>2 重复</h2><h2>3 重复</h2><a href="#native">定理</a></body></html>');
@@ -19,6 +20,14 @@ test('filenames supply titles and parent folders supply notebook names without m
   assert.deepEqual(noteIdentity('代数/局部环.typ'), { title: '局部环', notebook: '代数' });
   assert.deepEqual(noteIdentity('随笔.typ'), { title: '随笔', notebook: '' });
   assert.equal(noteIdentity('数学/代数/局部环.typ').notebook, '代数');
+});
+
+test('the note template is validated in exported HTML without another compilation', () => {
+  const marker = '<span hidden data-note-template=""></span>';
+  const html = count => `<html><body>${marker.repeat(count)}<p>正文</p></body></html>`;
+  assert.throws(() => prepareDocument(html(0), { filename: '缺少模板.typ' }), /必须且只能调用一次/);
+  assert.throws(() => prepareDocument(html(2), { filename: '重复模板.typ' }), /必须且只能调用一次/);
+  assert.ok(!prepareDocument(html(1), { filename: '笔记.typ' }).html.includes('data-note-template'));
 });
 
 test('display math stays in one row while explicit multiline tables remain intact', () => {

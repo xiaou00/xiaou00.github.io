@@ -27,6 +27,8 @@
   show math.underline: _math-line
   show math.overline: it => _math-line(it, over: true)
   [#metadata(none) <note>]
+  // Validate the template from the HTML, without a second Typst evaluation.
+  html.elem("span", attrs: ("data-note-template": "", hidden: ""), [])
   doc
 }
 

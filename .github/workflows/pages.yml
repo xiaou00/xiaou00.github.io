@@ -39,6 +39,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Restore Typst compilation cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            .build/typst-cache
+            ~/.cache/typst/packages
+          key: typst-html-v1-${{ runner.os }}-0.15.1-${{ github.sha }}
+          restore-keys: |
+            typst-html-v1-${{ runner.os }}-0.15.1-
+
       - name: Build HTML and MathML
         run: npm run build
 

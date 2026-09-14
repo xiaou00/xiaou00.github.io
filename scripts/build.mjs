@@ -1,29 +1,13 @@
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { cp, mkdir, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseHTML } from 'linkedom';
 import { resolveNoteLinks } from './note-links.mjs';
 import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs';
+import { TypstCompiler } from './typst-compiler.mjs';
 
-const exec = promisify(execFile);
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
-const compiler = process.env.TYPST_BIN || 'typst';
-
-async function typst(args) {
-  try {
-    const { stdout, stderr } = await exec(compiler, args, { cwd: ROOT, maxBuffer: 24 * 1024 * 1024 });
-    // Typst always emits this known feature notice. Preserve other warnings.
-    const diagnostics = stderr.replace(/warning: html export is under active development and incomplete\n(?: = hint:.*\n)*/g, '').trim();
-    if (diagnostics) process.stderr.write(`${diagnostics}\n`);
-    return stdout;
-  } catch (error) {
-    if (error.code === 'ENOENT') throw new Error('未找到 Typst. 请安装 Typst 0.15.1 或更新版本, 或设置 TYPST_BIN.');
-    throw new Error(error.stderr || error.message);
-  }
-}
 
 function namespaceSvg(svg, prefix) {
   const ids = new Map([...svg.querySelectorAll('[id]')].map(element => [element.id, `${prefix}${element.id}`]));
@@ -42,8 +26,11 @@ function namespaceSvg(svg, prefix) {
   }
 }
 
-export function prepareDocument(source) {
+export function prepareDocument(source, { filename } = {}) {
   const { document } = parseHTML(source);
+  const templates = [...document.querySelectorAll('[data-note-template]')];
+  if (filename !== undefined && templates.length !== 1) throw new Error(`${filename}: 每篇文稿必须且只能调用一次 note 模板.`);
+  for (const marker of templates) marker.remove();
   const styles = [...document.head.querySelectorAll('style')].map(style => style.textContent);
   for (const wrapper of document.body.querySelectorAll('[data-note-label]')) {
     const id = wrapper.getAttribute('data-note-label');
@@ -120,9 +107,15 @@ export function prepareDocument(source) {
   return { html: document.body.innerHTML, text, toc, styles };
 }
 
-export async function build({ dev = false } = {}) {
+export async function build({ dev = false, compilerSession = null, fresh = false } = {}) {
+  const session = compilerSession || new TypstCompiler({ cwd: ROOT });
+  try { return await buildSite({ dev, session, fresh }); }
+  finally { if (!compilerSession) await session.close(); }
+}
+
+async function buildSite({ dev, session, fresh }) {
   const start = performance.now();
-  const version = await typst(['--version']);
+  const version = await session.version();
   const match = version.match(/typst (\d+)\.(\d+)\.(\d+)/);
   if (!match || (Number(match[1]) === 0 && Number(match[2]) < 15)) throw new Error('原生 MathML 输出需要 Typst >= 0.15.0, 推荐 0.15.1.');
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
@@ -130,15 +123,16 @@ export async function build({ dev = false } = {}) {
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base 必须形如 / 或 /repository-name/.');
   const { homePage, notePage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
+  await session.retain(filenames.map(filename => join(contentRoot, 'notes', filename)));
   const notes = [];
+  const compilation = { cached: 0, incremental: 0, cold: 0 };
   for (const filename of filenames) {
     const slug = filename.slice(0, -4);
     const input = join(contentRoot, 'notes', filename);
     const flags = ['--features', 'html', '--root', contentRoot, '--input', `note-title=${noteIdentity(filename).title}`];
-    const compiled = await typst(['compile', ...flags, '--format', 'html', input, '-']);
-    const templates = Number(await typst(['eval', ...flags, '--target', 'html', '--in', input, 'query(<note>).len()']));
-    if (templates !== 1) throw new Error(`${filename}: 每篇文稿必须且只能调用一次 note 模板.`);
-    notes.push({ ...noteIdentity(filename), slug, ...prepareDocument(compiled) });
+    const compiled = await session.compile(input, flags, { fresh });
+    compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
+    notes.push({ ...noteIdentity(filename), slug, ...prepareDocument(compiled.html, { filename }) });
   }
   notes.sort((a, b) => compareNames(a.slug, b.slug));
   resolveNoteLinks(notes, site);
@@ -168,10 +162,10 @@ export async function build({ dev = false } = {}) {
     throw error;
   }
   await rm(previous, { recursive: true, force: true });
-  console.log(`✓ ${notes.length} 篇文稿 → HTML + MathML · ${(performance.now() - start).toFixed(0)} ms`);
-  return { site, notes, outputDir };
+  console.log(`✓ ${notes.length} 篇文稿 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
+  return { site, notes, outputDir, compilation };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  build().catch(error => { console.error(`\n构建失败\n${error.message}`); process.exitCode = 1; });
+  build({ fresh: process.argv.includes('--no-cache') }).catch(error => { console.error(`\n构建失败\n${error.message}`); process.exitCode = 1; });
 }

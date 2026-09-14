@@ -181,6 +181,22 @@ Fletcher 交换图和 CeTZ 绘图使用 `#web-diagram(...)` 包裹. 它通过 Ty
 
 图形默认居中, 宽图可独立横向滚动, 不需要在外面再写 `#align(center, ...)`. `caption` 可省略, 也可以用 `<label>` 和 `@label` 引用带标题的图. 页面保留 SVG 的原始比例, 缩放后箭头与标签仍然清晰.
 
+### 交换图与编译缓存
+
+保持 `npm run dev` 运行即可, `#web-diagram(...)` 的写法不变. 预览为每篇笔记保留一个 Typst 增量编译进程, 复用函数计算及图形布局缓存. 首次打开笔记需要编译, 随后只改正文时, 未变化的 Fletcher/CeTZ 图形会复用计算结果. 修改图形, 引用的变量或公共模板时, Typst 按实际依赖更新. 停止预览会释放这些进程和内存缓存, 下次启动重新预热.
+
+整篇笔记的 HTML + MathML + SVG 还会保存到 `.build/typst-cache/`. `npm run build` 根据 Typst 报告的源文件, 导入文件和图片等实际依赖检查内容哈希, 未变化时直接复用; 编译参数, Typst 版本或日期变化也会使缓存失效. GitHub Actions 会保存并恢复这份缓存和 Typst 包缓存. 缓存不会进入网站或公开源文件目录.
+
+更改网页样式和首页配置时, 正文无需重新编译. 文件目录, 跨篇链接及反向引用仍会重新生成, 删除笔记也会正常同步. 模板检查直接读取导出的标记, 不再额外编译一次. 终端会显示命中缓存, 增量编译和首次编译的笔记数量.
+
+需要强制重新编译正式站点时运行:
+
+```sh
+npm run build -- --no-cache
+```
+
+### HTML 导出边界
+
 Typst 的 HTML 导出目前仍是实验性功能; 0.15 起提供原生 MathML.`page`,`place`, PDF 页眉页脚等布局规则不能直接等价转换成网页, 需要通过网页模板或 `html.frame` 适配. 参见 [HTML 官方文档](https://typst.app/docs/reference/html/) 和 [0.15 更新说明](https://typst.app/docs/changelog/0.15.0/).
 
 `content/template.typ` 是网页模板,`参考/template.typ` 是原始纸面模板, 二者没有互相覆盖. 参考入口还引用了当前目录中未提供的 `references.bib` 和 `math-alphanumeric.csl`, 因此这里没有假定参考文件可以直接完整编译.
@@ -204,6 +220,7 @@ src/
   client.js                文件搜索, 文件夹展开, 目录及阅读进度
 scripts/
   build.mjs                Typst 编译与静态页面生成
+  typst-compiler.mjs        常驻增量编译, 依赖检查和磁盘缓存
   note-links.mjs           跨笔记链接解析与反向引用
   note-paths.mjs           从路径读取标题和笔记本, 递归发现文件, 路径解析和网址编码
   serve.mjs                预览, 文件监听和错误反馈

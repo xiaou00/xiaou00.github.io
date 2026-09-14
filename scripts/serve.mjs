@@ -3,6 +3,7 @@ import { watch } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, resolve, sep } from 'node:path';
 import { build, ROOT } from './build.mjs';
+import { TypstCompiler } from './typst-compiler.mjs';
 
 const dev = process.argv.includes('--watch');
 const arg = key => {
@@ -13,11 +14,26 @@ const arg = key => {
 };
 const port = Number(arg('--port') || process.env.PORT || 5173);
 const host = arg('--host') || process.env.HOST || '127.0.0.1';
+let ready = false;
+let closing = false;
+const compilerSession = new TypstCompiler({ cwd: ROOT, watch: dev, onChange: () => {
+  if (ready && !closing) { clearTimeout(timer); timer = setTimeout(rebuild, 80); }
+} });
 let result;
-try { result = await build({ dev }); } catch (error) { console.error(error.message); process.exit(1); }
+let startupError = null;
+try { result = await build({ dev, compilerSession }); }
+catch (error) {
+  if (!dev) { await compilerSession.close(); console.error(error.message); process.exit(1); }
+  // Keep the last working preview and the incremental workers alive while the
+  // author is fixing a syntax error, including errors present at startup.
+  const { default: site } = await import('../site.config.mjs');
+  result = { site };
+  startupError = error.message;
+  console.error(`${error.message}\n保留上次成功构建, 等待修正.`);
+}
 let base = result.site.base;
 let revision = 0;
-let latestError = null;
+let latestError = startupError;
 const clients = new Set();
 const publish = () => {
   const message = `data: ${JSON.stringify({ revision, error: latestError })}\n\n`;
@@ -84,7 +100,7 @@ const server = createServer(async (request, response) => {
     response.end('页面暂时无法读取, 请刷新重试.');
   }
 });
-server.on('error', error => { console.error(`无法启动预览: ${error.message}`); process.exit(1); });
+server.on('error', async error => { console.error(`无法启动预览: ${error.message}`); await shutdown(); process.exitCode = 1; });
 server.listen(port, host, () => console.log(`\n  Liber 777\n  http://${host}:${port}${base}\n  ${dev ? '监听笔记, 引用, 模板与页面文件; 保存后自动编译.' : '静态站点预览'}\n`));
 
 const watchers = [];
@@ -92,10 +108,11 @@ let timer;
 let building = false;
 let pending = false;
 async function rebuild() {
+  if (closing) return;
   if (building) { pending = true; return; }
   building = true;
   try {
-    const output = await build({ dev: true });
+    const output = await build({ dev: true, compilerSession });
     base = output.site.base;
     latestError = null;
     revision++;
@@ -115,11 +132,14 @@ if (dev) {
     if (['cover.png', 'site.config.mjs'].includes(filename)) { clearTimeout(timer); timer = setTimeout(rebuild, 120); }
   }));
 }
-function shutdown() {
+ready = true;
+async function shutdown() {
+  closing = true;
   clearTimeout(timer);
   for (const watcher of watchers) watcher.close();
   for (const client of clients) client.end();
   server.close();
+  await compilerSession.close();
 }
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
