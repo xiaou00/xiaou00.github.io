@@ -1,0 +1,120 @@
+#let colim = $limits(op("colim"))$
+#let Spec = $op("Spec")$
+#let Frac = $op("Frac")$
+#let Im = $op("im")$
+#let Coeq = $op("coeq")$
+#let res = $op("res")$
+#let char = $"char"$
+#let Eq = $op("Eq")$
+#let tr = "tr"
+#let rad = "rad"
+
+#let act = $arrow.half.cw$
+#let wedge = $or$
+#let smash = $and$
+#let coprod = $union.sq$
+#let semidirect = $\u{22ca}$
+#let pairarrow = $\u{21c9}$
+#let larr = $stretch(->)$
+#let smile = $op(smile)$
+#let veq = $#rotate(90deg, $=$)$
+#let vdeq = $#rotate(90deg, $=:$)$
+
+
+#let GL = $"GL"$
+#let SL = $"SL"$
+
+#let et = "ét"
+#let Ner = $"N"_bullet$
+#let fib = $"fib"$
+#let cofib = $"cofib"$
+#let coker = $"coker"$
+#let dg = $"dg"$
+
+#let Hom = "Hom"
+#let Map = "Map"
+#let Cov = "Cov"
+#let Desc = "Desc"
+#let Mul = "Mul"
+#let Der = "Der"
+#let Aut = "Aut"
+#let End = "End"
+#let Lan = "Lan"
+#let Ran = "Ran"
+#let Pic = "Pic"
+#let Ext = "Ext"
+#let Tor = "Tor"
+#let Nm = "Nm"
+#let Gr = "Gr"
+#let Wh = "Wh"
+#let Hilb = "Hilb"
+#let Quot = "Quot"
+#let Assem = "Assem"
+#let opp = "op"
+#let pr = "pr"
+#let ev = "ev"
+#let Spf = "Spf"
+#let CH = "CH"
+#let yo = "よ"
+
+#let gl = $frak("gl")$
+#let sl = $frak("sl")$
+
+#let Fun = $bold(sans("Fun"))$
+#let BiFun = $bold(sans("BiFun"))$
+#let Exc = $bold(sans("Exc"))$
+#let Act = $bold(sans("Act"))$
+#let Env = $bold(sans("Env"))$
+#let Set = $bold(sans("Set"))$
+#let Open = $bold(sans("Open"))$
+#let PSh = $bold(sans("PSh"))$
+#let Sh = $bold(sans("Sh"))$
+#let LRep = $bold(sans("LRep"))$
+#let Ab = $bold(sans("Ab"))$
+#let Ring = $bold(sans("Ring"))$
+#let CRing = $bold(sans("CRing"))$
+#let Mod = $bold(sans("Mod"))$
+#let QCoh = $bold(sans("QCoh"))$
+#let Grp = $bold(sans("Grp"))$
+#let Sch = $bold(sans("Sch"))$
+#let Top = $bold(sans("Top"))$
+#let LRS = $bold(sans("LRS"))$
+#let Aff = $bold(sans("Aff"))$
+#let Cat = $bold(sans("Cat"))$
+#let Grpd = $bold(sans("Grpd"))$
+#let Ani = $bold(sans("Ani"))$
+#let St = $bold(sans("St"))$
+#let PSt = $bold(sans("PSt"))$
+#let sSet = $bold(sans("sSet"))$
+#let CG = $bold(sans("CG"))$
+#let QCat = $bold(sans("QCat"))$
+#let Sp = $bold(sans("Sp"))$
+#let Ch = $bold(sans("Ch"))$
+#let dgCat = $bold(sans("dgCat"))$
+#let Kcat = $bold(sans("K"))$
+#let Dcat = $bold(sans("D"))$
+#let Fin = $bold(sans("Fin"))$
+#let Op = $bold(sans("Op"))$
+#let POp = $bold(sans("POp"))$
+#let Comm = $bold(sans("Comm"))$
+#let Assoc = $bold(sans("Assoc"))$
+#let Alg = $bold(sans("Alg"))$
+#let CAlg = $bold(sans("CAlg"))$
+#let Mon = $bold(sans("Mon"))$
+#let CMon = $bold(sans("CMon"))$
+#let AlgSp = $bold(sans("AlgSp"))$
+#let DMSt = $bold(sans("DMSt"))$
+#let ArtSt = $bold(sans("ArtSt"))$
+#let LieAlg = $bold(sans("LieAlg"))$
+#let Vect = $bold(sans("Vect"))$
+#let Rep = $bold(sans("Rep"))$
+#let Lie = $bold(sans("Lie"))$
+#let Perf = $bold(sans("Perf"))$
+
+#let ideal = $lt.closed$
+#let ad = $"ad"$
+
+
+#let cat(name) = $bold(sans(name))$
+
+
