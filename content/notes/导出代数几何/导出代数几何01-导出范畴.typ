@@ -147,3 +147,7 @@ $ pi_n Map_(Ner^"dg" (cal(C))) (X,Y) tilde.eq H^(-n) underline(Hom)_(cal(C)) (X,
 我们先来规定一个记号, 设 $cal(C),cal(D)$ 是 $oo$-范畴, 并且指定一族态射 $W subset "Mor"(cal(C))$. 定义记号
 $ Fun_W (cal(C),cal(D)) subset Fun(cal(C),cal(D)) $
 是全体将 $W$ 中态射映为等价的函子张成的全子 $oo$-范畴.
+
+#definition(title:[$oo$-范畴的局部化])[
+  
+]
