@@ -99,7 +99,7 @@ $ Ner(Ch_(>=0)(k))["qis"^(-1)] tilde.eq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] tilde
 #proposition(title:[同伦--同调对应])[
   我们可以将 $X_bullet in simp(Mod_k)$ 遗忘成单纯集后取几何实现, 以零元为基点可作同伦群 $pi_n (abs(X_bullet),0)$. 我们也可以定义单纯集的同伦群为显然的 $pi_n^"simp" (X_bullet,0) := [S^n,X_bullet]$, 其中 $S^n := Delta^n\/partial Delta^n$. 那么我们有
   $ pi_n (abs(X_bullet),0) tilde.eq pi_n^"simp" (X_bullet,0) tilde.eq H_n (DK(X)) $
-]
+] <prop-simplicial-module-homotopy-homology>
 
 #proof[
   由 Dold--Kan
@@ -137,7 +137,16 @@ $ "Sym" : simp(Mod_k) arrows.lr simp(CAlg_k) : "oblv" $
   + $f$ 是余纤维化当且仅当其对上述两族态射具有左提升性质.
 ]
 
-我们先承认一个结论:
+我们先承认几个结论:
+
+#theorem[
+  前面定义的两对伴随
+  $ 
+  k[-]:sSet arrows.lr simp(Mod_k):"oblv"\
+  "Sym":simp(Mod_k) arrows.lr simp(CAlg_k):"oblv"
+  $
+  是 Quillen 伴随.
+]
 
 #proposition[
   Dold--Kan 对应函子 $DK:simp(Mod_k) -> Ch_(>=0)(k)$ 是松对称幺半函子, 配对的比较态射是 shuffle map
@@ -166,6 +175,8 @@ $ "Sym" : simp(Mod_k) arrows.lr simp(CAlg_k) : "oblv" $
 
 == dga 和 cdga 的模型结构
 
+=== dga 的模型结构
+
 我们有伴随对
 $ T : Ch_(>=0) (k) arrows.lr dga_(k,>=0) : "oblv" $
 其中
@@ -182,3 +193,39 @@ $ T(V) = k plus.o V plus.o V^(times.o 2) plus.o ... $
 
 局部化得到 $dga_(k,>=0) ["qis"^(-1)]$ 就是连通结合导出 $k$-代数的一个模型. $oo$-范畴角度我们可以干净地写
 $ dga_(k,>=0) ["qis"^(-1)] tilde.eq Alg_(EE_1) (Dcat_(>=0) (k)) $
+并且在谱代数的意义下
+$ Dcat_(>=0) (k) tilde.eq Mod_(H k,>=0) $
+是对称幺半稳定 $oo$-范畴的等价, 从而
+$ dga_(k,>=0) ["qis"^(-1)] tilde.eq Alg(Mod_(H k))_(>=0) $
+右边是 $H k$ 上的连通结合代数谱, 常称为*导出代数*.
+
+=== cdga 的模型结构
+
+同样地, 我们有伴随对 
+$ "Sym" : Ch_(>=0) (k) arrows.lr cdga_(k,>=0) : "oblv" $
+其中 $"Sym"$ 是对称代数.
+
+但 cdga 的情形有些许不同, 当 $k$ 取任意的交换环时, 会存在自然的比较函子
+$ cdga_(k,>=0) ["qis"^(-1)] -> CAlg(Dcat_(>=0)(k)) $
+但一般不是等价: 关键在于底层的局部化函子
+$ L : Ch_(>=0) (k) -> Dcat_(>=0) (k) $
+中, 左边用的是普通张量 $times.o_k$, 右边是导出张量 $times.o^"L"_k$. 从而 $L$ 一般不是对称幺半的, 而是松对称幺半的. 之所以结合代数可以, 是因为结合代数不涉及 $S_n$-作用取商.
+
+= 同调分次环
+
+== 同调分次环的构造
+
+设 $R_bullet in simp(CAlg_k)$, 那么定义
+$ pi_* R := plus.o.big_(n>=0) pi_n (R) $
+由@prop-simplicial-module-homotopy-homology, 这也可以视作是
+$ H_* (DK(R)) = plus.o.big_(n>=0) H_n (DK(R)) $
+由于 $R_bullet$ 有乘法
+$ mu : R_bullet times.o_k R_bullet -> R_bullet $
+使得 $pi_* R$ 构成一个非负的分次交换 $k$-代数, 而 $pi_0 R$ 也是一个普通的交换 $k$-代数, 有函子伴随对
+$ pi_0 : simp(CAlg_k) arrows.lr CAlg_k : c $
+其中 $c$ 将普通的交换 $k$-代数视作常值的单纯代数, 每个 $pi_n$ 也是函子
+$ pi_n : simp(CAlg_k) -> Mod_k $
+将所有次数放在一起就得到
+$ pi_* : simp(CAlg_k) -> cat("GrCAlg")_(k,>=0) $
+并且同调分次环的乘法满足 Koszul 符号交换律
+$ x y = (-1)^(p q) y x, quad x in pi_p R_bullet, y in pi_q R_bullet $
