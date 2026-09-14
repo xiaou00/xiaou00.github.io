@@ -102,3 +102,31 @@ Original paragraph.
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test('Chinese source and imported text edits match a clean compile and never cache corrupted text', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'typst-unicode-test-'));
+  const input = join(root, 'note.typ');
+  const shared = join(root, 'shared.typ');
+  const flags = ['--features', 'html', '--root', root];
+  const watcher = new TypstCompiler({ cwd: root, watch: true });
+  const batch = new TypstCompiler({ cwd: root });
+  const source = '#include "shared.typ"\n#html.elem("a", attrs: ("data-note": "./子目录/目标 笔记.typ"), [])';
+  try {
+    await writeFile(shared, '笔记');
+    await writeFile(input, source);
+    await watcher.compile(input, flags);
+    await writeFile(input, source.replace('目标 笔记.typ', '目标标题已更新.typ'));
+    const renamed = await watcher.compile(input, flags);
+    assert.ok(renamed.html.includes('目标标题已更新.typ'));
+    assert.equal(renamed.html, (await batch.compile(input, flags, { fresh: true })).html);
+    await writeFile(shared, '已更新');
+    const imported = await watcher.compile(input, flags);
+    assert.ok(imported.html.includes('已更新'));
+    assert.equal(imported.html, (await batch.compile(input, flags, { fresh: true })).html);
+    assert.equal((await batch.compile(input, flags)).html, imported.html);
+  } finally {
+    await watcher.close();
+    await batch.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});

@@ -10,14 +10,29 @@ const digest = value => createHash('sha256').update(value).digest('hex');
 const notice = /warning: html export is under active development and incomplete\n(?: = hint:.*\n)*/g;
 const diagnostics = value => value.replace(notice, '').trim();
 
-async function snapshot(files) {
+async function contents(files) {
   return Object.fromEntries(await Promise.all(files.map(async file => {
-    try { return [file, digest(await readFile(file))]; }
+    try { return [file, await readFile(file)]; }
     catch (error) { if (error.code === 'ENOENT') return [file, null]; throw error; }
   })));
 }
 
+const hashes = files => Object.fromEntries(Object.entries(files).map(([file, bytes]) => [file, bytes === null ? null : digest(bytes)]));
+const snapshot = async files => hashes(await contents(files));
 const unchanged = (before, after) => Object.entries(before).every(([file, hash]) => hash === after[file]);
+
+// Typst 0.15.1 rounds a shared byte suffix in the wrong direction when it
+// starts inside a UTF-8 character (e.g. changing 笔记 to 已更新). Restart only
+// for these edits, so corrupted incremental output never reaches the cache.
+// https://github.com/typst/typst/blob/v0.15.1/crates/typst-syntax/src/lines.rs#L175
+function unsafeUnicodeEdit(before, after) {
+  if (!before || !after || before.equals(after)) return false;
+  let suffix = 0;
+  const length = Math.min(before.length, after.length);
+  while (suffix < length && before[before.length - suffix - 1] === after[after.length - suffix - 1]) suffix++;
+  const continuation = (bytes, index) => index < bytes.length && (bytes[index] & 0xc0) === 0x80;
+  return continuation(before, before.length - suffix) || continuation(after, after.length - suffix);
+}
 
 // A persistent CLI process keeps Typst's own memoized function/layout results,
 // including Fletcher/CeTZ frames. File dependencies come from Typst, not regexes.
@@ -48,7 +63,7 @@ export class TypstCompiler {
 
   async key(input, flags) {
     return digest(JSON.stringify([
-      1, this.binary, await this.version(), this.cwd, input, flags,
+      2, this.binary, await this.version(), this.cwd, input, flags,
       // Time-dependent documents must not reuse yesterday's output.
       new Date().toISOString().slice(0, 10),
       ...['TYPST_FONT_PATHS', 'TYPST_IGNORE_SYSTEM_FONTS', 'TYPST_PACKAGE_PATH', 'TYPST_PACKAGE_CACHE_PATH', 'SOURCE_DATE_EPOCH'].map(key => process.env[key] || ''),
@@ -120,6 +135,11 @@ export class TypstCompiler {
       this.workers.set(input, worker);
     }
     for (;;) {
+      if (worker.restart) {
+        await worker.stop();
+        this.workers.delete(input);
+        return this.compileWatching(input, flags, key);
+      }
       const revision = worker.revision;
       const result = worker.result;
       if (!worker.compiling && result && unchanged(result.dependencies, await snapshot(Object.keys(result.dependencies)))) {
@@ -152,7 +172,8 @@ export class TypstCompiler {
     const wake = () => { for (const waiter of [...worker.waiters]) waiter(); };
     let text = '';
     let epoch = 0;
-    let before = snapshot([input]);
+    let sourceBytes = contents([input]);
+    let before = sourceBytes.then(hashes);
     let completion = Promise.resolve();
     const finish = (failed, milliseconds, finishedEpoch, initial) => {
       completion = completion.then(async () => {
@@ -161,7 +182,17 @@ export class TypstCompiler {
         if (worker.closed || epoch !== finishedEpoch) return;
         let files = Object.keys(worker.result?.dependencies || { [input]: null });
         try { files = await this.dependencies(depsPath, input); } catch (error) { if (!failed) throw error; }
-        const dependencies = await snapshot(files);
+        const bytes = await contents(files);
+        const dependencies = hashes(bytes);
+        const previousBytes = await sourceBytes;
+        if (Object.entries(bytes).some(([file, current]) => unsafeUnicodeEdit(previousBytes[file], current))) worker.restart = true;
+        if (worker.restart) {
+          worker.compiling = false;
+          worker.revision++;
+          wake();
+          this.onChange(input);
+          return;
+        }
         const initialDependencies = await initial;
         if (!unchanged(initialDependencies, await snapshot(Object.keys(initialDependencies)))) return;
         const message = diagnostics(text);
@@ -169,6 +200,7 @@ export class TypstCompiler {
         if (epoch !== finishedEpoch || worker.closed) return;
         worker.compiling = false;
         worker.revision++;
+        sourceBytes = Promise.resolve(bytes);
         worker.result = { html, dependencies, milliseconds, error: failed ? new Error(message || `Typst 编译失败: ${input}`) : null };
         if (!failed) {
           if (message) process.stderr.write(`${message}\n`);
@@ -188,6 +220,9 @@ export class TypstCompiler {
     for (const reader of readers) reader.on('line', line => {
       line = line.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '');
       if (/\] compiling \.\.\./.test(line)) {
+        // Rapid saves can skip an intermediate result. Its source may have
+        // triggered the Unicode bug, so discard that process conservatively.
+        if (epoch > 0 && worker.compiling) worker.restart = true;
         epoch++;
         worker.compiling = true;
         text = '';

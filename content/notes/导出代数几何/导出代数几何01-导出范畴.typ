@@ -2,7 +2,6 @@
 #import "@preview/cetz:0.4.1"
 #import "@preview/fletcher:0.5.8" :*
 
-
 #show: note
 
 = 链复形
@@ -281,3 +280,30 @@ $ LMod_A (Sp) := Alg_(cat("LM")^times.o) (Sp) times_(Alg_(EE_1) (Sp)) {A} $
 #theorem[
   对任意 $EE_1$-环谱 $A$, $Mod_A$ 是可呈示的稳定无穷范畴, 即 $Mod_A in cat("Pr")^"L"_"st"$.
 ]
+
+== 模范畴与导出范畴
+
+环谱的模范畴之所以重要, 是因为它已经内蕴了所有的导出结构.
+
+#definition(title:[模范畴的 $t$-结构])[
+  给定连通环谱 $A$, 其模范畴的 $t$-结构定义为
+  $
+  Mod_(A,>=0) := {M : pi_i M = 0 "对任意" i<0} \
+  Mod_(A,<=0) := {M : pi_i M = 0 "对任意" i>0}
+  $
+]
+
+#proposition[
+  $pi_0$ 给出普通 Abel 范畴的等价
+  $ Mod_A^suit.heart tilde.eq Mod_(pi_0 A)^"ord" $
+  右边表示是常规的模范畴
+]
+
+更重要的是下面的结论
+
+#theorem[
+  对于普通的交换环 $A$, 我们有 $oo$-范畴的等价
+  $ Dcat(A) tilde.eq Mod_(H A) $
+]
+
+我们之后如果直接对环谱的模范畴定义函子, 一般意义下它都已经蕴含了导出信息, 例如 $Hom$ 自动替换为 $"RHom"$, 而 $times.o $ 换成 $times.o^"L"$.
