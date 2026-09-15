@@ -211,7 +211,7 @@
 
 = 可呈示性
 
-== 紧对象
+== $kappa$-滤过
 
 #definition(title:[$kappa$-滤过范畴])[
   给定正则序数 $kappa$, 我们称一个 $oo$-范畴 $cal(C)$ 是 *$kappa$-滤过的*, 当且仅当以 $cal(C)$ 为指标在 $Ani$ 中的余极限与所有 $kappa$-小极限交换.
