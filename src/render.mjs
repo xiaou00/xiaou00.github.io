@@ -1,3 +1,4 @@
+import { posix } from 'node:path';
 import { compareNames, encodeNotePath, noteUrl } from '../scripts/note-paths.mjs';
 
 export function escapeHtml(value = '') {
@@ -84,6 +85,11 @@ export function homePage(site, notes, dev) {
 }
 
 export function notePage(site, note, notes, dev) {
+  const folder = posix.dirname(note.slug);
+  const siblings = notes.filter(other => posix.dirname(other.slug) === folder).sort((a, b) => compareNames(a.title, b.title));
+  const index = siblings.findIndex(other => other.slug === note.slug);
+  const previous = siblings[index - 1];
+  const next = siblings[index + 1];
   const references = [
     { title: '本文引用', direction: 'outgoing', notes: note.outgoing },
     { title: '引用本文', direction: 'incoming', notes: note.incoming },
@@ -100,6 +106,10 @@ export function notePage(site, note, notes, dev) {
     </aside><div class="article-column"><article class="typst-content" aria-label="${e(note.title)}">${note.html}</article>
       <div class="article-end"><span></span>${star}<span></span></div><div class="article-bottom"><a href="${href(site)}#writings">← 返回笔记目录</a></div>
       ${references.length ? `<section class="note-connections" aria-label="笔记之间的引用">${references.map(group => `<div class="connection-group" data-direction="${group.direction}"><h2>${group.title}<span>${group.notes.length}</span></h2><ul>${group.notes.map(other => `<li><a href="${noteUrl(site, other.slug)}"><span>${e(other.title)}</span>${arrow}</a></li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+      ${previous || next ? `<nav class="note-pagination" aria-label="同一笔记本的相邻笔记">
+        ${previous ? `<a rel="prev" href="${noteUrl(site, previous.slug)}"><span class="note-pagination-label">← 上一篇</span><span>${e(previous.title)}</span></a>` : ''}
+        ${next ? `<a rel="next" href="${noteUrl(site, next.slug)}"><span class="note-pagination-label">下一篇 →</span><span>${e(next.title)}</span></a>` : ''}
+      </nav>` : ''}
     </div></div>
   </main>` });
 }

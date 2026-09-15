@@ -35,6 +35,7 @@
 #let Hom = "Hom"
 #let Map = "Map"
 #let Cov = "Cov"
+#let Ind = "Ind"
 #let Desc = "Desc"
 #let Mul = "Mul"
 #let Der = "Der"
@@ -56,7 +57,11 @@
 #let ev = "ev"
 #let Spf = "Spf"
 #let CH = "CH"
-#let yo = "よ"
+#let yo = context if target() == "html" {
+  html.elem("mrow", attrs: (style: "font-style: normal; font-size: 0.9em"), [よ])
+} else {
+  text(size: 0.9em, style: "normal")[よ]
+}
 
 #let gl = $frak("gl")$
 #let sl = $frak("sl")$
@@ -120,5 +125,3 @@
 
 #let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$
-
-

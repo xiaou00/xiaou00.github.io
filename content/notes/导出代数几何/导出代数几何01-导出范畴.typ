@@ -121,7 +121,7 @@ dg-脉是微分分次的核心构造. 现在开始我们固定一个dg-范畴 $c
   $ K_bullet (X,Y) = (Z^0 <- underline(Hom)^(-1) <- underline(Hom)^(-1) <- ...) $
 + 由Dold--Kan对应, 有范畴等价 $"DK":Ch_(>=0)(k) -->^~ cat("sMod")_k$, 于是我们规定
   $ Map_(cal(C)_Delta) (X,Y) := "DK"(K_bullet (X,Y)) $
-  得到了一个单纯范畴. 单纯范畴是无穷范畴的一种模型. 我们也可以作同伦相干脉函子 $Ner^"hc" (cal(C)_Delta)$ 换成拟范畴模型. 通常我们定义
+  得到了一个单纯范畴. 单纯范畴是无穷范畴的一种模型. 我们也可以作同伦融贯脉函子 $Ner^"hc" (cal(C)_Delta)$ 换成拟范畴模型. 通常我们定义
   $ Ner^"dg" (cal(C)) := Ner^"hc" (cal(C)_Delta) $
 
 现在我们来考察这个函子的含义, 其 0-单形就是 $cal(C)$ 的对象, 一个 1-单形
@@ -232,7 +232,7 @@ $ pi_0 : Sp^suit.heart <->^~ Ab : H $
 $ mu : A smash A -> A quad eta : SS -> A $
 再配备一系列同伦信息,  例如存在决定结合律的同伦
 $ mu(mu smash 1) tilde.eq mu(1 smash mu) $
-以及更多高阶同伦. $EE_oo$-环谱还要添加更高阶相干的交换律 $mu tilde.eq mu compose tau$ 等.
+以及更多高阶同伦. $EE_oo$-环谱还要添加更高阶融贯的交换律 $mu tilde.eq mu compose tau$ 等.
 
 #definition(title:[同伦分次环])[
   设 $A$ 是一个 $EE_1$-环谱, 则
@@ -261,7 +261,7 @@ $ S^(p+q) tilde.eq S^p smash S^q larr^(a smash b) A smash A -->^mu A $
 
 == 环谱的模
 
-现在我们希望定义的左模是带有同伦相干的作用
+现在我们希望定义的左模是带有同伦融贯的作用
 $ alpha : A smash M -> M $
 的一种谱 $M$.
 
