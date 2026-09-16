@@ -35,7 +35,6 @@
 #let Hom = "Hom"
 #let Map = "Map"
 #let Cov = "Cov"
-#let Ind = "Ind"
 #let Desc = "Desc"
 #let Mul = "Mul"
 #let Der = "Der"
@@ -118,6 +117,8 @@
 #let Perf = $bold(sans("Perf"))$
 #let LMod = $bold(sans("LMod"))$
 #let dga = $bold(sans("dgAlg"))$
+#let Ind = $bold(sans("Ind"))$
+#let sInd = $bold(sans("sInd"))$
 #let cdga = $bold(sans("cdgAlg"))$
 
 #let ideal = $lt.closed$
@@ -125,3 +126,4 @@
 
 #let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$
+

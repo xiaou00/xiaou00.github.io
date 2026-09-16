@@ -21,6 +21,12 @@
 .math-env .env-first-paragraph{display:inline}
 .math-env .env-first-paragraph:not(:last-child)::after{content:"";display:block;margin-bottom:1.25em}
 
+.typst-content .note-fold{margin:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.typst-content .note-fold>summary{padding:11px 0;cursor:pointer;color:var(--crimson);line-height:1.8}
+.typst-content .note-fold>summary::marker{color:var(--crimson);font-size:.8em}
+.typst-content .note-fold-body{min-width:0;padding:5px 0 17px 18px}
+.typst-content .note-fold-body>:last-child{margin-bottom:0}
+
 .note-connections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px;margin-top:32px;padding-top:23px;border-top:1px solid var(--line)}
 .connection-group h2{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:1px;color:var(--muted);margin:0 0 10px}
 .connection-group h2>span{font-family:var(--serif);font-size:11px;color:var(--crimson)}

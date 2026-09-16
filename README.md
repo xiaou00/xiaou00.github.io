@@ -140,7 +140,7 @@ content/notes/
 
 模板提供与参考文件相近的接口:
 
-`definition`,`theorem`,`lemma`,`proposition`,`corollary`,`axiom`,`example`,`remark`,`question`,`proof`,`proofsketch`,`answer`.
+`definition`,`theorem`,`lemma`,`proposition`,`corollary`,`axiom`,`example`,`remark`,`question`,`proof`,`proofsketch`,`answer`,`fold`.
 
 前六种环境由 Typst 原生计数器编号, 可以使用 `<label>` 和 `@label` 交叉引用; 例, 注和问题不编号. 章节目录从编译后的 HTML 标题生成, 既保留原生引用锚点, 也为未被引用的标题补全链接.
 
@@ -157,6 +157,22 @@ $ overline(underline(x/y)) $
 ```
 
 模板为 Typst 0.15 尚未导出的 `math.underline` 和 `math.overline` 补充原生 MathML, 横线随内容宽度伸缩, 支持嵌套及上下标. 文本中的 `#underline[文字]` 和 `#overline[文字]` 仍使用原生文本装饰.
+
+### 默认收起的内容
+
+用 `fold` 包裹需要折叠的内容. 网页中默认收起, 点击标题即可展开或再次收起:
+
+```typst
+#fold(title: "查看证明")[
+  #proof[
+    这里写证明正文, 可以使用公式和多个段落.
+
+    $ (a + b)^2 = a^2 + 2 a b + b^2 $
+  ]
+]
+```
+
+省略 `title` 时显示 "展开查看", 例如 `#fold[补充说明.]`. 标题也可以用内容块写公式, 例如 `title: [关于 $f$ 的说明]`. 支持嵌套折叠, 无需 JavaScript 也能展开.
 
 ### 图表及 HTML 导出边界
 
@@ -180,6 +196,8 @@ Fletcher 交换图和 CeTZ 绘图使用 `#web-diagram(...)` 包裹. 它通过 Ty
 ```
 
 图形默认居中, 宽图可独立横向滚动, 不需要在外面再写 `#align(center, ...)`. `caption` 可省略, 也可以用 `<label>` 和 `@label` 引用带标题的图. 页面保留 SVG 的原始比例, 缩放后箭头与标签仍然清晰.
+
+图内文字使用思源宋体, 数学公式使用 Libertinus Math, 与网页一致. 构建会自动将 `public/fonts/` 中已有的网页字体解压到 `.build/typst-fonts/` 供 Typst 使用, 无需另装系统字体, GitHub Pages 也使用同一套文件. 字体未变化时直接复用, 更换字体后会自动重新编译图形.
 
 ### 交换图与编译缓存
 

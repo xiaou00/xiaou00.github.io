@@ -6,6 +6,7 @@ import { parseHTML } from 'linkedom';
 import { resolveNoteLinks } from './note-links.mjs';
 import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs';
 import { TypstCompiler } from './typst-compiler.mjs';
+import { prepareTypstFonts } from './typst-fonts.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
@@ -143,13 +144,14 @@ async function buildSite({ dev, session, fresh }) {
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base 必须形如 / 或 /repository-name/.');
   const { homePage, notePage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
+  const fontPath = await prepareTypstFonts(ROOT);
   await session.retain(filenames.map(filename => join(contentRoot, 'notes', filename)));
   const notes = [];
   const compilation = { cached: 0, incremental: 0, cold: 0 };
   for (const filename of filenames) {
     const slug = filename.slice(0, -4);
     const input = join(contentRoot, 'notes', filename);
-    const flags = ['--features', 'html', '--root', contentRoot, '--input', `note-title=${noteIdentity(filename).title}`];
+    const flags = ['--features', 'html', '--root', contentRoot, '--ignore-system-fonts', '--font-path', fontPath, '--input', `note-title=${noteIdentity(filename).title}`];
     const compiled = await session.compile(input, flags, { fresh });
     compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
     notes.push({ ...noteIdentity(filename), slug, ...prepareDocument(compiled.html, { filename }) });

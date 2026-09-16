@@ -9,6 +9,7 @@ import { resolveNoteLinks } from '../scripts/note-links.mjs';
 import { discoverNoteFiles, encodeNotePath, noteIdentity, resolveNotePath, validateNotePath } from '../scripts/note-paths.mjs';
 import { createNotebookFixture } from './fixtures.mjs';
 import './typst-compiler.test.mjs';
+import './typst-fonts.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
   const document = prepareDocument('<html><head></head><body><h2 id="native">1 定理</h2><h2>2 重复</h2><h2>3 重复</h2><a href="#native">定理</a></body></html>');

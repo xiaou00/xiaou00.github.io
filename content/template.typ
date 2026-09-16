@@ -79,6 +79,12 @@
 #let proofsketch(body) = _proof([证明思路], body)
 #let answer(body) = _proof([解答], body)
 
+// Native disclosure: closed initially, with keyboard and no-JavaScript support.
+#let fold(body, title: "展开查看") = html.elem("details", attrs: (class: "note-fold"), [
+  #html.elem("summary", title)
+  #html.elem("div", attrs: (class: "note-fold-body"), body)
+])
+
 // Keep a distinct name so importing Fletcher's diagram never shadows this.
 // Only the drawing becomes SVG; surrounding equations remain native MathML.
 #let web-diagram(body, caption: none) = figure(
@@ -87,7 +93,12 @@
     role: "region",
     "aria-label": "图形, 可横向滚动",
     tabindex: "0",
-  ), html.frame(body)),
+  ), html.frame({
+    // SVG glyphs are fixed at compile time, so CSS cannot supply their fonts.
+    set text(font: "Source Han Serif")
+    show math.equation: set text(font: ("Libertinus Math", "Source Han Serif"))
+    body
+  })),
   kind: "diagram",
   supplement: [图],
   caption: caption,

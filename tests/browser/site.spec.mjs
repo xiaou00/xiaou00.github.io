@@ -390,3 +390,56 @@ test('a save with unchanged output preserves expanded folders and search without
     await page.evaluate(() => window.testBuildStream?.close());
   }
 });
+
+test('folded content starts closed and supports keyboard, nesting and MathML without JavaScript', async ({ browser, request, baseURL }) => {
+  const slug = `browser-fold-${randomUUID()}`;
+  const input = resolve(`content/notes/${slug}.typ`);
+  try {
+    await writeFile(input, `#import "../template.typ": *
+#show: note
+= 折叠内容
+#fold(title: [查看 $x^2$ 的证明])[
+  #proof[
+    折叠中的证明正文.
+
+    $ (a + b)^2 = a^2 + 2 a b + b^2 $
+  ]
+  #fold(title: "计算细节")[嵌套的补充说明.]
+]
+#fold[使用默认标题的内容.]
+`);
+    await expect.poll(async () => (await request.get(noteRoute(slug))).status(), { timeout: 15000 }).toBe(200);
+    for (const javaScriptEnabled of [true, false]) {
+      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 844 } });
+      try {
+        const page = await context.newPage();
+        await page.goto(`${baseURL}${noteRoute(slug)}`);
+        await expect(page.locator('.note-fold[open]')).toHaveCount(0);
+        const outer = page.locator('.note-fold').first();
+        const summary = outer.locator(':scope > summary');
+        const proof = outer.locator('.proof');
+        await expect(proof).not.toBeVisible();
+        await expect(summary.locator('math')).toBeVisible();
+        await summary.focus();
+        await page.keyboard.press('Enter');
+        await expect(proof).toBeVisible();
+        const formula = proof.locator('math[display="block"]');
+        await expect(formula).toBeVisible();
+        expect(await formula.evaluate(node => node.namespaceURI)).toBe('http://www.w3.org/1998/Math/MathML');
+        const nested = outer.locator('.note-fold');
+        await expect(nested.locator('.note-fold-body')).not.toBeVisible();
+        await nested.locator('summary').click();
+        await expect(nested.locator('.note-fold-body')).toBeVisible();
+        await expect(page.locator('.note-fold').last().locator('summary')).toHaveText('展开查看');
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+        if (javaScriptEnabled) await outer.screenshot({ path: test.info().outputPath('fold-open.png') });
+        await summary.focus();
+        await page.keyboard.press('Space');
+        await expect(proof).not.toBeVisible();
+      } finally { await context.close(); }
+    }
+  } finally {
+    await rm(input, { force: true });
+    await expect.poll(async () => (await request.get(noteRoute(slug))).status(), { timeout: 15000 }).toBe(404);
+  }
+});
