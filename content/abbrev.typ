@@ -45,6 +45,7 @@
 #let Pic = "Pic"
 #let Ext = "Ext"
 #let Tor = "Tor"
+#let Bar = "Bar"
 #let Nm = "Nm"
 #let Gr = "Gr"
 #let Wh = "Wh"
@@ -120,10 +121,23 @@
 #let Ind = $bold(sans("Ind"))$
 #let sInd = $bold(sans("sInd"))$
 #let cdga = $bold(sans("cdgAlg"))$
+#let AniRing = $bold(sans("AniRing"))$
+#let AniAlg = $bold(sans("AniAlg"))$
+#let AniCAlg = $bold(sans("AniCAlg"))$
+#let Poly = $bold(sans("Poly"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
 
 #let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$
+
+#let rightarrow = $stretch(->, size: #15pt)$
+#let movebase(size, x) = text(baseline: size)[#x]
+#let injlim = $display(limits(lim_(movebase(#(-1.9pt),rightarrow))))$
+#let varinjlim(subscript) = $injlim_movebase(#(-2.8pt), subscript)$
+
+#let leftarrow = $stretch(<-, size: #15pt)$
+#let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
+#let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
 
