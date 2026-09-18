@@ -102,7 +102,7 @@ $ n times m := k[x_1,...,x_n] times.o_k k[x_1,...,x_m] tilde.eq k[x_1,...,x_(n+m
 
 #proposition[
   $Poly_k subset CAlg_k^(omega"p")$, 也就是说 $k[x_1,...,x_n]$ 都是紧投射的 $k$-代数.
-]
+] <prop-poly-compact-projective-side-1>
 
 #proof[
   记 $P_n = k[x_1,...,x_n]$. 只需证明 $Hom_(CAlg_k) (P_n, -)$ 保持筛余极限, 由自由的泛性质
@@ -128,5 +128,87 @@ Lawvere 重构定理是 Lawvere 理论最核心的定理
 ] <thm-lawvere-reconstruction>
 
 #proof[
+  记 $cal(D)=cal(C)_"ff"$, 函子
+  $ h' : cal(C) -> Fun(cal(D)^opp, Set), quad h'_X := h_X|_(cal(D)) = Hom_(cal(C))(-,X) $
+  首先由于 $cal(D)$ 具有有限余积, 因为 $F$ 是左伴随, 从而
+  $ F(S union.sq T) tilde.eq F(S) union.sq F(T), quad F(nothing) tilde.eq 0 $
+  于是在 $TT_F = cal(D)^opp$ 中, 这些变为有限乘积, 于是
+  $ h'_X ((P union.sq Q)^opp) &= Hom_(cal(C))(P union.sq Q, X) \ &tilde.eq Hom_(cal(C))(P,X) times Hom_(cal(C))(Q,X) $
+  且 $h'_X (0) = *$, 从而
+  $ h'_X : cal(C) -> Fun^times (TT_F,Set) $
+  特别地, 对有限集 $S$, 有
+  $ h'_X (F(S)) tilde.eq Hom_Set (S,"oblv"(X)) tilde.eq "oblv"(X)^S $
+  若 $P=F(S)$, 其中 $S$ 是有限集, 而 $I$ 是筛范畴, 则
+  $ Hom_(cal(C))(P,colim_(i in I)X_i) &tilde.eq Hom_Set (S,"oblv"(colim_(i in I)X_i)) \ &tilde.eq Hom_Set (S,colim_(i in I) "oblv"(X_i)) \ &tilde.eq colim_(i in I) (Hom_Set (S,"oblv"(X_i))) $
+  因此
+  $ h'_(colim_(i in I) X_i) tilde.eq colim_(i in I) h'_(X_i) $
+  点态成立, 即 $h'_((-))$ 保持筛余极限. 接下来考虑这对伴随 $F tack.l "oblv"$ 的杠解消 $Bar_bullet (F,"oblv";X)$. 显然由上一节的结论, 有
+  $ abs(Bar_bullet (F,"oblv";X)) tilde.eq X $
+  并且每个
+  $ Bar_n (F,"oblv";X) = F(S_n) $
+  都是某个集合 $S_n$ 上的自由对象, 而任何集合都是其有限子集的滤过余极限
+  $ S_n tilde.eq varinjlim(S' subset_"fin" S_n) S' $
+  由于 $F$ 是左伴随, 有
+  $ F(S_n) tilde.eq varinjlim(S' subset_"fin" S_n) F(S') $
+  滤过余极限也是筛余极限, 因此每个 $Bar_n (X)$ 都在有限自由对象筛余极限的闭包中, 再取几何实现, 可知 $cal(C)$ 由 $cal(D)$ 在筛余极限下生成.
 
+  接下来证明 $h'_((-))$ 本质满. 取
+  $ A in Fun^times (cal(D)^opp,Set) $
+  考虑 Grothendieck 构造
+  $ integral_(cal(D)) A $
+  下面证明这是一个筛范畴, 首先 $A(0) tilde.eq *$, 从而 $integral A$ 非空. 再取两个对象 $(P,a),(Q,b)$, 由于 $A$ 将积送到余积, 即
+  $ A(P union.sq Q) -->^~ A(P) times A(Q) $
+  存在唯一 $c in A(P union.sq Q)$ 对应于 $(a,b)$. 于是有典范的图表
+  $ (P,a) -> (P union.sq Q,c) <- (Q,b) $
+  事实上它在这两个对象的该图表范畴中是始对象, 若另有
+  $ (P,a) -->^f (R,r) <--^g (Q,b) $
+  则余积泛性质给出唯一的
+  $ [f,g] : P union.sq Q -> R $
+  并且 $A([f,g])(r)=c$. 因为其在 $A(P) times A(Q)$ 两个分量中正是
+  $ A(f)(r) = a, quad A(g)(r) = b $
+  于是任意两个对象的形如 $i -> bullet <- j$ 的范畴都有始对象, 其中 $i,j in integral A$ , 而这个范畴恰好是逗号范畴 $(i,j) arrow.b Delta$, 其中 $Delta:integral A -> integral A times integral A$ 是对角函子. 对任意 $i,j$ 该逗号范畴非空且连通等价于说 $Delta$ 是共尾的, 从而 $integral A$ 是筛的. 另一方面, Yoneda 稠密性给出
+  $ A tilde.eq colim_((P,a) in integral A) yo(P) $
+  我们可以在 $cal(C)$ 中取
+  $ X = colim_((P,a) in integral A) P $
+  存在性由上述证明的筛性保证, 由于 $h'_((-))$ 保持筛余极限以及 $h'_P = yo(P)$, 不难推出
+  $ h'_X tilde.eq colim_((P,a) in integral A) h'_P = colim_((P,a) in integral A) yo(P) tilde.eq A $
+  从而 $h'_((-))$ 本质满.
+
+  最后考察全忠实性, 固定 $Y in cal(C)$, 考虑全体满足
+  $ Hom_(cal(C))(X,Y) -->^~ "Nat"(h'_X,h'_Y) quad (*) $
+  的 $X$, 对 $P in cal(D)$, 由 Yoneda 有
+  $ "Nat"(h'_P,h'_Y) = "Nat"(yo(P),h'_Y) tilde.eq h'_Y (P) = Hom_(cal(C))(P,Y) $
+  从而所以 $P in cal(D)$ 都满足 $(*)$. 更进一步, 若
+  $ X = colim_i X_i $
+  且所有 $X_i$ 都满足 $(*)$, 则
+  $ Hom_(cal(C))(X,Y) &tilde.eq lim_i Hom_(cal(C))(X_i,Y) \
+  &tilde.eq lim_i "Nat"(h'_(X_i),h'_Y) \
+  &tilde.eq "Nat"(colim_i h'_(X_i),h'_Y) \
+  &tilde.eq "Nat"(h'_X,h'_Y) $
+  而 $cal(D)$ 筛生成 $cal(C)$, 从而所有 $X$ 都满足 $(*)$. 从而全忠实.
+]
+
+#corollary[
+  我们有
+  $ CAlg_k tilde.eq Fun^times (Poly^opp_k, Set) $
+  也就是说
+  $ "1-"sInd(Poly_k) tilde.eq CAlg_k $
+] <cor-1sind-poly-calg>
+
+最后我们来证明@prop-poly-compact-projective-side-1 的另一半
+
+#proposition[
+  $CAlg_k^(omega"p") subset cat("Idem")(Poly_k)$, 也就是说紧投射的 $k$-代数必然是某个有限生成多项式代数的收缩.
+] <prop-poly-compact-projective-side-2>
+
+#proof[
+  设 $A in CAlg_k^(omega"p")$, 由@cor-1sind-poly-calg, 可作
+  $ A tilde.eq colim_(i in I) P_i, quad P_i in Poly_k $
+  其中 $I$ 是筛的. 由于 $A$ 紧投射, 有
+  $ Hom(A,A) tilde.eq colim_(i in I) Hom(A,P_i) $
+  特别地, $id_A in Hom(A,A)$ 必定来自某个 $Hom(A,P_i)$ 元素 $s:A->P_i$. 若 $r_i:P_i->A$ 是余极限的结构映射, 那么 $s$ 被映射到 $id_A$ 恰好意味着
+  $ r_i compose s = id_A $
+  也就是
+  $ A -->^s P_i -->^(r_i) A $
+  从而 $A$ 是某个 $P_i in Poly_k$ 的收缩.
 ]

@@ -237,5 +237,21 @@ $ delta : F eta U : G -> G^2 $
 == 杠解消的定义
 
 #definition(title:[杠解消])[
-  对伴随对 $F:cal(C) arrows.lr cal(D):G$, 定义*杠解消* (bar resolution) 为
+  对伴随对 $F:cal(C) arrows.lr cal(D):G$, $X in cal(D)$ 是对象. 定义*杠解消* (bar resolution) 为
+  $ Bar_n (F,G;X) := G^(n+1) X, quad G = F U $
+  面映射为
+  $ d_i = G^i epsilon G^(n-i) : G^(n+1) X -> G^n X, quad 0<=i<=n $
+  退化映射为
+  $ s_i = G^i delta G^(n-i) : G^(n+1) X -> G^(n+2) X $
+  余单子公理恰好蕴含单纯恒等式, 从而
+  $ Bar_bullet (F,G;X) in simp(cal(D)) $
+  伴随的余单位
+  $ epsilon_X compose epsilon_(G X) compose ... compose epsilon_(G^n X) : G^(n+1) X -> X $
+  诱导了解消映射.
+]
+
+杠解消有下述标准结论, 证明暂且略过
+
+#theorem[
+  若 $cal(D)$ 有几何实现, $U$ 是保守的 ($U(f)$ 是同构蕴含 $f$ 是同构), 且 $U:cal(D)->cal(C)$ 保持几何实现, 那么 $abs(Bar_bullet (F,G;X)) tilde.eq X$
 ]

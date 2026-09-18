@@ -107,6 +107,14 @@ export function prepareDocument(source, { filename } = {}) {
     // Typst reuses glyph IDs across frames; each embedded SVG needs its own IDs.
     for (const svg of diagram.querySelectorAll(':scope > svg')) namespaceSvg(svg, `diagram-svg-${++diagramIndex}-`);
   }
+  for (const operator of document.querySelectorAll('math mo')) {
+    // Firefox can apply its legacy large-operator form to an attached tensor
+    // product in display math. Keep ordinary U+2297 at its natural size;
+    // explicit large operators and the n-ary U+2A02 remain unchanged.
+    if (operator.textContent === '⊗' && !operator.hasAttribute('largeop')) {
+      operator.setAttribute('largeop', 'false');
+    }
+  }
   for (const element of document.querySelectorAll('math[display="block"], table')) {
     // Firefox can line-break between direct children of <math> when its
     // available width changes. Keep each equation in one explicit row;

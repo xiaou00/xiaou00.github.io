@@ -1,0 +1,44 @@
+#import "../../template.typ": *
+#import "@preview/cetz:0.4.1"
+#import "@preview/fletcher:0.5.8" :*
+
+#show: note
+
+本节固定 $k$ 为任意交换环.
+
+= 生象交换 $k$-代数和生象环
+
+== 基本定义
+
+#definition(title:[生象交换 $k$-代数 / 生象环])[
+  我们定义*生象交换 $k$-代数*的范畴为
+  $ AniCAlg_k := Ani(CAlg_k) $
+  *生象环* (animated ring) 定义为特例
+  $ AniRing := AniCAlg_ZZ $
+]
+
+由上一节的讨论, 我们也可以定义
+$ AniCAlg_k tilde.eq Fun^times (Poly_k^opp, Ani) $
+
+#remark[
+  当 $k in AniRing$ 时, 我们也可以定义 $AniCAlg_k$ 的对象就是全体生象环的态射
+  $ k -> A $
+  这么定义是合理的, 也符合朴素的代数直觉.
+]
+
+#definition(title:[自由生成生象交换代数])[
+  定义 $LSym_k:Ani(Mod_k) -> AniCAlg_k$ 为遗忘函子的左伴随, 将有限生成的投射 $k$-模 $P$ 送到交换的 $k$-代数 $Sym_k P$.
+]
+
+由于 $Ani(Mod_k) tilde.eq Dcat_(>=0)(k)$, 我们也可以想象 $LSym_k : Dcat_(>=0) (k)->AniCAlg_k$.
+
+== 导出张量积
+
+为了给出导出张量积定义的同时给出合理的解释 (而不是直接定义成推出), 我个人觉得可以先从多项式 $Poly_k$ 开始. 上节我们也提到, $Poly_k$ 有典范的张量积
+$ k[x_1,...,x_n] times.o_k k[x_1,...,x_m] tilde.eq k[x_1,...,x_(n+m)] $
+并且这里 $P times.o_k Q = P cop_k Q$ 正好是 $Poly_k$ 的余积.
+
+记
+$ yo : Poly_k arrow.hook sInd(Poly_k) = AniCAlg_k, quad P |-> Hom(-,P) $
+其中 $yo(P)(A) = Hom_(Poly_k) (A,P)$ 视作离散生象. 因此在可表对象上, 我们应该规定
+$ yo(P) dtens_k y(Q) := yo(P tens_k Q) $

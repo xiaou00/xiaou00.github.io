@@ -159,6 +159,12 @@ $ Fun_W (cal(C),cal(D)) subset Fun(cal(C),cal(D)) $
 
 == 导出范畴
 
+回顾范畴 $PrL$ 的定义
+
+#definition(title:[范畴 $PrL$])[
+  定义范畴 $PrL$ 的对象为可呈示的 $oo$-范畴, 态射是保持小余极限的函子, 对于可呈示的范畴而言, 这等价于左伴随函子.
+]
+
 现在我们通过之前介绍的 dg-方法将 $Ch(cal(A))$ 视作 $oo$-范畴, 记 $"qis"$ 是所有拟同构的族, 我们可以给出导出范畴的定义:
 
 #definition(title:[导出范畴])[
