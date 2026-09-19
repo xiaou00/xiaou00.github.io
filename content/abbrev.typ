@@ -36,6 +36,8 @@
 #let cofib = $"cofib"$
 #let coker = $"coker"$
 #let dg = $"dg"$
+#let trunl(args) = $tau_(<= args)$
+#let trunr(args) = $tau_(>= args)$
 
 #let Hom = "Hom"
 #let Map = "Map"

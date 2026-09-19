@@ -184,18 +184,7 @@ $ pi_i Phi(A) tilde.eq pi_i A $
 
 事实上, $AniCAlg_k$ 就是导出代数几何中最基础的环对象, 而 $CAlg_(H k)$ 就是*谱代数几何*中最基础的环对象. (笔者在写该笔记的时候还未正式接触谱代数几何, 若有谬误敬请谅解)
 
-== 生象环的模
-
-通过上述构造的比较态射, 我们可以典范地给每个生象环 $R in AniRing$ 都关联一个环谱 $R in CAlg_SS$. 我们使用同一个记号.
-
-通过这个角度, 我们可以对对称幺半的 $oo$-范畴 $cal(C)$ 定义 $Mod_R (cal(C))$. 我们可以定义连通导出范畴
-$ Dcat_(>=0)(R) := Mod_R (AniMod_ZZ) tilde.eq Mod_R (Dcat_(>=0)(ZZ)) $
-我们知道通过在 $PrL$ 中形式逆转 $Sigma:M|->M[1]$ 可以得到一个稳定无穷范畴 $Dcat(R)$, 即定义为余极限
-$ colim(Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma ...) $
-当我们在 $PrL$ 中计算这个范畴时, 余极限可以改写作对应右伴随函子的极限
-$ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
-
-= 生象环的例子
+== 生象环的例子
 
 #example(title:[离散生象环])[
   一个正常的环可以典范视作一个生象环, 只需通过 $Set arrow.hook Ani$ 诱导的
@@ -207,4 +196,35 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
   我们有自由-遗忘伴随
   $ "Free" : Ani arrows.lr AniRing : "oblv" $
   一个非离散的典型例子就是 $"Free"(S^1)$.
+]
+
+= 生象环的模
+
+== 生象环的导出范畴
+
+通过上述构造的比较态射, 我们可以典范地给每个生象环 $R in AniRing$ 都关联一个环谱 $R in CAlg_SS$. 我们使用同一个记号.
+
+通过这个角度, 我们可以对对称幺半的 $oo$-范畴 $cal(C)$ 定义 $Mod_R (cal(C))$. 我们可以定义连通导出范畴
+$ Dcat_(>=0)(R) := Mod_R (AniMod_ZZ) tilde.eq Mod_R (Dcat_(>=0)(ZZ)) $
+我们知道通过在 $PrL$ 中形式逆转 $Sigma:M|->M[1]$ 可以得到一个稳定无穷范畴 $Dcat(R)$, 即定义为余极限
+$ colim(Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma ...) $
+当我们在 $PrL$ 中计算这个范畴时, 余极限可以改写作对应右伴随函子的极限
+$ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
+
+== 生象环模的定义
+
+#definition(title:[生象代数的连通导出模])[
+  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 为下列两两等价的范畴之一:
+
+  + $Ab((AniCAlg_k)_(\/A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
+  + $Sp((AniCAlg_k)_(\/A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.
+  + $simp(Mod_(A_bullet)) [W^(-1)]$, 其中 $simp(Mod_(A_bullet))$ 的对象是单纯 $k$-模带有相容的作用 $A_bullet times.o_k M_bullet -> M_bullet$, $A_bullet$ 是 $A$ 在 $simp(CAlg_k)[W^(-1)]$ 中的对应.
+  + $Dcat_(>=0)(A) := Mod_A (D_(>=0)(k))$, 即导出范畴上的 $A$-代数对象.
+]
+#definition(title:[生象代数的一般导出模])[
+  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A$ 为下列两两等价的范畴之一:
+
+  + $Sp((AniCAlg_k)_(\/A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
+  + $Dcat(A) := Mod_A (D(k))$, 即导出范畴上的 $A$-代数对象.
+  + 上述定义的 $ lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
 ]

@@ -42,15 +42,17 @@ test('display math stays in one row while explicit multiline tables remain intac
   assert.equal(document.querySelector('#aligned > mtable').children.length, 2);
 });
 
-test('ordinary tensor products keep their natural size while explicit large operators remain large', () => {
-  const source = '<html><body><math display="block"><mi>P</mi><msub><msup><mo>⊗</mo><mi>L</mi></msup><mi>k</mi></msub><mi>Q</mi><mo>=</mo><mi>P</mi><msub><mo lspace="0.22em" rspace="0.22em">⊗</mo><mi>k</mi></msub><mi>Q</mi><mo largeop="true">⊗</mo><mo>⨂</mo><mo>∑</mo></math></body></html>';
-  const { document } = parseHTML(`<html><body>${prepareDocument(source).html}</body></html>`);
-  const tensors = [...document.querySelectorAll('mo')].filter(node => node.textContent === '⊗');
-  assert.deepEqual(tensors.map(node => node.getAttribute('largeop')), ['false', 'false', 'true']);
-  assert.equal(tensors[1].getAttribute('lspace'), '0.22em', 'binary spacing is preserved');
-  assert.ok(document.querySelector('msub > msup > mo'), 'derived tensor scripts are preserved');
-  for (const node of document.querySelectorAll('mo')) {
-    if (['⨂', '∑'].includes(node.textContent)) assert.equal(node.getAttribute('largeop'), null);
+test('ordinary tensor products and direct sums keep their natural size while explicit large operators remain large', () => {
+  for (const symbol of ['⊗', '⊕']) {
+    const source = `<html><body><math display="block"><mi>P</mi><msub><msup><mo>${symbol}</mo><mi>L</mi></msup><mi>k</mi></msub><mi>Q</mi><mo>=</mo><mi>P</mi><msub><mo lspace="0.22em" rspace="0.22em">${symbol}</mo><mi>k</mi></msub><mi>Q</mi><mo largeop="true">${symbol}</mo><mo>⨂</mo><mo>⨁</mo><mo>∑</mo></math></body></html>`;
+    const { document } = parseHTML(`<html><body>${prepareDocument(source).html}</body></html>`);
+    const operators = [...document.querySelectorAll('mo')].filter(node => node.textContent === symbol);
+    assert.deepEqual(operators.map(node => node.getAttribute('largeop')), ['false', 'false', 'true']);
+    assert.equal(operators[1].getAttribute('lspace'), '0.22em', 'binary spacing is preserved');
+    assert.ok(document.querySelector('msub > msup > mo'), 'attached scripts are preserved');
+    for (const node of document.querySelectorAll('mo')) {
+      if (['⨂', '⨁', '∑'].includes(node.textContent)) assert.equal(node.getAttribute('largeop'), null);
+    }
   }
 });
 

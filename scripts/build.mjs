@@ -108,10 +108,10 @@ export function prepareDocument(source, { filename } = {}) {
     for (const svg of diagram.querySelectorAll(':scope > svg')) namespaceSvg(svg, `diagram-svg-${++diagramIndex}-`);
   }
   for (const operator of document.querySelectorAll('math mo')) {
-    // Firefox can apply its legacy large-operator form to an attached tensor
-    // product in display math. Keep ordinary U+2297 at its natural size;
-    // explicit large operators and the n-ary U+2A02 remain unchanged.
-    if (operator.textContent === '⊗' && !operator.hasAttribute('largeop')) {
+    // Firefox can apply its legacy large-operator form to binary tensor
+    // products and direct sums in display math. Keep them at their natural
+    // size, while preserving explicit large operators and n-ary ⨂ / ⨁.
+    if (['⊗', '⊕'].includes(operator.textContent) && !operator.hasAttribute('largeop')) {
       operator.setAttribute('largeop', 'false');
     }
   }
