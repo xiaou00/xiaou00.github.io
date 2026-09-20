@@ -1,10 +1,10 @@
 {
   "categories": {
+    "Ring": "环和代数",
     "Schm": "概形",
     "Stck": "叠",
     "Drvd": "导出概形与导出叠",
-    "Spct": "谱预层对象",
-    "Ring": "环和代数"
+    "Spct": "谱预层对象"
   },
   "properties": {
     "smooth": "光滑",

@@ -41,8 +41,8 @@ test('browse, search, boolean/unknown filters, numerical ranges and query restor
   await page.getByRole('navigation', { name: '主导航' }).getByRole('link', { name: 'sheafpedia' }).click();
   const rows = page.locator('[data-object-row]:visible');
   await expect(rows).toHaveCount(6);
-  await expect(page.locator('.object-group h2 > span')).toHaveText(['Schm', 'Stck', 'Drvd', 'Spct', 'Ring']);
-  await expect(page.locator('[data-object-row] .object-id')).toHaveText(['Schm8971', 'Schm8972', 'Stck8971', 'Drvd8971', 'Spct8971', 'Ring8971']);
+  await expect(page.locator('.object-group h2 > span')).toHaveText(['Ring', 'Schm', 'Stck', 'Drvd', 'Spct']);
+  await expect(page.locator('[data-object-row] .object-id')).toHaveText(['Ring8971', 'Schm8971', 'Schm8972', 'Stck8971', 'Drvd8971', 'Spct8971']);
   await page.locator('[name="category"]').selectOption('Ring');
   await expect(rows).toHaveCount(1);
   await expect(rows).toContainText('Ring8971');
@@ -129,7 +129,7 @@ test('without JavaScript the categories, objects, contents and folds remain acce
     await page.goto('/sheafpedia/');
     await expect(page.locator('.object-controls')).toBeHidden();
     await expect(page.locator('[data-object-row]:visible')).toHaveCount(6);
-    await page.locator('[data-object-link]').first().click();
+    await page.locator('[data-object-link][href="/sheafpedia/Schm8971/"]').click();
     await expect(page.locator('.typst-content')).toBeVisible();
     await page.locator('.note-fold summary').click();
     await expect(page.locator('.note-fold-body')).toBeVisible();

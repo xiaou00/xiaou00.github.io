@@ -229,7 +229,7 @@ Typst 的 HTML 导出目前仍是实验性功能; 0.15 起提供原生 MathML.`p
 npm run new:object -- Schm0001 "对象名称"
 ```
 
-对象放在 `content/sheafpedia/{Schm,Stck,Drvd,Spct,Ring}/`, 文件名为前缀加四位编号. 每个文件调用一次 `encyclopedia(...)`, 填写对象名称, 定义, 简介, 性质和不变量. 例如 `smooth: true`, `proper: false`, `dimension: 0`; 省略或 `none` 表示未记录. 其他性质和不变量也可以通过自定义字典添加.
+对象放在 `content/sheafpedia/{Ring,Schm,Stck,Drvd,Spct}/`, 文件名为前缀加四位编号. 每个文件调用一次 `encyclopedia(...)`, 填写对象名称, 定义, 简介, 性质和不变量. 例如 `smooth: true`, `proper: false`, `dimension: 0`; 省略或 `none` 表示未记录. 其他性质和不变量也可以通过自定义字典添加.
 
 完整参数, 模板示例和跨对象引用见 [sheafpedia 写作说明](docs/sheafpedia.md). 五个分类目录已经准备好, `_example.typ` 为不发布的写法示例. 原有预览, 自动更新, 缓存和 GitHub Pages 流程均可继续使用.
 
