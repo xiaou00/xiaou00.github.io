@@ -9,6 +9,7 @@
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs",
     "new:note": "node scripts/new-note.mjs",
+    "new:object": "node scripts/new-object.mjs",
     "test": "node tests/build.test.mjs",
     "test:browser": "node scripts/test-browser.mjs"
   },

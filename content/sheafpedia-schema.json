@@ -1,0 +1,34 @@
+{
+  "categories": {
+    "Schm": "概形",
+    "Stck": "叠",
+    "Drvd": "导出概形与导出叠",
+    "Spct": "谱预层对象",
+    "Ring": "环和代数"
+  },
+  "properties": {
+    "smooth": "光滑",
+    "proper": "紧合",
+    "separated": "分离",
+    "quasi-compact": "拟紧",
+    "quasi-separated": "拟分离",
+    "finite-type": "有限型",
+    "finite-presentation": "有限表示",
+    "affine": "仿射",
+    "projective": "射影",
+    "reduced": "约化",
+    "irreducible": "既约",
+    "integral": "整",
+    "normal": "正规",
+    "regular": "正则",
+    "noetherian": "Noether",
+    "connected": "连通"
+  },
+  "numbers": {
+    "dimension": "维数",
+    "genus": "亏格",
+    "degree": "次数",
+    "euler-characteristic": "Euler 示性数",
+    "picard-number": "Picard 数"
+  }
+}

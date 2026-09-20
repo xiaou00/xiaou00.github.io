@@ -11,6 +11,8 @@ export default defineConfig({
   use: {
     baseURL,
     headless: true,
+    // Verify navigation and live updates without smooth-scroll timing races.
+    reducedMotion: 'reduce',
     launchOptions: { executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] },
     screenshot: 'only-on-failure',
   },

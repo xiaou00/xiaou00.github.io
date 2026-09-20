@@ -15,9 +15,10 @@ try {
   }
   // Snapshot shared Typst helpers, but use only the test suite's own notes.
   await cp(join(root, 'content'), join(workspace, 'content'), {
-    recursive: true, filter: source => source !== join(root, 'content/notes'),
+    recursive: true, filter: source => !['notes', 'sheafpedia'].some(folder => source === join(root, 'content', folder)),
   });
   await mkdir(join(workspace, 'content/notes'), { recursive: true });
+  await mkdir(join(workspace, 'content/sheafpedia'), { recursive: true });
   await symlink(join(root, 'node_modules'), join(workspace, 'node_modules'), 'junction');
 
   const socket = createServer();

@@ -221,6 +221,18 @@ Typst 的 HTML 导出目前仍是实验性功能; 0.15 起提供原生 MathML.`p
 
 `content/template.typ` 是网页模板,`参考/template.typ` 是原始纸面模板, 二者没有互相覆盖. 参考入口还引用了当前目录中未提供的 `references.bib` 和 `math-alphanumeric.csl`, 因此这里没有假定参考文件可以直接完整编译.
 
+## sheafpedia 几何对象手册
+
+主导航新增 `sheafpedia`, 在 `/sheafpedia/` 按类别和编号浏览几何对象, 支持关键词, 布尔性质和数值范围检索.
+
+```sh
+npm run new:object -- Schm0001 "对象名称"
+```
+
+对象放在 `content/sheafpedia/{Schm,Stck,Drvd,Spct,Ring}/`, 文件名为前缀加四位编号. 每个文件调用一次 `encyclopedia(...)`, 填写对象名称, 定义, 简介, 性质和不变量. 例如 `smooth: true`, `proper: false`, `dimension: 0`; 省略或 `none` 表示未记录. 其他性质和不变量也可以通过自定义字典添加.
+
+完整参数, 模板示例和跨对象引用见 [sheafpedia 写作说明](docs/sheafpedia.md). 五个分类目录已经准备好, `_example.typ` 为不发布的写法示例. 原有预览, 自动更新, 缓存和 GitHub Pages 流程均可继续使用.
+
 ## 当前文稿
 
 - **算术几何笔记** (`算术几何/算术几何笔记.typ`): 学习主题索引, 链接到其他独立笔记.
@@ -233,6 +245,9 @@ cover.png                  原始主页封面
 site.config.mjs            站名, 作者, 简介, 部署根路径
 content/
   template.typ             网页写作模板
+  sheafpedia-template.typ  几何对象百科模板
+  sheafpedia-schema.json   性质与数值参数定义
+  sheafpedia/*/*.typ       五类百科对象, 按编号生成独立页面
   notes/**/*.typ           按实际文件夹组织, 每个文件都是一篇独立笔记
 src/
   render.mjs               首页, 阅读页和 404 模板

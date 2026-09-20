@@ -230,7 +230,7 @@ test('desktop and mobile have no horizontal page overflow or missing assets', as
 });
 
 test('content is readable without JavaScript', async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(`${baseURL}/`);
   await expect(page.locator('.file-link')).toHaveCount(noteCount);
@@ -275,7 +275,7 @@ test('nested notebooks, filename and folder renames, references and live changes
     await expect(entry).not.toBeVisible();
     await page.getByRole('button', { name: '全部展开' }).click();
     await expect(entry).toBeVisible();
-    const noJsContext = await page.context().browser().newContext({ javaScriptEnabled: false });
+    const noJsContext = await page.context().browser().newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' });
     const noJsPage = await noJsContext.newPage();
     await noJsPage.bringToFront();
     await noJsPage.goto(`${baseURL}/`);
@@ -410,7 +410,7 @@ test('folded content starts closed and supports keyboard, nesting and MathML wit
 `);
     await expect.poll(async () => (await request.get(noteRoute(slug))).status(), { timeout: 15000 }).toBe(200);
     for (const javaScriptEnabled of [true, false]) {
-      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 844 } });
+      const context = await browser.newContext({ javaScriptEnabled, reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
       try {
         const page = await context.newPage();
         await page.goto(`${baseURL}${noteRoute(slug)}`);

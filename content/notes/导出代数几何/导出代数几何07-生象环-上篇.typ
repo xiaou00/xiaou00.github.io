@@ -214,7 +214,7 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
 == 生象环模的定义
 
 #definition(title:[生象代数的连通导出模])[
-  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 为下列两两等价的范畴之一:
+  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 或 $AniMod_A$ 为下列两两等价的范畴之一:
 
   + $Ab((AniCAlg_k)_(\/A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
   + $Sp((AniCAlg_k)_(\/A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.

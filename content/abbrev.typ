@@ -66,6 +66,7 @@
 #let ev = "ev"
 #let Spf = "Spf"
 #let CH = "CH"
+#let SqZ = $"SqZ"$
 #let yo = context if target() == "html" {
   html.elem("mrow", attrs: (style: "font-style: normal; font-size: 0.9em"), [よ])
 } else {
@@ -134,6 +135,7 @@
 #let AniAlg = $bold(sans("AniAlg"))$
 #let AniCAlg = $bold(sans("AniCAlg"))$
 #let AniMod = $bold(sans("AniMod"))$
+#let AugAlg = $bold(sans("AugAlg"))$
 #let Poly = $bold(sans("Poly"))$
 #let PrL = $bold(sans("Pr"))^"L"$
 

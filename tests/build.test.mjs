@@ -8,8 +8,10 @@ import { build, prepareDocument, ROOT } from '../scripts/build.mjs';
 import { resolveNoteLinks } from '../scripts/note-links.mjs';
 import { discoverNoteFiles, encodeNotePath, noteIdentity, resolveNotePath, validateNotePath } from '../scripts/note-paths.mjs';
 import { createNotebookFixture } from './fixtures.mjs';
+import { documentUrl } from '../scripts/sheafpedia.mjs';
 import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
+import './sheafpedia.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
   const document = prepareDocument('<html><head></head><body><h2 id="native">1 定理</h2><h2>2 重复</h2><h2>3 重复</h2><a href="#native">定理</a></body></html>');
@@ -59,7 +61,7 @@ test('ordinary tensor products and direct sums keep their natural size while exp
 test('real Typst source builds a linked static site with native MathML and references', async () => {
   const fixture = await createNotebookFixture();
   try {
-    const { notes } = await build();
+    const { notes, objects, site } = await build();
     assert.equal(notes.length >= 2, true);
     const specimen = notes.find(note => note.slug === fixture.specimen);
     assert.ok(specimen);
@@ -103,6 +105,8 @@ test('real Typst source builds a linked static site with native MathML and refer
     assert.equal(await readFile(join(ROOT, `dist/sources/notes/${specimen.slug}.typ`), 'utf8'), await readFile(join(ROOT, `content/notes/${specimen.slug}.typ`), 'utf8'));
     const pages = new Map();
     for (const note of notes) pages.set(note.slug, parseHTML(await readFile(join(ROOT, `dist/notes/${note.slug}/index.html`), 'utf8')).document);
+    const linkedPages = new Map(notes.map(note => [documentUrl(site, note), { entry: note, page: pages.get(note.slug) }]));
+    for (const object of objects) linkedPages.set(documentUrl(site, object), { entry: object, page: parseHTML(await readFile(join(ROOT, `dist/sheafpedia/${object.objectId}/index.html`), 'utf8')).document });
     assert.ok(pages.has(fixture.ideals), 'each file has its own note page');
     assert.equal(pages.get(fixture.index).querySelector('#dvr-dedekind'), null, 'the index does not embed another note');
     assert.ok(document.getElementById('theorems'), 'unreferenced labels remain valid external targets');
@@ -117,12 +121,12 @@ test('real Typst source builds a linked static site with native MathML and refer
       assert.equal(page.querySelector('[data-note], [data-note-label]'), null, 'all internal placeholders were resolved');
       for (const link of page.querySelectorAll('.note-reference')) {
         const url = new URL(link.getAttribute('href'), 'https://example.com');
-        const destination = decodeURIComponent(url.pathname.slice('/notes/'.length, -1));
-        assert.ok(pages.has(destination), link.outerHTML);
-        if (url.hash) assert.ok(pages.get(destination).getElementById(decodeURIComponent(url.hash.slice(1))), link.outerHTML);
-        if (destination !== note.slug) {
-          assert.ok(notes.find(other => other.slug === destination).incoming.includes(note), 'backlink generated');
-          assert.ok(note.outgoing.some(other => other.slug === destination), 'outgoing note indexed');
+        const destination = linkedPages.get(url.pathname);
+        assert.ok(destination, link.outerHTML);
+        if (url.hash) assert.ok(destination.page.getElementById(decodeURIComponent(url.hash.slice(1))), link.outerHTML);
+        if (destination.entry !== note) {
+          assert.ok(destination.entry.incoming.includes(note), 'backlink generated');
+          assert.ok(note.outgoing.includes(destination.entry), 'outgoing entry indexed');
         }
       }
     }

@@ -48,6 +48,20 @@
 }
 
 // Each environment has a native figure counter and supports @references.
+#let object-ref(id, target: none, ..rest) = {
+  assert(type(id) == str, message: "object-ref 的编号必须是字符串.")
+  assert(rest.pos().len() <= 1 and rest.named().len() == 0,
+    message: "自定义链接文字请放在 object-ref(...)[文字] 中.")
+  assert(target == none or type(target) in (str, label),
+    message: "target 必须是标签或字符串.")
+  let body = rest.pos().at(0, default: none)
+  html.elem("a", attrs: (
+    "data-object": id,
+    "data-note-target": if target == none { "" } else { str(target) },
+    "data-note-auto": if body == none { "true" } else { "false" },
+  ), if body == none { [] } else { body })
+}
+
 #let _env(kind, name, body, title: "", numbered: true) = figure(
   html.elem("div", attrs: (class: "env-body", "data-env": kind), body),
   kind: kind,

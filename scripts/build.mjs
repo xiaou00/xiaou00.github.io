@@ -7,6 +7,7 @@ import { resolveNoteLinks } from './note-links.mjs';
 import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs';
 import { TypstCompiler } from './typst-compiler.mjs';
 import { prepareTypstFonts } from './typst-fonts.mjs';
+import { discoverObjectFiles, objectIdentity, objectMetadata, finishObject } from './sheafpedia.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
@@ -47,10 +48,11 @@ function namespaceSvg(svg, prefix) {
   }
 }
 
-export function prepareDocument(source, { filename } = {}) {
+export function prepareDocument(source, { filename, object = false } = {}) {
   const { document } = parseHTML(source);
   const templates = [...document.querySelectorAll('[data-note-template]')];
   if (filename !== undefined && templates.length !== 1) throw new Error(`${filename}: 每篇文稿必须且只能调用一次 note 模板.`);
+  if (filename !== undefined && !object && document.querySelector('[data-object-template]')) throw new Error(`${filename}: encyclopedia 文件请放在 content/sheafpedia/ 对应类别目录中.`);
   for (const marker of templates) marker.remove();
   const styles = [...document.head.querySelectorAll('style')].map(style => style.textContent);
   for (const wrapper of document.body.querySelectorAll('[data-note-label]')) {
@@ -150,10 +152,13 @@ async function buildSite({ dev, session, fresh }) {
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
   const site = { ...config };
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base 必须形如 / 或 /repository-name/.');
-  const { homePage, notePage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
+  const { homePage, notePage, objectPage, sheafpediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
+  const schema = JSON.parse(await readFile(join(contentRoot, 'sheafpedia-schema.json'), 'utf8'));
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
+  const objectFiles = await discoverObjectFiles(join(contentRoot, 'sheafpedia'));
   const fontPath = await prepareTypstFonts(ROOT);
-  await session.retain(filenames.map(filename => join(contentRoot, 'notes', filename)));
+  await session.retain([...filenames.map(filename => join(contentRoot, 'notes', filename)),
+    ...objectFiles.map(filename => join(contentRoot, 'sheafpedia', filename))]);
   const notes = [];
   const compilation = { cached: 0, incremental: 0, cold: 0 };
   for (const filename of filenames) {
@@ -165,7 +170,19 @@ async function buildSite({ dev, session, fresh }) {
     notes.push({ ...noteIdentity(filename), slug, ...prepareDocument(compiled.html, { filename }) });
   }
   notes.sort((a, b) => compareNames(a.slug, b.slug));
-  resolveNoteLinks(notes, site);
+  const objects = [];
+  for (const filename of objectFiles) {
+    const identity = objectIdentity(filename);
+    const flags = ['--features', 'html', '--root', contentRoot, '--ignore-system-fonts', '--font-path', fontPath, '--input', `note-title=${identity.objectId}`];
+    const compiled = await session.compile(join(contentRoot, 'sheafpedia', filename), flags, { fresh });
+    compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
+    const document = prepareDocument(compiled.html, { filename, object: true });
+    objects.push({ ...identity, ...document, ...objectMetadata(document.html, filename) });
+  }
+  const categories = Object.keys(schema.categories);
+  objects.sort((a, b) => categories.indexOf(a.category) - categories.indexOf(b.category) || a.number - b.number);
+  resolveNoteLinks(notes, site, objects);
+  objects.forEach(finishObject);
   const outputDir = join(ROOT, dev ? '.build/dev' : 'dist');
   const stage = join(ROOT, dev ? '.build/site-dev' : '.build/site');
   await rm(stage, { recursive: true, force: true });
@@ -175,13 +192,20 @@ async function buildSite({ dev, session, fresh }) {
   await cp(join(ROOT, 'src/style.css'), join(stage, 'style.css'));
   await cp(join(ROOT, 'src/client.js'), join(stage, 'client.js'));
   await cp(contentRoot, join(stage, 'sources'), { recursive: true, filter: source => !relative(contentRoot, source).split(/[\\/]/).some(part => part.startsWith('_') || part.startsWith('.')) });
-  await writeFile(join(stage, 'typst.css'), [...new Set(notes.flatMap(note => note.styles))].join('\n'));
+  await writeFile(join(stage, 'typst.css'), [...new Set([...notes, ...objects].flatMap(note => note.styles))].join('\n'));
   await writeFile(join(stage, 'index.html'), homePage(site, notes, dev));
   await writeFile(join(stage, '404.html'), notFoundPage(site, dev));
   for (const note of notes) {
     const folder = join(stage, 'notes', note.slug);
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, 'index.html'), notePage(site, note, notes, dev));
+  }
+  await mkdir(join(stage, 'sheafpedia'), { recursive: true });
+  await writeFile(join(stage, 'sheafpedia/index.html'), sheafpediaPage(site, objects, schema, dev));
+  for (const object of objects) {
+    const folder = join(stage, 'sheafpedia', object.objectId);
+    await mkdir(folder, { recursive: true });
+    await writeFile(join(folder, 'index.html'), objectPage(site, object, objects, schema, dev));
   }
   // File watchers and Typst can both report the same save. Compare output
   // bytes, including assets and downloads, rather than rebuilding timestamps.
@@ -195,8 +219,8 @@ async function buildSite({ dev, session, fresh }) {
     throw error;
   }
   await rm(previous, { recursive: true, force: true });
-  console.log(`✓ ${notes.length} 篇文稿 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
-  return { site, notes, outputDir, compilation, fingerprint };
+  console.log(`✓ ${notes.length} 篇文稿, ${objects.length} 个几何对象 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
+  return { site, notes, objects, outputDir, compilation, fingerprint };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
