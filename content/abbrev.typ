@@ -1,13 +1,14 @@
 #let colim = $limits(op("colim"))$
 #let Spec = $op("Spec")$
 #let Frac = $op("Frac")$
-#let Im = $op("im")$
 #let Coeq = $op("coeq")$
 #let res = $op("res")$
 #let char = $"char"$
 #let Eq = $op("Eq")$
 #let tr = "tr"
+#let Res = "Res" 
 #let rad = "rad"
+#let Ann = "Ann"
 
 #let act = $arrow.half.cw$
 #let wedge = $or$

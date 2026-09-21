@@ -1,6 +1,6 @@
 import { posix } from 'node:path';
 import { compareNames, encodeNotePath, noteUrl } from '../scripts/note-paths.mjs';
-import { documentTitle, documentUrl, objectUrl } from '../scripts/sheafpedia.mjs';
+import { documentTitle, documentUrl, objectGroups, objectUrl } from '../scripts/geopedia.mjs';
 
 export function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -22,7 +22,7 @@ function header(site, section) {
     <nav aria-label="主导航">
       <a href="${href(site)}" ${section === 'home' ? 'aria-current="page"' : ''}>首页</a>
       <a href="${href(site)}#writings" ${section === 'notes' ? 'aria-current="page"' : ''}>文稿</a>
-      <a href="${href(site, 'sheafpedia/')}" ${section === 'sheafpedia' ? 'aria-current="page"' : ''}>sheafpedia</a>
+      <a href="${href(site, 'geopedia/')}" ${section === 'geopedia' ? 'aria-current="page"' : ''}>GeoPedia</a>
     </nav><span class="header-author">${e(site.author)}<span class="tiny-star">${star}</span></span>
   </div></header>`;
 }
@@ -89,22 +89,24 @@ export function homePage(site, notes, dev) {
 export function notePage(site, note, notes, dev, schema = null) {
   const isObject = Boolean(note.objectId);
   const folder = isObject ? note.category : posix.dirname(note.slug);
-  const siblings = isObject ? notes.filter(other => other.category === folder).sort((a, b) => a.number - b.number)
+  const prefixes = isObject ? objectGroups(schema).find(group => group.prefixes.includes(folder)).prefixes : [];
+  const siblings = isObject ? notes.filter(other => prefixes.includes(other.category))
+    .sort((a, b) => prefixes.indexOf(a.category) - prefixes.indexOf(b.category) || a.number - b.number)
     : notes.filter(other => posix.dirname(other.slug) === folder).sort((a, b) => compareNames(a.title, b.title));
   const index = siblings.indexOf(note);
   const previous = siblings[index - 1];
   const next = siblings[index + 1];
-  const returnUrl = isObject ? href(site, 'sheafpedia/') : `${href(site)}#writings`;
-  const returnTitle = isObject ? '几何对象手册' : '笔记目录';
-  const returnAttribute = isObject ? 'data-sheafpedia-return' : '';
+  const returnUrl = isObject ? href(site, 'geopedia/') : `${href(site)}#writings`;
+  const returnTitle = isObject ? 'GeoPedia' : '笔记目录';
+  const returnAttribute = isObject ? 'data-geopedia-return' : '';
   const paginationAttribute = isObject ? 'data-object-link' : '';
-  const path = isObject ? `sheafpedia/${note.objectId}/` : `notes/${encodeNotePath(note.slug)}/`;
-  const sourcePath = isObject ? `sheafpedia/${note.filename}` : `notes/${encodeNotePath(note.slug)}.typ`;
+  const path = isObject ? `geopedia/${note.objectId}/` : `notes/${encodeNotePath(note.slug)}/`;
+  const sourcePath = isObject ? `geopedia/${note.filename}` : `notes/${encodeNotePath(note.slug)}.typ`;
   const references = [
     { title: '本文引用', direction: 'outgoing', notes: note.outgoing },
     { title: '引用本文', direction: 'incoming', notes: note.incoming },
   ].filter(group => group.notes.length);
-  return layout(site, { title: documentTitle(note), note: true, section: isObject ? 'sheafpedia' : 'notes', dev, path, body: `
+  return layout(site, { title: documentTitle(note), note: true, section: isObject ? 'geopedia' : 'notes', dev, path, body: `
   <div class="reading-progress" aria-hidden="true"><span></span></div><main id="main" class="reading-main content-width">
     <div class="breadcrumb"><a ${returnAttribute} href="${returnUrl}">${returnTitle}</a><span>/</span><span>${e(isObject ? `${schema.categories[note.category]} / ${note.objectId}` : note.slug.split('/').join(' / '))}</span></div>
     <header class="article-header">${isObject ? `<div class="article-notebook object-id">${e(note.objectId)}</div>` : note.notebook ? `<div class="article-notebook">${folderIcon}<span>${e(note.notebook)}</span></div>` : ''}
@@ -129,31 +131,22 @@ export function objectPage(site, object, objects, schema, dev) {
   return notePage(site, object, objects, dev, schema);
 }
 
-export function sheafpediaPage(site, objects, schema, dev) {
-  const categories = Object.entries(schema.categories);
-  const propertyNames = [...new Set([...Object.values(schema.properties), ...objects.flatMap(object => Object.keys(object.properties))])];
-  const numberNames = [...new Set([...Object.values(schema.numbers), ...objects.flatMap(object => Object.keys(object.numbers))])];
-  const options = names => names.map(name => `<option value="${e(name)}">${e(name)}</option>`).join('');
-  return layout(site, { title: 'sheafpedia · 几何对象手册', section: 'sheafpedia', path: 'sheafpedia/', dev, body: `
-    <main id="main" class="sheafpedia content-width">
-      <header class="sheafpedia-heading"><span class="eyebrow crimson">SHEAFPEDIA</span><h1>几何对象手册<span class="index-dot">.</span></h1><p>定义, 构造, 性质与不变量.</p></header>
+export function geopediaPage(site, objects, schema, dev) {
+  const categories = objectGroups(schema).map(group => ({ ...group, objects: objects.filter(object => group.prefixes.includes(object.category)) }));
+  return layout(site, { title: 'GeoPedia · 几何对象手册', section: 'geopedia', path: 'geopedia/', dev, body: `
+    <main id="main" class="geopedia content-width">
+      <header class="geopedia-heading"><span class="eyebrow crimson">GeoPedia</span><h1>几何对象手册<span class="index-dot">.</span></h1><p>定义, 构造, 性质与不变量.</p></header>
       <div class="object-browser">
         <form class="object-controls" hidden role="search" aria-label="检索几何对象">
-          <div class="object-search-row"><label class="search-field">${searchIcon}<input type="search" name="q" placeholder="编号, 名称或关键词..." aria-label="搜索几何对象" autocomplete="off"></label>
-            <label>类别<select name="category"><option value="">全部类别</option>${categories.map(([code, name]) => `<option value="${code}">${code} · ${name}</option>`).join('')}</select></label></div>
-          <details class="object-filter-details"><summary>按性质与不变量筛选</summary><div class="object-filters">
-            <fieldset><legend>基本性质</legend><label>性质<select name="property"><option value="">不限性质</option>${options(propertyNames)}</select></label><label>取值<select name="value"><option value="">不限</option><option value="true">是</option><option value="false">否</option><option value="unknown">未记录</option></select></label></fieldset>
-            <fieldset><legend>数值不变量</legend><label>不变量<select name="invariant"><option value="">不限不变量</option>${options(numberNames)}</select></label><div class="invariant-range"><label>最小值<input type="number" step="any" name="min" placeholder="不限"></label><label>最大值<input type="number" step="any" name="max" placeholder="不限"></label></div></fieldset>
-          </div><p class="object-filter-hint">未记录的性质不会视为否. 数值筛选仅匹配已记录的数值, 范围包含端点.</p></details>
-          <div class="object-results-bar"><span data-object-count role="status" aria-live="polite">${objects.length} 个对象</span><button type="reset">清除筛选</button></div>
+          <label class="search-field">${searchIcon}<input type="search" name="q" placeholder="编号, 名称或关键词..." aria-label="搜索几何对象" autocomplete="off"></label>
+          <div class="object-results-bar"><span data-object-count role="status" aria-live="polite">${objects.length} 个对象</span><button type="reset">清除搜索</button></div>
         </form>
-        <nav class="object-category-nav" aria-label="按类别浏览">${categories.map(([code, name]) => `<a href="#category-${code}"><span>${code}</span> ${name}<small>${objects.filter(object => object.category === code).length}</small></a>`).join('')}</nav>
-        <div class="object-groups">${categories.map(([code, name]) => {
-          const group = objects.filter(object => object.category === code);
-          return `<section class="object-group" id="category-${code}" data-category="${code}" aria-labelledby="heading-${code}"><h2 id="heading-${code}"><span>${code}</span>${name}<small>${group.length}</small></h2>
-            ${group.length ? `<ul>${group.map(object => `<li data-object-row data-properties="${e(JSON.stringify(object.properties))}" data-numbers="${e(JSON.stringify(object.numbers))}" data-search="${e(`${object.objectId} ${code} ${name} ${object.title} ${object.aliases.join(' ')} ${object.text}`.toLocaleLowerCase())}"><a data-object-link href="${objectUrl(site, object.objectId)}"><span class="object-id">${object.objectId}</span><span class="object-name">${object.nameHtml}</span>${arrow}</a></li>`).join('')}</ul>` : '<p class="object-category-empty">尚未收录对象.</p>'}</section>`;
+        <nav class="object-category-nav" aria-label="按类别浏览">${categories.map(({ id, name, prefixes, objects }) => `<a href="#category-${id}"><span>${e(prefixes.join(' / '))}</span> ${e(name)}<small>${objects.length}</small></a>`).join('')}</nav>
+        <div class="object-groups">${categories.map(({ id: code, name, prefixes, objects: group }) => {
+          return `<section class="object-group" id="category-${code}" data-category="${code}" aria-labelledby="heading-${code}"><h2 id="heading-${code}"><span>${e(prefixes.join(' / '))}</span>${e(name)}<small>${group.length}</small></h2>
+            ${group.length ? `<ul>${group.map(object => `<li data-object-row data-search="${e(`${object.objectId} ${object.category} ${name} ${object.title} ${object.aliases.join(' ')} ${object.text}`.normalize('NFKC').toLocaleLowerCase())}"><a data-object-link href="${objectUrl(site, object.objectId)}"><span class="object-id">${object.objectId}</span><span class="object-name">${object.nameHtml}</span>${arrow}</a></li>`).join('')}</ul>` : '<p class="object-category-empty">尚未收录对象.</p>'}</section>`;
         }).join('')}</div>
-        <div class="object-no-results" hidden>没有找到符合条件的对象. 可以调整关键词或筛选条件.</div>
+        <div class="object-no-results" hidden>没有找到对象. 试试其他关键词, 或清除搜索.</div>
       </div>
     </main>` });
 }

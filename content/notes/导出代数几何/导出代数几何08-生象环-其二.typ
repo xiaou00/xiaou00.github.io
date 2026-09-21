@@ -182,7 +182,7 @@ $ fib(A_n -> A_(n-1)) tilde.eq (pi_n A)[n] $
 也就是说, 第 $n$ 个 Postnikov 层在线性化后为 $(pi_n A)[n]$, 但是 $A_n$ 一般不会等价于
 $ A_(n-1) plus.o (pi_n A)[n] $
 而它真正如何粘贴上去, 由 *$k$-不变量*
-$ LL_(A_(n-1)\/k) -> (pi_n A)[n+1] $
+$ LL_(A_(n-1)/k) -> (pi_n A)[n+1] $
 控制, 这是我们之后的重要主题.
 
 = 多项式代数与生象代数
@@ -191,7 +191,7 @@ $ LL_(A_(n-1)\/k) -> (pi_n A)[n+1] $
 
 #theorem(title:[多项式代数的稠密性])[
   设 $A in AniCAlg_k$, 则
-  $ A tilde.eq colim_((P->A) in (Poly_k)_(\/A)) P $
+  $ A tilde.eq colim_((P->A) in (Poly_k)_("/"A)) P $
 ]
 
 #proof[
@@ -200,6 +200,6 @@ $ LL_(A_(n-1)\/k) -> (pi_n A)[n+1] $
   由 Yoneda 稠密, 有
   $ A tilde.eq colim_((P,x) in integral_(Poly_k) A) yo(P) $
   又由 Yoneda, $A(P) tilde.eq Map_(AniCAlg_k)(P,A)$, 于是一个元素 $x in A(P)$ 恰好对应映射 $P->A$, 于是有典范等价
-  $ integral_(Poly_k) A tilde.eq Poly_k times_(AniCAlg_k) (AniCAlg_k)_(\/A) tilde.eq (Poly_k)_(\/A) $
+  $ integral_(Poly_k) A tilde.eq Poly_k times_(AniCAlg_k) (AniCAlg_k)_("/"A) tilde.eq (Poly_k)_("/"A) $
   又, 在 $A tilde.eq sInd(Poly_k)$ 的识别下, $yo(P)$ 就是多项式代数 $P$ 本身, 分别代入 Yoneda 稠密的陈述即证.
 ]

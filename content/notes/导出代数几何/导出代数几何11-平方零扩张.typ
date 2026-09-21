@@ -9,9 +9,9 @@
 == 经典理论过渡到导出
 
 经典的微分理论将很多信息都 "压扁" 了, 对于普通的 $k$-代数 $A$, 经典微分由
-$ dif : A -> Omega^1_(A\/k) $
+$ dif : A -> Omega^1_(A/k) $
 控制, 且有
-$ Der_k (A,M) tilde.eq Hom_A (Omega^1_(A\/k),M) $
+$ Der_k (A,M) tilde.eq Hom_A (Omega^1_(A/k),M) $
 这确实完美地表示了普通的平方零扩张
 $ A plus.o M, quad M^2 = 0 $
 在经典的微分中, 给定交换环 $A$ 和 $A$-模 $M$, 有分类的平方零扩张 $A plus.o M$, 乘法定义为
@@ -46,19 +46,19 @@ $ (a,x,y,z) |-> (a,x+y) $
 我们知道一个生象 $A$-代数就是一个生象环 $B$ 连带一个生象环的映射
 $ eta:A->B $
 也就是说对象属于范畴
-$ AniRing_(A\/) $
+$ AniRing_(A"/") $
 而增广代数则是这个想法的延伸:
 
 #definition(title:[增广生象代数])[
   一个*增广 $A$-代数*就是一个图
   $ A -->^eta B -->^epsilon A $
   满足 $epsilon compose eta tilde.eq id_A$, 其中 $eta$ 将 $B$ 识别为 $A$-代数, 而 $eta:B->A$ 称为*增广映射*. 这也就是说 $A$ 是 $B$ 的一个收缩. 该范畴记作
-  $ AugAlg_A := (AniRing_(A\/))_(\/id_A) $
+  $ AugAlg_A := (AniRing_(A"/"))_("/"id_A) $
 ]
 
 可以将这个构造想成, 一个增广代数就是在代数 $B$ 的基础上选取一个合适的 $A$-值点.
 
-显然一个增广对象可以同时典范视作 $AniRing_(A\/)$ 的元素, 也可以典范视作 $AniRing_(\/A)$ 的元素.
+显然一个增广对象可以同时典范视作 $AniRing_(A"/")$ 的元素, 也可以典范视作 $AniRing_("/"A)$ 的元素.
 
 == 增广理想
 
@@ -81,36 +81,36 @@ $ I times.o_A I -> I $
 例如刚才的例子 $I=(x)$ 中 $x dot x = x^2 != 0$ 不是平方零的. 若把增广代数 $B$ 想成 "在原点附近的函数", 那么增广理想 $I$ 是在原点消失的函数, 我们还有滤过
 $ B supset I supset I^2 supset I^3 supset ... $
 可以类比为 $I^n$ 表示 "至少 $n$ 阶小量的部分", 而商
-$ B\/I^n $
-就表示只保留常数项以及所有 $n-1$ 次项. 对于 $B\/I^2$, 这恰好是
-$ B\/I^2 tilde.eq A plus.o (I\/I^2) $
+$ B/I^n $
+就表示只保留常数项以及所有 $n-1$ 次项. 对于 $B/I^2$, 这恰好是
+$ B/I^2 tilde.eq A plus.o (I/I^2) $
 对应一个平方零扩张.
 
-== 与范畴 $AniCAlg_(k\/\/R)$
+== 与范畴 $AniCAlg_(k"//"R)$
 
 #definition[
   设 $k->R$ 是生象环映射, 即 $R$ 是生象 $k$-代数, 定义范畴
-  $ AniCAlg_(k\/\/R) := (AniCAlg_k)_(\/R) $
+  $ AniCAlg_(k"//"R) := (AniCAlg_k)_("/"R) $
   也就是全体分解
   $ k -> A -> R $
   构成的范畴.
 ]
 
 更精确地, 我们有
-$ Map_(AniCAlg_(k\/\/R))(A,B) tilde.eq Map_(AniCAlg_k)(A,B) times_(Map_(AniCAlg_k)(A,R)) {alpha:A->R} $
+$ Map_(AniCAlg_(k"//"R))(A,B) tilde.eq Map_(AniCAlg_k)(A,B) times_(Map_(AniCAlg_k)(A,R)) {alpha:A->R} $
 
-而所谓增广 $R$-代数, 本质上就是 $AniCAlg_(k\/\/R)$ 中的带基点对象. 即
-$ AugAlg_R tilde.eq (AniCAlg_(k\/\/R))_* $
+而所谓增广 $R$-代数, 本质上就是 $AniCAlg_(k"//"R)$ 中的带基点对象. 即
+$ AugAlg_R tilde.eq (AniCAlg_(k"//"R))_* $
 因为由定义我们有
-$ AugAlg_R tilde.eq (AniCAlg_(k\/\/R))_(R\/) $
+$ AugAlg_R tilde.eq (AniCAlg_(k"//"R))_(R"/") $
 而我们有结论佐证这一点
 
 #proposition[
-  生象交换 $k$-代数 $R$ 是范畴 $AniCAlg_(k\/\/R)$ 的终对象. 
+  生象交换 $k$-代数 $R$ 是范畴 $AniCAlg_(k"//"R)$ 的终对象. 
 ]
 
 也正是因此, 我们有典范的忘基点遗忘函子
-$ U : AugAlg_R -> AniCAlg_(k\/\/R) $
+$ U : AugAlg_R -> AniCAlg_(k"//"R) $
 
 = 平方零扩张与导子
 
@@ -151,15 +151,15 @@ $ A -> A plus.o M -> A $
   有些时候为了防止歧义, 我们将上述函子记作
   $ SqZ_A : Mod^(>=0)_A -> AugAlg_A $
   并且由于有遗忘函子, 我们还可以作
-  $ SqZ_A : Mod^(>=0)_A -> AniCAlg_(k\/\/A) $
+  $ SqZ_A : Mod^(>=0)_A -> AniCAlg_(k"//"A) $
 ]
 
 #proposition[
-  函子 $SqZ_A : Mod^(>=0)_A -> AniCAlg_(k\/\/A)$ 保持筛余极限和极限.
+  函子 $SqZ_A : Mod^(>=0)_A -> AniCAlg_(k"//"A)$ 保持筛余极限和极限.
 ]
 
 #proof[
-  下记 $cal(C)=AniCAlg_k$, $cal(C)_(\/A)=AniCAlg_(k\/\/A)$. 并且设
+  下记 $cal(C)=AniCAlg_k$, $cal(C)_("/"A)=AniCAlg_(k"//"A)$. 并且设
   $ U : AniCAlg_k -> Mod^(>=0)_k $
   是遗忘函子
   $ V : Mod^(>=0)_A -> Mod^(>=0)_k $
@@ -182,9 +182,9 @@ $ A -> A plus.o M -> A $
   由于 $U$ 保守, 比较映射是等价, 从而 $SqZ_A$ 保持筛余极限.
 
   下面证明其保持极限, 对任意图
-  $ X : J -> cal(C)_(\/A) $
+  $ X : J -> cal(C)_("/"A) $
   遗忘到 $cal(C)$ 的图依然为 $X$, 且有
-  $ lim_(cal(C)_(\/A)) X tilde.eq A times_(lim_J Delta A) lim_J X quad (*) $
+  $ lim_(cal(C)_("/"A)) X tilde.eq A times_(lim_J Delta A) lim_J X quad (*) $
   令
   $ X_j = SqZ_A (M_j) = A plus.o M_j $
   设 $M := lim_J M_j$ 是在 $Mod^(>=0)_A$ 中的极限, 由 $U$ 保持极限, 我们有
@@ -192,7 +192,7 @@ $ A -> A plus.o M -> A $
   而在生象模中, $plus.o$ 是有限双积, 极限函子保持它
   $ lim_J (Delta U(M) plus.o V(M_j)) tilde.eq (lim_J Delta U(A)) plus.o (lim_J V(M_j)) $
   带入 $(*)$ 得到
-  $ U(lim_(cal(C)_(\/A)) SqZ_A (M_j)) &tilde.eq U(A) times_(lim_J Delta U(A)) [(lim_J Delta U(A)) plus.o lim_J V(M_j)] \ &tilde.eq U(A) plus.o lim_J V(M_j) $
+  $ U(lim_(cal(C)_("/"A)) SqZ_A (M_j)) &tilde.eq U(A) times_(lim_J Delta U(A)) [(lim_J Delta U(A)) plus.o lim_J V(M_j)] \ &tilde.eq U(A) plus.o lim_J V(M_j) $
   再由 $V$ 保持极限有
   $ lim_J V(M_j) tilde.eq V(lim_J M_j) = V(M) $
   于是
@@ -205,13 +205,13 @@ $ A -> A plus.o M -> A $
 == 导子
 
 上一节中, 我们在最后给出了经典情形的导子刻画
-$ Der_k (A,M) tilde.eq Hom_((CAlg_k)_(\/A))(A,A plus.o M) $
+$ Der_k (A,M) tilde.eq Hom_((CAlg_k)_("/"A))(A,A plus.o M) $
 
 我们可以直接定义导出情形下的导子
 
 #definition(title:[导子])[
   设 $A$ 是生象交换 $k$-代数, $M$ 是 $A$-导出模, 定义 $A$ 到 $M$ 的 $k$-导子为
-  $ Der_k (A,M) := Map_(AniCAlg_(k\/\/A))(A,A plus.o M) $
+  $ Der_k (A,M) := Map_(AniCAlg_(k"//"A))(A,A plus.o M) $
   这里左边的 $A$ 指切片中的对象 $A -->^id A$, $A plus.o M$ 指 $A plus.o M -->^epsilon A$.
 ]
 
@@ -245,7 +245,27 @@ $ Der_k (A,M) tilde.eq Hom_((CAlg_k)_(\/A))(A,A plus.o M) $
   $ (a,d(a))(b,d(b)) = (a b, a d(b)+b d(a)) $
   这就导出了 Leibniz 律
   $ d(a b) = a d(b) + b d(a) $
-  并且由于 $s_d$ 是 $k$-代数映射
+  并且由于 $s_d$ 是 $k$-代数映射, 我们得到了
+  $ d : A -> M $
+  作为 $k$-模的映射.
+]
+
+事实上, 我们可以将导子解释为形如 $d:A->M$ 的 $k$-模映射, 并且满足同伦融贯的 Leibniz 律.
+
+#proposition[
+  一个导子 $d in Der_k (A,M)$ 自然对应一个 $k$-模映射 $d : A -> M$.
+]
+
+#proof[
+  设有 $s:A->A plus.o M$ 满足 $epsilon s = id_A$, 若遗忘代数结构, 则平方零扩张的底层有分解
+  $ U (A plus.o M) tilde.eq U(A) plus.o M $
+  并且
+  $ U(epsilon) : U(A) plus.o M -> U(A) $
+  是第一分量投影, 考察
+  $ U(s) : U(A) -> U(A) plus.o M $
+  满足 $pr_A compose U(s) tilde.eq id_(U(A))$, 那取第二分量投影就得到了
+  $ d_s := pr_M compose U(s) : U(A) -> M $
+  即 $U(s) tilde.eq (id_A,d_s)$.
 ]
 
 导子生象 $Der_k (A,M)$ 中有天然的基点, 即典范截面
@@ -265,7 +285,7 @@ $ s_0 : A -> A plus.o M, quad a |-> (a,0) $
 
 == 一般平方零扩张
 
-上面, 我们只讨论了平方零扩张分裂的情况, 平方零扩张当然可以不分裂, 但怎么给出其合适的定义是一个很好的问题. 我们先来端详前述的 $R plus.o M$ 性质. 显然, $R plus.o M$ 可以视作 $AniAlg_(k\/\/R)$ 中的一个环路空间对象, 不难验证下面的方形是拉回方形
+上面, 我们只讨论了平方零扩张分裂的情况, 平方零扩张当然可以不分裂, 但怎么给出其合适的定义是一个很好的问题. 我们先来端详前述的 $R plus.o M$ 性质. 显然, $R plus.o M$ 可以视作 $AniAlg_(k"//"R)$ 中的一个环路空间对象, 不难验证下面的方形是拉回方形
 
 #web-diagram(diagram({
 	node((0, -1), [$R plus.o M$])
@@ -280,7 +300,7 @@ $ s_0 : A -> A plus.o M, quad a |-> (a,0) $
 
 而两边的 $R->R plus.o Sigma M$ 都由平凡导子给出. 图中给出
 $ R plus.o M tilde.eq Omega(R plus.o Sigma M) $
-由于 $Der_k (R,-)$ 保持极限, 下记 $cal(C) = AniCAlg_(k\/\/R)$, 有
+由于 $Der_k (R,-)$ 保持极限, 下记 $cal(C) = AniCAlg_(k"//"R)$, 有
 $ Der_k (R,M) &tilde.eq Map_cal(C)(R,R plus.o M) \
               &tilde.eq Map_cal(C)(R,R times_(R plus.o Sigma M) R) \
               &tilde.eq Map(R,R) times_(Der_k (R,Sigma M)) Map(R,R) $

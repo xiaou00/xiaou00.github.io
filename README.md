@@ -148,6 +148,16 @@ content/notes/
 
 公式直接生成 `<math>` 元素, 由浏览器渲染. 较宽的公式和表格可以独立横向滚动, 避免把手机页面撑宽. 阅读页还提供目录跟随, 阅读进度, 源文件下载和浏览器打印.
 
+数学模式中的 `/` 默认显示为同行斜线, 行内和整行公式都适用. 需要上下分式时显式写 `frac(...)`:
+
+```typst
+$A/B$             // 同行斜线, 适合商对象
+$(a + b)/c$       // 保留括号
+$ frac(a, b) $    // 上下分式
+```
+
+模板在 `note` 函数内设置 `set math.frac(style: "horizontal")`, 并在顶层导出 `#let frac = math.frac.with(style: "vertical")`. 这是 Typst 原生的[分式样式设置](https://typst.app/docs/reference/math/frac/), 原有 `\/` 写法也可继续使用.
+
 数学上下划线直接使用 Typst 的原写法, 无需额外包裹:
 
 ```typst
@@ -221,17 +231,17 @@ Typst 的 HTML 导出目前仍是实验性功能; 0.15 起提供原生 MathML.`p
 
 `content/template.typ` 是网页模板,`参考/template.typ` 是原始纸面模板, 二者没有互相覆盖. 参考入口还引用了当前目录中未提供的 `references.bib` 和 `math-alphanumeric.csl`, 因此这里没有假定参考文件可以直接完整编译.
 
-## sheafpedia 几何对象手册
+## GeoPedia 几何对象手册
 
-主导航新增 `sheafpedia`, 在 `/sheafpedia/` 按类别和编号浏览几何对象, 支持关键词, 布尔性质和数值范围检索.
+在主导航进入 `GeoPedia`, 地址为 `/geopedia/`. 按 Ring, Schm, Stck, 高阶对象四个栏目浏览, 支持关键词搜索. 高阶对象合并展示 Drvd 和 Spct, 保留各自的编号和目录.
 
 ```sh
-npm run new:object -- Schm0001 "对象名称"
+npm run new:object -- Ring0001 "对象名称"
 ```
 
-对象放在 `content/sheafpedia/{Ring,Schm,Stck,Drvd,Spct}/`, 文件名为前缀加四位编号. 每个文件调用一次 `encyclopedia(...)`, 填写对象名称, 定义, 简介, 性质和不变量. 例如 `smooth: true`, `proper: false`, `dimension: 0`; 省略或 `none` 表示未记录. 其他性质和不变量也可以通过自定义字典添加.
+对象放在 `content/geopedia/{Ring,Schm,Stck,Drvd,Spct}/`, 文件名为前缀加四位编号. 每个文件调用一次 `encyclopedia(...)`, 填写对象名称, 定义和可选的简介等内容. 性质使用 content 列表, 例如 `properties: ([光滑], [紧合])`, 页面显示为简约标签. 不变量使用键值列表, 例如 `invariants: (([维数], [0]),)`. 别名使用 `aliases: ([另一个名称],)`, 一般讨论放在 `content: [...]` 中.
 
-完整参数, 模板示例和跨对象引用见 [sheafpedia 写作说明](docs/sheafpedia.md). 五个分类目录已经准备好, `_example.typ` 为不发布的写法示例. 原有预览, 自动更新, 缓存和 GitHub Pages 流程均可继续使用.
+笔记中可直接用 `#geopedia("Ring0001")` 引用对象, 或用 `#geopedia("Ring0001")[整数环]` 自定义链接文字. 原有 `object-ref` 写法仍可用. 模板示例和跨对象引用见 [GeoPedia 写作说明](docs/geopedia.md). `_example.typ` 为不发布的写法示例. 继续使用原有预览, 自动更新, 缓存和 GitHub Pages 流程.
 
 ## 当前文稿
 
@@ -245,9 +255,9 @@ cover.png                  原始主页封面
 site.config.mjs            站名, 作者, 简介, 部署根路径
 content/
   template.typ             网页写作模板
-  sheafpedia-template.typ  几何对象百科模板
-  sheafpedia-schema.json   性质与数值参数定义
-  sheafpedia/*/*.typ       五类百科对象, 按编号生成独立页面
+  geopedia-template.typ  几何对象百科模板
+  geopedia-schema.json   类别名称与显示顺序
+  geopedia/*/*.typ       百科对象源文件, 按编号生成独立页面
   notes/**/*.typ           按实际文件夹组织, 每个文件都是一篇独立笔记
 src/
   render.mjs               首页, 阅读页和 404 模板

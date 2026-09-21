@@ -15,11 +15,15 @@
   )
 } else { it }
 
+// Slash syntax follows the default style; explicit frac(...) stays stacked.
+#let frac = math.frac.with(style: "vertical")
+
 #let note(doc) = {
   // The build supplies the title from the filename.
   set document(title: sys.inputs.at("note-title", default: ""), author: "xiaou0")
   set text(lang: "zh")
   set smartquote(enabled: false)
+  set math.frac(style: "horizontal")
   set heading(numbering: "1.1")
   // Keep explicit labels even when only another note references them.
   show heading: _labelled
@@ -47,7 +51,7 @@
   ), if body == none { [] } else { body })
 }
 
-// Each environment has a native figure counter and supports @references.
+// GeoPedia references use the same deferred resolution as note references.
 #let object-ref(id, target: none, ..rest) = {
   assert(type(id) == str, message: "object-ref 的编号必须是字符串.")
   assert(rest.pos().len() <= 1 and rest.named().len() == 0,
@@ -62,6 +66,9 @@
   ), if body == none { [] } else { body })
 }
 
+#let geopedia = object-ref
+
+// Each environment has a native figure counter and supports @references.
 #let _env(kind, name, body, title: "", numbered: true) = figure(
   html.elem("div", attrs: (class: "env-body", "data-env": kind), body),
   kind: kind,

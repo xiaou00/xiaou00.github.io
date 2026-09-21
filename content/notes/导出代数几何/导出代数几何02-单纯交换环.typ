@@ -83,7 +83,7 @@ $ d = d_0 : DK_n (M) -> DK_(n-1) (M) $
 
   1. 弱等价定义为链复形的拟同构.
   2. 纤维化是在 $n>0$ 次上逐阶满射的链映射.
-  3. 余纤维化是*投射余纤维化*, 即 $i:C_bullet->D_bullet$ 是逐次单射, 并且其余核 (商) 复形 $D_bullet\/C_bullet$ 在每个次数 $D_n\/i_n (C_n)$ 上都是投射 $k$-模.
+  3. 余纤维化是*投射余纤维化*, 即 $i:C_bullet->D_bullet$ 是逐次单射, 并且其余核 (商) 复形 $D_bullet/C_bullet$ 在每个次数 $D_n/i_n (C_n)$ 上都是投射 $k$-模.
 ]
 
 这个模型范畴中的余纤维替换就是同调代数里的*投射解消*, 可以用于计算左导出信息.
@@ -97,7 +97,7 @@ $ Ner(Ch_(>=0)(k))["qis"^(-1)] tilde.eq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] tilde
 从而 $simp(Mod_k)[W^(-1)] tilde.eq Dcat_(>=0)(k)$ 是一种 Dold--Kan 对应.
 
 #proposition(title:[同伦--同调对应])[
-  我们可以将 $X_bullet in simp(Mod_k)$ 遗忘成单纯集后取几何实现, 以零元为基点可作同伦群 $pi_n (abs(X_bullet),0)$. 我们也可以定义单纯集的同伦群为显然的 $pi_n^"simp" (X_bullet,0) := [S^n,X_bullet]$, 其中 $S^n := Delta^n\/partial Delta^n$. 那么我们有
+  我们可以将 $X_bullet in simp(Mod_k)$ 遗忘成单纯集后取几何实现, 以零元为基点可作同伦群 $pi_n (abs(X_bullet),0)$. 我们也可以定义单纯集的同伦群为显然的 $pi_n^"simp" (X_bullet,0) := [S^n,X_bullet]$, 其中 $S^n := Delta^n/partial Delta^n$. 那么我们有
   $ pi_n (abs(X_bullet),0) tilde.eq pi_n^"simp" (X_bullet,0) tilde.eq H_n (DK(X)) $
 ] <prop-simplicial-module-homotopy-homology>
 
@@ -109,7 +109,7 @@ $ Ner(Ch_(>=0)(k))["qis"^(-1)] tilde.eq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] tilde
   $ Z_n (DK(X)) = ker (d_0 : DK_n (X) -> DK_(n-1) (X)) $
   因为 $x in DK_n (X)$ 本身已经满足
   $ d_1 x = ... = d_n x = 0 $
-  再加上核条件 $d_0 x = 0$, 所以 $Z_n (DK(X))$ 恰好就是所有边都退化到 $0$ 的 $n$-单形, 从而映射 $Delta^n -> X$ 下降成 $Delta^n\/partial Delta^n = S^n -> X$, 从而闭链恰好是基点的 $n$-球代表.
+  再加上核条件 $d_0 x = 0$, 所以 $Z_n (DK(X))$ 恰好就是所有边都退化到 $0$ 的 $n$-单形, 从而映射 $Delta^n -> X$ 下降成 $Delta^n/partial Delta^n = S^n -> X$, 从而闭链恰好是基点的 $n$-球代表.
 
   接下来再看边界, 我们有
   $ B_n (DK(X)) = d_0 (DK_(n+1) X) $

@@ -8,10 +8,10 @@ import { build, prepareDocument, ROOT } from '../scripts/build.mjs';
 import { resolveNoteLinks } from '../scripts/note-links.mjs';
 import { discoverNoteFiles, encodeNotePath, noteIdentity, resolveNotePath, validateNotePath } from '../scripts/note-paths.mjs';
 import { createNotebookFixture } from './fixtures.mjs';
-import { documentUrl } from '../scripts/sheafpedia.mjs';
+import { documentUrl } from '../scripts/geopedia.mjs';
 import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
-import './sheafpedia.test.mjs';
+import './geopedia.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
   const document = prepareDocument('<html><head></head><body><h2 id="native">1 定理</h2><h2>2 重复</h2><h2>3 重复</h2><a href="#native">定理</a></body></html>');
@@ -68,6 +68,12 @@ test('real Typst source builds a linked static site with native MathML and refer
     const { document } = parseHTML(await readFile(join(ROOT, `dist/notes/${specimen.slug}/index.html`), 'utf8'));
     assert.ok(document.querySelectorAll('math').length > 40, 'real formulas were compiled');
     assert.equal(document.querySelector('math code'), null, 'no unevaluated math functions');
+    const slashes = [...document.querySelectorAll('#math-slashes math')];
+    assert.deepEqual(slashes.map(math => math.querySelectorAll('mfrac').length), [0, 0, 0, 0, 0, 1, 1], 'only explicit frac calls produce stacked fractions');
+    assert.deepEqual(slashes.map(math => [...math.querySelectorAll('mi, mo')].filter(node => node.textContent === '/').length), [1, 1, 1, 1, 1, 0, 2], 'slash syntax works inline, in display math, in subscripts and inside fractions');
+    assert.equal(slashes[2].textContent, '(𝑎+𝑏)/𝑐', 'horizontal fractions preserve grouping parentheses');
+    assert.equal(slashes[3].querySelector('msub, msubsup').children[1].textContent, '𝐴/𝑘');
+    assert.equal(slashes[4].textContent, 'ℤ/𝑝ℤ');
     const lines = document.querySelector('#math-lines');
     assert.equal(lines.querySelectorAll('mrow.math-underline').length, 8, 'underlines survive in inline, display, nested and subscript math');
     assert.equal(lines.querySelectorAll('mrow.math-overline').length, 7, 'overlines survive in inline, display and nested math');
@@ -106,7 +112,7 @@ test('real Typst source builds a linked static site with native MathML and refer
     const pages = new Map();
     for (const note of notes) pages.set(note.slug, parseHTML(await readFile(join(ROOT, `dist/notes/${note.slug}/index.html`), 'utf8')).document);
     const linkedPages = new Map(notes.map(note => [documentUrl(site, note), { entry: note, page: pages.get(note.slug) }]));
-    for (const object of objects) linkedPages.set(documentUrl(site, object), { entry: object, page: parseHTML(await readFile(join(ROOT, `dist/sheafpedia/${object.objectId}/index.html`), 'utf8')).document });
+    for (const object of objects) linkedPages.set(documentUrl(site, object), { entry: object, page: parseHTML(await readFile(join(ROOT, `dist/geopedia/${object.objectId}/index.html`), 'utf8')).document });
     assert.ok(pages.has(fixture.ideals), 'each file has its own note page');
     assert.equal(pages.get(fixture.index).querySelector('#dvr-dedekind'), null, 'the index does not embed another note');
     assert.ok(document.getElementById('theorems'), 'unreferenced labels remain valid external targets');

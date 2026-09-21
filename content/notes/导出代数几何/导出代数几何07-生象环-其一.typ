@@ -216,15 +216,15 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
 #definition(title:[生象代数的连通导出模])[
   对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 或 $AniMod_A$ 为下列两两等价的范畴之一:
 
-  + $Ab((AniCAlg_k)_(\/A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
-  + $Sp((AniCAlg_k)_(\/A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.
+  + $Ab((AniCAlg_k)_("/"A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
+  + $Sp((AniCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.
   + $simp(Mod_(A_bullet)) [W^(-1)]$, 其中 $simp(Mod_(A_bullet))$ 的对象是单纯 $k$-模带有相容的作用 $A_bullet times.o_k M_bullet -> M_bullet$, $A_bullet$ 是 $A$ 在 $simp(CAlg_k)[W^(-1)]$ 中的对应.
   + $Dcat_(>=0)(A) := Mod_A (D_(>=0)(k))$, 即导出范畴上的 $A$-代数对象.
 ]
 #definition(title:[生象代数的一般导出模])[
   对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A$ 为下列两两等价的范畴之一:
 
-  + $Sp((AniCAlg_k)_(\/A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
+  + $Sp((AniCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
   + $Dcat(A) := Mod_A (D(k))$, 即导出范畴上的 $A$-代数对象.
   + 上述定义的 $ lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
 ]

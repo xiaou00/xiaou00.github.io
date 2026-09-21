@@ -91,7 +91,7 @@
   $ F_1 (c) = Hom(c_1,c), quad F_2 (c) = Hom(c_2,c) $
   筛条件给出
   $ colim_c (Hom(c_1,c) times Hom(c_2,c)) tilde.eq * $
-  而左边恰是逗号范畴 $(c_1,c_2)\/Delta$ 的连通分支集合, 于是 $Delta$ 共尾.
+  而左边恰是逗号范畴 $(c_1,c_2)/Delta$ 的连通分支集合, 于是 $Delta$ 共尾.
 ]
 
 

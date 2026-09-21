@@ -66,75 +66,51 @@ if (article) {
   updateReading();
 }
 
-// Search stays entirely static. The query string preserves filters on return.
-const objectQueryKeys = ['q', 'category', 'property', 'value', 'invariant', 'min', 'max'];
+// Only the keyword query is kept when opening an object and returning.
 const objectBrowser = document.querySelector('.object-browser');
 if (objectBrowser) {
   const form = objectBrowser.querySelector('form');
-  const controls = Object.fromEntries(objectQueryKeys.map(key => [key, form.elements.namedItem(key)]));
+  const search = form.elements.namedItem('q');
   const groups = [...objectBrowser.querySelectorAll('.object-group')];
-  const rows = [...objectBrowser.querySelectorAll('[data-object-row]')].map(row => ({
-    row, category: row.closest('[data-category]').dataset.category,
-    properties: JSON.parse(row.dataset.properties), numbers: JSON.parse(row.dataset.numbers),
-  }));
-  const details = form.querySelector('details');
+  const rows = [...objectBrowser.querySelectorAll('[data-object-row]')];
   form.hidden = false;
-  const restore = () => {
-    const params = new URLSearchParams(location.search);
-    for (const key of objectQueryKeys) controls[key].value = params.get(key) || '';
-    details.open = ['property', 'invariant', 'min', 'max'].some(key => controls[key].value);
-  };
-  const update = (writeUrl = true) => {
-    const values = Object.fromEntries(objectQueryKeys.map(key => [key, controls[key].value.trim()]));
-    const terms = values.q.toLocaleLowerCase().split(/\s+/).filter(Boolean);
-    const min = values.min === '' ? -Infinity : Number(values.min);
-    const max = values.max === '' ? Infinity : Number(values.max);
-    controls.value.disabled = !values.property;
-    controls.min.disabled = controls.max.disabled = !values.invariant;
-    const active = terms.length || values.category || values.property || values.invariant;
+  const restore = () => { search.value = new URLSearchParams(location.search).get('q') || ''; };
+  const update = () => {
+    const query = search.value.trim();
+    const terms = query.normalize('NFKC').toLocaleLowerCase().split(/\s+/).filter(Boolean);
     let count = 0;
-    for (const item of rows) {
-      const flag = item.properties[values.property];
-      const number = item.numbers[values.invariant];
-      const propertyMatches = !values.property || !values.value || (values.value === 'unknown' ? flag == null : flag === (values.value === 'true'));
-      const numberMatches = !values.invariant || typeof number === 'number' && number >= min && number <= max;
-      const match = (!values.category || item.category === values.category) && propertyMatches && numberMatches && terms.every(term => item.row.dataset.search.includes(term));
-      item.row.hidden = !match;
-      if (match) count++;
+    for (const row of rows) {
+      row.hidden = !terms.every(term => row.dataset.search.includes(term));
+      if (!row.hidden) count++;
     }
     for (const group of groups) {
       const count = group.querySelectorAll('[data-object-row]:not([hidden])').length;
-      group.hidden = Boolean(active) && count === 0;
+      group.hidden = terms.length > 0 && count === 0;
       group.querySelector('h2 small').textContent = count;
     }
-    objectBrowser.querySelector('[data-object-count]').textContent = active ? `${count} / ${rows.length} 个对象` : `${rows.length} 个对象`;
-    objectBrowser.querySelector('.object-no-results').hidden = !active || count > 0;
+    objectBrowser.querySelector('[data-object-count]').textContent = terms.length ? `${count} / ${rows.length} 个对象` : `${rows.length} 个对象`;
+    objectBrowser.querySelector('.object-no-results').hidden = !terms.length || count > 0;
     const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(values)) {
-      if (value && !(key === 'value' && !values.property) && !(['min', 'max'].includes(key) && !values.invariant)) params.set(key, value);
-    }
-    const query = params.size ? `?${params}` : '';
-    if (writeUrl) history.replaceState(null, '', `${location.pathname}${query}${location.hash}`);
+    if (query) params.set('q', query);
+    const suffix = params.size ? `?${params}` : '';
+    history.replaceState(null, '', `${location.pathname}${suffix}${location.hash}`);
     for (const link of objectBrowser.querySelectorAll('[data-object-link]')) {
-      const url = new URL(link.href); url.search = query; link.href = url.href;
+      const url = new URL(link.href); url.search = suffix; link.href = url.href;
     }
   };
   form.addEventListener('submit', event => event.preventDefault());
-  form.addEventListener('input', () => update());
-  form.addEventListener('change', () => update());
+  form.addEventListener('input', update);
   form.addEventListener('reset', event => {
-    event.preventDefault();
-    for (const control of Object.values(controls)) control.value = '';
-    update(); controls.q.focus();
+    event.preventDefault(); search.value = ''; update(); search.focus();
   });
-  window.addEventListener('popstate', () => { restore(); update(false); });
-  restore(); update(false);
+  window.addEventListener('popstate', () => { restore(); update(); });
+  restore(); update();
 }
-if (document.querySelector('[data-sheafpedia-return]')) {
-  const current = new URLSearchParams(location.search);
+if (document.querySelector('[data-geopedia-return]')) {
+  const query = new URLSearchParams(location.search).get('q');
   const params = new URLSearchParams();
-  for (const key of objectQueryKeys) if (current.has(key)) params.set(key, current.get(key));
-  for (const link of document.querySelectorAll('[data-sheafpedia-return], .note-pagination [data-object-link]')) {
+  if (query) params.set('q', query);
+  for (const link of document.querySelectorAll('[data-geopedia-return], .note-pagination [data-object-link]')) {
     const url = new URL(link.href); url.search = params.toString(); link.href = url.href;
   }
 }

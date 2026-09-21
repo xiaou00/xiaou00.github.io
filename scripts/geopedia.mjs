@@ -22,7 +22,17 @@ export async function discoverObjectFiles(root) {
   return filenames;
 }
 
-export const objectUrl = (site, id) => `${site.base}sheafpedia/${id}/`;
+// Prefixes with the same display name share a single browsing section.
+export function objectGroups({ categories }) {
+  const groups = new Map();
+  for (const [prefix, name] of Object.entries(categories)) {
+    if (!groups.has(name)) groups.set(name, { id: prefix, name, prefixes: [] });
+    groups.get(name).prefixes.push(prefix);
+  }
+  return [...groups.values()];
+}
+
+export const objectUrl = (site, id) => `${site.base}geopedia/${id}/`;
 export const documentUrl = (site, entry) => entry.objectId ? objectUrl(site, entry.objectId) : noteUrl(site, entry.slug);
 export const documentTitle = entry => entry.objectId ? `${entry.objectId} ${entry.title}` : entry.title;
 
@@ -32,10 +42,10 @@ export function objectMetadata(html, filename) {
   const markers = [...document.querySelectorAll('[data-object-template]')];
   if (markers.length !== 1) throw new Error(`${filename}: 每个对象必须且只能调用一次 encyclopedia 模板.`);
   const marker = markers[0];
-  const data = JSON.parse(marker.getAttribute('data-object-template'));
+  const aliases = [...marker.querySelectorAll('[data-object-alias]')].map(alias => alias.textContent.replace(/\s+/g, ' ').trim());
   const title = marker.querySelector('[data-object-name]')?.textContent.trim();
   if (!title) throw new Error(`${filename}: 对象名称不能为空.`);
-  return { ...data, title };
+  return { aliases, title };
 }
 
 export function finishObject(entry) {
@@ -46,6 +56,7 @@ export function finishObject(entry) {
   for (const paragraph of name.querySelectorAll(':scope > p')) paragraph.replaceWith(...paragraph.childNodes);
   entry.nameHtml = name.innerHTML;
   entry.introductionHtml = marker.querySelector('[data-object-introduction]').innerHTML;
+  entry.aliases = [...marker.querySelectorAll('[data-object-alias]')].map(alias => alias.textContent.replace(/\s+/g, ' ').trim());
   entry.text = document.body.textContent.replace(/\s+/g, ' ').trim();
   marker.remove();
   entry.html = document.body.innerHTML;

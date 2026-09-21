@@ -1,6 +1,6 @@
 import { parseHTML } from 'linkedom';
 import { noteIdentity, resolveNotePath } from './note-paths.mjs';
-import { documentTitle, documentUrl, validateObjectId } from './sheafpedia.mjs';
+import { documentTitle, documentUrl, validateObjectId } from './geopedia.mjs';
 
 // All notes already exist here; resolving a cycle needs no recursive compilation.
 export function resolveNoteLinks(notes, { base = '/' } = {}, objects = []) {

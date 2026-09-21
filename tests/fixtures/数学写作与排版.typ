@@ -84,6 +84,19 @@ $ R = {x in K | v(x) >= 0}, quad
   [剩余域], $k = R/frak(m)$, [模去极大理想],
 )
 
+== 斜线与分式 <math-slashes-heading>
+
+#html.elem("div", attrs: (id: "math-slashes"))[
+  行内 $A/B$, $A \/ B$ 与 $(a + b)/c$.
+
+  $ Omega^1_(A/k) $
+  $ ZZ / p ZZ $
+
+  显式分式 $frac(a, b)$.
+
+  $ frac(a/b, c/d) $
+]
+
 == 大运算符与多行公式 <math-operators-heading>
 
 #html.elem("div", attrs: (id: "math-operators"))[
@@ -101,7 +114,7 @@ $ R = {x in K | v(x) >= 0}, quad
   行内 $underline(Hom)(X, Y)^n$, $overline(x + y)^2$ 与 $overline(i + j)$.
 
   $ underline(Hom)(X, Y)^n = underline(x + y + z) $
-  $ overline(x + y + z) = overline(underline(x/y)) $
+  $ overline(x + y + z) = overline(underline(frac(x, y))) $
   $ underline(overline(x + y)) + underline(underline(x + y)) $
   $ A_(underline(Hom)) + overline(overline(x + y)) $
 

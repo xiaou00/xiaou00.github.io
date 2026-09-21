@@ -7,7 +7,7 @@ import { resolveNoteLinks } from './note-links.mjs';
 import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs';
 import { TypstCompiler } from './typst-compiler.mjs';
 import { prepareTypstFonts } from './typst-fonts.mjs';
-import { discoverObjectFiles, objectIdentity, objectMetadata, finishObject } from './sheafpedia.mjs';
+import { discoverObjectFiles, objectIdentity, objectMetadata, finishObject } from './geopedia.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
@@ -52,7 +52,7 @@ export function prepareDocument(source, { filename, object = false } = {}) {
   const { document } = parseHTML(source);
   const templates = [...document.querySelectorAll('[data-note-template]')];
   if (filename !== undefined && templates.length !== 1) throw new Error(`${filename}: 每篇文稿必须且只能调用一次 note 模板.`);
-  if (filename !== undefined && !object && document.querySelector('[data-object-template]')) throw new Error(`${filename}: encyclopedia 文件请放在 content/sheafpedia/ 对应类别目录中.`);
+  if (filename !== undefined && !object && document.querySelector('[data-object-template]')) throw new Error(`${filename}: encyclopedia 文件请放在 content/geopedia/ 对应类别目录中.`);
   for (const marker of templates) marker.remove();
   const styles = [...document.head.querySelectorAll('style')].map(style => style.textContent);
   for (const wrapper of document.body.querySelectorAll('[data-note-label]')) {
@@ -152,13 +152,13 @@ async function buildSite({ dev, session, fresh }) {
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
   const site = { ...config };
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base 必须形如 / 或 /repository-name/.');
-  const { homePage, notePage, objectPage, sheafpediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
-  const schema = JSON.parse(await readFile(join(contentRoot, 'sheafpedia-schema.json'), 'utf8'));
+  const { homePage, notePage, objectPage, geopediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
+  const schema = JSON.parse(await readFile(join(contentRoot, 'geopedia-schema.json'), 'utf8'));
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
-  const objectFiles = await discoverObjectFiles(join(contentRoot, 'sheafpedia'));
+  const objectFiles = await discoverObjectFiles(join(contentRoot, 'geopedia'));
   const fontPath = await prepareTypstFonts(ROOT);
   await session.retain([...filenames.map(filename => join(contentRoot, 'notes', filename)),
-    ...objectFiles.map(filename => join(contentRoot, 'sheafpedia', filename))]);
+    ...objectFiles.map(filename => join(contentRoot, 'geopedia', filename))]);
   const notes = [];
   const compilation = { cached: 0, incremental: 0, cold: 0 };
   for (const filename of filenames) {
@@ -174,7 +174,7 @@ async function buildSite({ dev, session, fresh }) {
   for (const filename of objectFiles) {
     const identity = objectIdentity(filename);
     const flags = ['--features', 'html', '--root', contentRoot, '--ignore-system-fonts', '--font-path', fontPath, '--input', `note-title=${identity.objectId}`];
-    const compiled = await session.compile(join(contentRoot, 'sheafpedia', filename), flags, { fresh });
+    const compiled = await session.compile(join(contentRoot, 'geopedia', filename), flags, { fresh });
     compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
     const document = prepareDocument(compiled.html, { filename, object: true });
     objects.push({ ...identity, ...document, ...objectMetadata(document.html, filename) });
@@ -200,10 +200,10 @@ async function buildSite({ dev, session, fresh }) {
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, 'index.html'), notePage(site, note, notes, dev));
   }
-  await mkdir(join(stage, 'sheafpedia'), { recursive: true });
-  await writeFile(join(stage, 'sheafpedia/index.html'), sheafpediaPage(site, objects, schema, dev));
+  await mkdir(join(stage, 'geopedia'), { recursive: true });
+  await writeFile(join(stage, 'geopedia/index.html'), geopediaPage(site, objects, schema, dev));
   for (const object of objects) {
-    const folder = join(stage, 'sheafpedia', object.objectId);
+    const folder = join(stage, 'geopedia', object.objectId);
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, 'index.html'), objectPage(site, object, objects, schema, dev));
   }
