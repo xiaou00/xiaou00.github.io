@@ -237,3 +237,57 @@ $ A -> ... -> A_n ->^(p_n) A_(n-1) -> ... -> A_0 = pi_0 A $
 现在我们来识别这个问题中内蕴的障碍理论, 这个问题很简单. 我们知道有平方零扩张 $p_n:A_n->A_(n-1)$, 问题是 $f:R->A_(n-1)$ 是否能提升为 $tilde(f):R->A_n$ 使得整体交换. 那么我们的障碍类被选为
 $ o_(p_n)(f) = [(p_n)_f] in pi_0 Map_R (LL_(R/k), f^*pi_n A [n+1] ) $
 刻画 $f$ 的提升障碍, 显然有 $Lift_(p_n) (f) != nothing$ 当且仅当 $o_(p_n)(f)=0$.
+
+= André--Quillen (上)同调论
+
+== 余切复形表示的(上)同调论
+
+最自然地说, André--Quillen 理论, 就是余切复形 $LL_(A/k)$ 表示的同调和上同调理论.
+
+#definition(title:[André--Quillen 同调])[
+  设 $A in AniCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 同调*为
+  $ D_n (A/k;M) := pi_n (LL_(A/k) times.o_A M) in Mod_(pi_0 A) $
+]
+
+类似地, 可以定义上同调
+
+#definition(title:[André--Quillen 上同调])[
+  设 $A in AniCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 上同调*为
+  $ D^n (A/k;M) := pi_(-n) underline(Map)_A (LL_(A/k),M) in Mod_(pi_0 A) $
+]
+
+显然上述可以等价地写成
+$ pi_0 underline(Map)_A (LL_(A/k),M[n]) $
+若其离散, 这个恰好就是
+$ Ext^n_A (LL_(A/k),M) $
+我们可以识别出其一些平凡的性质, 包括并不限于:
+
++ $D^0$ 就是普通导子, 因为 $D^0 (A/k;M) = pi_0 Map_A (L_(A/k),M) tilde.eq pi_0 Der_k (A,M)$.
++ $D_0$ 就是 $Omega^1_(pi_0 A/pi_0 k) times.o_(pi_0 A) pi_0 M$ 就是经典 Kähler 微分带系数 $M$.
++ $D^1$ 分类平方零扩张, 因为 $D^1 (A/k;M) tilde.eq pi_0 Der_k (A,M[1])$.
+
+== Jacobi--Zariski 正合列
+
+#proposition(title:[Jacobi--Zariski 同调长正合列])[
+  设连续的生象环映射 $k->A->B$, 则存在长正合列
+  $ ... -> D_n (A/k;M) -> D_n (B/k;M) -> D_n (B/A;M) ->^partial D_(n-1)(A/k;M) -> ... $
+]
+
+#proof[
+  直接对传递三角
+  $ B times.o_A LL_(A/k) -> LL_(B/k) -> LL_(B/A) $
+  张量 $M$ 后取同伦群即可.
+]
+
+#proposition(title:[Jacobi--Zariski 上同调长正合列])[
+  设连续的生象环映射 $k->A->B$, 则存在长正合列
+  $ ... -> D^n (B/A;M) -> D^n (B/k;M) -> D^n (A/k;M) ->^partial D^(n-1)(B/A;M) -> ... $
+]
+
+二者形式上十分类似, 在离散的情况下, 前者的低阶部分是
+$ D_1 (B/A;M) ->^partial Omega^1_(A/k) times.o_A M -> Omega^1_(B/k) times.o_B M -> Omega^1_(B/A) times.o_B M -> 0 $
+取 $M=B$ 就得到了经典的
+$ D_1 (B/A;B) -> B times.o_A Omega^1_(A/k) -> Omega^1_(B/k) -> Omega^1_(B/A) -> 0 $
+这里的左边甚至被补齐了, $D_1$ 某些意义上刻画了 Kähler 微分正合列左端不再单射的缺陷部分. 而后者的低阶部分形如
+$ 0 -> Der_A (B,M) -> Der_k (B,M) -> Der_k (A,M) -> D^1 (B/A,M) -> D^1 (B/k,M) -> D^1 (A/k,M) -> ... $
+

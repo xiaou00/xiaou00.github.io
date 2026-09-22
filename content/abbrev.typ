@@ -10,6 +10,7 @@
 #let rad = "rad"
 #let Ann = "Ann"
 #let Lift = "Lift"
+#let Amp = "Amp"
 
 #let act = $arrow.half.cw$
 #let wedge = $or$
@@ -141,6 +142,8 @@
 #let AugAlg = $bold(sans("AugAlg"))$
 #let Poly = $bold(sans("Poly"))$
 #let PrL = $bold(sans("Pr"))^"L"$
+#let Cell = $bold(sans("Cell"))$
+#let Idem = $bold(sans("Idem"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
