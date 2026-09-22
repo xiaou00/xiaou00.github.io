@@ -228,3 +228,34 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
   + $Dcat(A) := Mod_A (D(k))$, 即导出范畴上的 $A$-代数对象.
   + 上述定义的 $ lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
 ]
+
+== 映射锥
+
+#proposition(title:[一个简单但重要的计算引理])[
+  设 $M,N in Mod_A^suit.heart$, $f:M->N$ 是导出模态射, 则
+  $ cofib(M->^f N) tilde.eq [M->^f N] $
+]
+
+#proof[
+  只需证明 $C=[M->^f N]$ 满足泛性质即可, 即对任意 $X in Mod_A$ 有
+  $ Map(C,X) tilde.eq Map(N,X) times_(Map(M,X)) Map(0,X) $
+  而由于 $Map(0,X) tilde.eq *$, 问题转化成:
+
+  #question[
+    从 $C$ 到 $X$ 的映射是否恰好等价于 $g:N->X$ 加上 $g f:M->X$ 的一个零同伦.
+  ]
+
+  答案是肯定的, 有自然包含 $i:N->C$, 复合 $M->^f N->^i C$ 并非严格的零映射, 但存在典范的零伦
+  $ h: M->C_1 = M, quad h = id_M $
+  由于 $C$ 的微分就是 $f$, 有 $d_C h=f$, 换句话说 $i f = d_C compose id_M$, 也就是 $i f tilde.eq 0$. 现在任取 $X$, 一个映射
+  $ phi:C->X $
+  限制到 $C_0=N$ 给出 $g:N->X$, 同时 $phi$ 在 $C_1=M$ 上的部分给出了同伦 $h:M->X[1]$, 链映射恰好要求了 $d h+ h d = g f$, 由于 $M$ 集中在 $0$ 度, 也就是说 $d h = g f$, 表示 $h$ 是 $g f$ 的零伦.
+]
+
+我们也可以证明下面的定理, 由于篇幅问题就暂且略过了
+
+#theorem(title:[映射锥的对应])[
+  对于任意 $M,N in Mod_A$ 和 $f:M->N$, 有
+  $ cofib(f) tilde.eq "Cone"(f) $
+  是映射锥构造. 也就是说余纤维覆盖了经典的映射锥理论.
+]

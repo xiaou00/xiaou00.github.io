@@ -9,6 +9,7 @@
 #let Res = "Res" 
 #let rad = "rad"
 #let Ann = "Ann"
+#let Lift = "Lift"
 
 #let act = $arrow.half.cw$
 #let wedge = $or$
@@ -41,6 +42,7 @@
 #let trunr(args) = $tau_(>= args)$
 
 #let Hom = "Hom"
+#let SqExt = $"SqExt"$
 #let Map = "Map"
 #let Cov = "Cov"
 #let Desc = "Desc"

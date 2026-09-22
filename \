@@ -8,9 +8,9 @@
 
 = 余切复形的基本性质
 
-== 恒等法则
+== 恒等规则
 
-#proposition(title:[恒等法则])[
+#proposition[
   对于生象环的恒等态射 $k->k$, 有 $LL_(k/k)=0$.
 ]
 
@@ -20,9 +20,9 @@
   由泛性质知 $LL_(k/k) = 0$.
 ]
 
-== 自由代数法则
+== 自由代数规则
 
-#proposition(title:[自由代数法则])[
+#proposition[
   设 $M in AniMod_k$ 是 $k$-生象模, 则自由代数
   $ LL_(LSym_k (M) / k) tilde.eq LSym_k (M) tens_k M $
 ]
@@ -59,7 +59,7 @@ $ d_(P_n/k) (f) = sum_i frac(partial f,partial x_i) dif x_i $
 下面我们记伴随对
 $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 
-#proposition(title:[传递三角])[
+#proposition[
   设 $A,B in AniCAlg_k$ 以及态射 $f:A->B$, 我们有典范的纤维序列
   $ B tens_A LL_(A/k) ->^(f_*) LL_(B/k) -> LL_(B/A) $
 ]
@@ -103,9 +103,9 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 
 == 基变换法则
 
-#proposition(title:[基变换法则])[
+#proposition[
   对 $A in AniCAlg_k$ 和生象环 $k->k'$, 有
-  $ LL_(A'/k') tilde.eq A' tens_A L_(A/k), quad "其中" A' = A tens_k k' $
+  $ LL_((A tens_k k')/k') tilde.eq A' tens_A L_(A/k), quad A' = A tens_k k' $
 ]
 
 #proof[
@@ -138,6 +138,19 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 
 == 商法则
 
+下面考虑导出商
+
+#web-diagram(diagram({
+	node((0, 0), [$"LSym"_k (M)$])
+	node((0, 1), [$k$])
+	node((1, 0), [$A$])
+	node((1, 1), [$A\/\/M$])
+	edge((0, 0), (0, 1), [$epsilon$], label-side: right, "->")
+	edge((0, 0), (1, 0), "->")
+	edge((1, 0), (1, 1), "->")
+	edge((0, 1), (1, 1), "->")
+}))
+
 #lemma(title:[反向的自由代数规则])[
   设 $M in AniMod$, 则 $0:LSym_k (M)->k$ 对应的余切复形为
   $ LL_(k/LSym_k (M)) tilde.eq M[1] $
@@ -154,84 +167,9 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
   $ k times.o_P LL_(P/k) tilde.eq k times.o_P (P times.o_k M) tilde.eq M $
   从而纤维序列变为
   $ M -> 0 -> LL_(k/P) $
-  即 $M = fib(0->LL_(k/P))$, 故 $LL_(k/P) tilde.eq M[1]$.
 ]
 
-下面考虑导出商
-
-#web-diagram(diagram({
-	node((0, 0), [$"LSym"_k (M)$])
-	node((0, 1), [$k$])
-	node((1, 0), [$A$])
-	node((1, 1), [$A\/\/M$])
-	edge((0, 0), (0, 1), [$epsilon$], label-side: right, "->")
-	edge((0, 0), (1, 0), "->")
-	edge((1, 0), (1, 1), "->")
-	edge((0, 1), (1, 1), "->")
-}))
-
-
-
-#proposition(title:[导出商法则])[
+#proposition[
   设 $A in AniCAlg_k$, 记 $B = A/\/M$ 为导出商, 则
   $ LL_(B/A) tilde.eq B times.o_k M[1] $
 ]
-
-#proof[
-  依旧记 $P=LSym_k (M)$. 由于上述商图表是推出的, 并且由余切复形的基变换法则, 沿着上方态射 $P->A$ 作基变换. 对公式
-  $ LL_(S'/S) tilde.eq S' times.o_R' LL_(R'/R) $
-  代入 $R=P, S=A, R'=k, S'=B$ 得
-  $ LL_(B/A) tilde.eq B times.o_k LL_(k/P) tilde.eq B times.o_k M[1] $
-]
-
-= Jacobi 计算公式
-
-== 单方程情形
-
-#proposition(title:[单方程的 Jacobian])[
-  若 $B = k[x_1,...,x_n]/\/f$, 且 $f$ 是正则元. 则
-  $ LL_(B/k) tilde.eq [B ->^(nabla f) B^(plus.o n)] $
-  其中
-  $ nabla f (x) = sum_(i=1)^n frac(partial f,partial x_i)(x) dif x_i $
-]
-
-#proof[
-  设 $A = k[x_1,...,x_n]$, 那么取 $M=k dot e, e|-> f in A$, 则
-  $ LSym_k (M) tilde.eq k[t] $
-  由导出商法则, 有
-  $ LL_(B/A) tilde.eq B times.o_k k[1] tilde.eq B[1] $
-  对于 $A->B$ 应用传递三角
-  $ B times.o_A LL_(A/k) -> LL_(B/k) -> LL_(B/A) $
-  由于 $A$ 是多项式环, 有
-  $ LL_(A/k) tilde.eq plus.o.big_(i=1)^n A dif x_i $
-  因此
-  $ B times.o_A LL_(A/k) tilde.eq B^(plus.o n) $
-  于是得到纤维序列
-  $ B^(plus.o n) -> LL_(B/k) -> B[1] $
-  旋转得
-  $ B->B^(plus.o n) -> LL_(B/k) $
-  得 $LL_(B/k) = cofib(B->^delta B^(plus.o n))$. 下面证明 $delta = nabla f$. 先看定义 $B$ 的态射
-  $ k[t] -> A, quad t |-> f $
-  在余切复形上诱导典范的
-  $ A times.o_(k[t]) LL_(k[t]/k) -> LL_(A/k) $
-  而
-  $ LL_(k[t]/k) tilde.eq k[t] d t $
-  余切复形的函子性结合 Leibniz 律可以在多项式环上算出
-  $ d t |-> d(f) , quad d f = sum_(i=1)^n frac(partial f,partial x_i) dif x_i $
-  沿着 $A->B$ 基变换即可.
-]
-
-== 多方程情形
-
-#proposition(title:[Jacobian])[
-  若 $B = k[x_1,...,x_n]/\/(f_1,...,f_m)$, 且 $f_1,...,f_m$ 是正则序列. 则
-  $ LL_(B/k) tilde.eq [B^(plus.o n) larr^("Jac"(f_1,...,f_m)) B^(plus.o n)] $
-  其中
-  $ "Jac"(f_1,...,f_m) := mat(
-    frac(partial f_1,partial x_1),dots.c,frac(partial f_m,partial x_1);
-    dots.v,dots.down,dots.v;
-    frac(partial f_1,partial x_m),dots.c,frac(partial f_m,partial x_n)
-  ) $
-]
-
-我实在懒得写这个证明了 QAQ.

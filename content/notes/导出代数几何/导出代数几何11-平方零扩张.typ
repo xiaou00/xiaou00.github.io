@@ -291,19 +291,19 @@ $ s_0 : A -> A plus.o M, quad a |-> (a,0) $
 	node((0, -1), [$R plus.o M$])
 	node((1, -1), [$R$])
 	node((0, 0), [$R$])
-	node((1, 0), [$R plus.o Sigma M$])
+	node((1, 0), [$R plus.o M[1]$])
 	edge((0, -1), (0, 0), "->")
 	edge((0, 0), (1, 0), "->")
 	edge((0, -1), (1, -1), "->")
 	edge((1, -1), (1, 0), "->")
 }))
 
-而两边的 $R->R plus.o Sigma M$ 都由平凡导子给出. 图中给出
-$ R plus.o M tilde.eq Omega(R plus.o Sigma M) $
+而两边的 $R->R plus.o M[1]$ 都由平凡导子给出. 图中给出
+$ R plus.o M tilde.eq Omega(R plus.o M[1]) $
 由于 $Der_k (R,-)$ 保持极限, 下记 $cal(C) = AniCAlg_(k"//"R)$, 有
 $ Der_k (R,M) &tilde.eq Map_cal(C)(R,R plus.o M) \
-              &tilde.eq Map_cal(C)(R,R times_(R plus.o Sigma M) R) \
-              &tilde.eq Map(R,R) times_(Der_k (R,Sigma M)) Map(R,R) $
+              &tilde.eq Map_cal(C)(R,R times_(R plus.o M[1]) R) \
+              &tilde.eq Map(R,R) times_(Der_k (R,M[1])) Map(R,R) $
 而因为 $R$ 是终对象, $Map_(cal(C))(R,R)tilde.eq *$, 于是有
 $ Der_k (R,Sigma^n M) tilde.eq Omega Der_k (R,Sigma^(n+1)M) $
 若令 $X_n := Der_k (R,Sigma^n M)$, 就得到一列
@@ -313,18 +313,18 @@ $ X_0, X_1, X_2, ... $
 回顾正题, 我们现在可以推广平方零扩张的定义到非分裂的情形
 
 #definition(title:[平方零扩张])[
-  设 $p:tilde(S)->S$ 是 $AniCAlg_k$ 的态射, 称其为 $S$ 关于 $M$ 的一个*平方零扩张* (square zero extension, SZE), 是指存在一个导子 $d in Der_k (S,Sigma M)$, 使得 $tilde(S)$ 可置入拉回方形
+  设 $p:tilde(S)->S$ 是 $AniCAlg_k$ 的态射, 称其为 $S$ 关于 $M$ 的一个*平方零扩张* (square zero extension, SZE), 是指存在一个导子 $d in Der_k (S,M[1])$, 使得 $tilde(S)$ 可置入拉回方形
   #web-diagram(diagram({
       node((0, -1), [$tilde(S)$])
       node((1, -1), [$S$])
       node((0, 0), [$S$])
-      node((1, 0), [$S plus.o Sigma M$])
+      node((1, 0), [$S plus.o M[1]$])
       edge((0, -1), (0, 0), "->")
       edge((0, 0), (1, 0), [$d$], label-side: right, "->")
       edge((0, -1), (1, -1), [$p$], "->")
       edge((1, -1), (1, 0), [$0$], label-side: left, "->")
   }))
-  其中横向态射 $d$ 是给定导子, $0$ 是零导子.
+  其中横向态射 $d$ 是给定导子, $0$ 是零导子. 所有固定 $M$ 的平方零扩张构成一个群胚, 记作 $SqExt_k (S,M)$.
 ]
 
 上述定义的核心思想, 就是将 $tilde(S)$ 识别为 $fib(d)$, 虽然这个纤维是在非线性的代数范畴取的.
