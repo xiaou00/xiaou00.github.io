@@ -158,3 +158,8 @@ $ R = {x in K | v(x) >= 0}, quad
     if i > 0 { edge((i - 1, 0), (i, 0), "->", $d_(i - 1)$) }
   }
 })) <long-diagram>
+
+#diagram-row[
+  #simplex2($x$, $y$, $z$, edge-stroke: 1.2pt) <simplex-filled>
+  #simplex2hollow($bold(1) times.o X$, $X times.o X^or times.o X$, $X$, ab: $f$, bc: $g$, ac: $g compose f$) <simplex-hollow>
+]

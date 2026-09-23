@@ -1,6 +1,6 @@
 # Liber 777
 
-个人数学 writings 网站. 以 `cover.png` 和 `参考/template.typ` 中的象牙白, 石灰色, 深红与四芒星为视觉基础.
+个人数学 writings 网站. 当前使用 `cover.png` 作为主页封面, 采用纯白背景, 黑灰文字与纯红强调色, 保留四芒星装饰.
 
 页面文字统一使用本地加载的思源宋体, 数学公式使用 Libertinus Math. 阅读页左侧目录在桌面为 160px, 较窄屏幕为 140px, 手机上移至正文上方.
 
@@ -207,6 +207,24 @@ Fletcher 交换图和 CeTZ 绘图使用 `#web-diagram(...)` 包裹. 它通过 Ty
 
 图形默认居中, 宽图可独立横向滚动, 不需要在外面再写 `#align(center, ...)`. `caption` 可省略, 也可以用 `<label>` 和 `@label` 引用带标题的图. 页面保留 SVG 的原始比例, 缩放后箭头与标签仍然清晰.
 
+模板中的 `simplex2` 和 `simplex2hollow` 已内置 `web-diagram`, 分别绘制带 `///` 标记和空心的三角图. 直接在正文中调用, 不要放在 `$...$` 中, 也无需再次包裹 `web-diagram`:
+
+```typst
+#simplex2($x$, $y$, $z$, ab: $f$, bc: $g$, ac: $g compose f$)
+#simplex2hollow($x$, $y$, $z$)
+```
+
+`ab`, `bc`, `ac` 为可省略的边标签, `simplex2` 的 `edge-stroke` 参数控制线宽, 默认 `.65pt`. 只需导入笔记模板, 不用另行导入 Fletcher.
+
+多个图需要放在同一行时, 用 `#diagram-row[...]` 包裹. 图形整体居中, 窄屏可横向滚动:
+
+```typst
+#diagram-row[
+  #simplex2($x$, $y$, $z$)
+  #simplex2hollow($a$, $b$, $c$)
+]
+```
+
 图内文字使用思源宋体, 数学公式使用 Libertinus Math, 与网页一致. 构建会自动将 `public/fonts/` 中已有的网页字体解压到 `.build/typst-fonts/` 供 Typst 使用, 无需另装系统字体, GitHub Pages 也使用同一套文件. 字体未变化时直接复用, 更换字体后会自动重新编译图形.
 
 ### 交换图与编译缓存
@@ -251,7 +269,8 @@ npm run new:object -- Ring0001 "对象名称"
 ## 目录
 
 ```text
-cover.png                  原始主页封面
+cover.png                  当前主页封面
+cover02.png                备用封面
 site.config.mjs            站名, 作者, 简介, 部署根路径
 content/
   template.typ             网页写作模板
@@ -261,7 +280,7 @@ content/
   notes/**/*.typ           按实际文件夹组织, 每个文件都是一篇独立笔记
 src/
   render.mjs               首页, 阅读页和 404 模板
-  style.css                纸面主题与响应式样式
+  style.css                网站配色与响应式样式
   client.js                文件搜索, 文件夹展开, 目录及阅读进度
 scripts/
   build.mjs                Typst 编译与静态页面生成

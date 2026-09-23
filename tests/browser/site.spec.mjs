@@ -171,7 +171,7 @@ test('Fletcher diagrams render at their natural size, center, scroll and retain 
   await page.goto(noteRoute(specimen));
   await page.evaluate(() => document.fonts.ready);
   const diagrams = page.locator('.note-diagram .diagram-scroll > svg');
-  await expect(diagrams).toHaveCount(2);
+  await expect(diagrams).toHaveCount(4);
   const sizes = await diagrams.evaluateAll(nodes => nodes.map(svg => ({
     namespace: svg.namespaceURI,
     width: svg.getBoundingClientRect().width,
@@ -186,6 +186,13 @@ test('Fletcher diagrams render at their natural size, center, scroll and retain 
     expect(size.geometry).toBeGreaterThan(0);
     expect(size.width / size.height).toBeCloseTo(size.ratio, 2);
   }
+  for (const id of ['simplex-filled', 'simplex-hollow']) {
+    const simplex = page.locator(`#${id}`);
+    expect(await simplex.evaluate(figure => figure.namespaceURI)).toBe('http://www.w3.org/1999/xhtml');
+    await expect(simplex.locator('.diagram-scroll > svg')).toBeVisible();
+    await simplex.screenshot({ path: `/tmp/ain-soph-${id}.png` });
+  }
+  await page.locator('.diagram-row').screenshot({ path: '/tmp/ain-soph-diagram-row.png' });
   const square = page.locator('#commutative-square');
   expect(await square.locator('.diagram-scroll').evaluate(region => {
     const outer = region.getBoundingClientRect();

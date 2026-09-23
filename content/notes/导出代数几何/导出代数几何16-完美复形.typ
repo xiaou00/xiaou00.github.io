@@ -107,5 +107,119 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
 #proof[
   正向已证. 记 $R=pi_0A$. 设 $M$ 几乎完美, 且 $Amp(M) subset [a,b]$, 适当平移后可设 $Amp(M) subset [0,n]$. 由于 $M$ 有下界, 且
   $ M times.o_A R in Mod^[0,n]_R $
-  由导出 Nakayama, $M in Mod^(>=0)_A$. 下面对 $n$ 归纳证明. 对 $n=0$, $M$ 振幅为 $[0,0]$, 即平坦. 因为 $M$ 几乎完美, $pi_0 M$ 有限表示, 有因为其平坦, $pi_0 M$ 有限生成且投射. 有限生成投射 $R$-模
+  由导出 Nakayama, $M in Mod^(>=0)_A$. 下面对 $n$ 归纳证明. 对 $n=0$, $M$ 振幅为 $[0,0]$, 即平坦. 因为 $M$ 几乎完美, $pi_0 M$ 有限表示, 有因为其平坦, $pi_0 M$ 有限生成且投射. 有限生成投射 $R$-模唯一提升为有限生成投射 $A$-模, 平坦模判别给出
+  $ pi_i M tilde.eq pi_i A times.o_R pi_0 M $
+  因而 $M$ 本身就是有限生成的投射 $A$-模, 即某个 $A^r$ 的收缩, 故
+  $ M in Perf(A) $
+  其余归纳即可, 设 $n>0$, 假设结论对于 Tor 振幅 $[0,n-1]$ 都成立, 因为 $M$ 几乎完美, $pi_0M$ 有限生成, 取有限自由模 $F=A^(plus.o r)$ 以及态射
+  $ f:F->M $
+  使 $pi_0F->>pi_0M$ 满. 令 $K = fib(F->M)$, 由于几乎完美对纤维封闭, 显然 $K$ 几乎完美, 现在任取离散的 $R$-模 $N$, 首先由于
+  $ F times.o_A N tilde.eq N^(plus.o r) $
+  因此 $F times.o_A N$ 离散, 并且
+  $ pi_0 (F times.o_A N) tilde.eq N^(plus.o r) $
+  另一方面由于 $M,N$ 都连通, 从 Künneth 谱序列容易看出
+  $ pi_0 (M times.o_A N) tilde.eq pi_0 M times.o_R pi_o N tilde.eq pi_0 M times.o_R N $
+  现在看
+  $ f times.o_A N : F times.o_A N -> M times.o_A N $
+  在 $pi_0$ 上, 这个映射在上述识别下恰好是
+  $ R^(plus.o r) times.o_R N -> pi_0 M times.o_R N $
+  即 $pi_0 f times.o_R id_N$, 从而
+  $ R^(plus.o r) ->> pi_0 M $
+  满, 且张量积函子正合, 于是
+  $ R^(plus.o r) times.o_R N ->> pi_0 M times.o_R N $
+  从而
+  $ pi_0 (F times.o_A N) ->> pi_0 (M times.o_A N) $
+  满射, 另一方面
+  $ M times.o_A N in Mod^[0,n]_A $
+  对纤维序列 $K->F->M$ 取张量积亦然是纤维序列
+  $ K times.o_A N -> F times.o_A N -> M times.o_A N $
+  作其同伦长正合列看出:
+
+  - 当 $i<0$ 时 $pi_i (K times.o_A N) =0$.
+  - 当 $i>=1$ 时 $pi_i (K times.o_A N) tilde.eq pi_(i+1) (M times.o_A N)$.
+
+  因此 $K times.o_A N in Mod^[0,n-1]_A$, 由于 $N$ 任意, $Amp(K)subset[0,n-1]$, 由归纳假设 $K$ 完美. $F$ 是有限自由模从而完美, 由纤维序列 $K->F->M$, $M$ 完美, 证毕.
+]
+
+= 可对偶性
+
+== 可对偶性通论
+
+我们知道 $Mod_A$ 构成一个对称幺半稳定 $oo$-范畴 $(Mod_A,dtens,A)$. 下面我们来拓展基础代数中的可对偶性概念.
+
+#definition(title:[可对偶性])[
+  设 $(cal(C), times.o, bold(1))$ 是对称幺半稳定 $oo$-范畴, 对象 $X in cal(C)$ 称之为*可对偶的* (dualizable), 是指存在对象 $X^or in cal(C)$ 以及态射
+  $ "coev": bold(1)-> X times.o X^or \ ev : X^or times.o X -> bold(1) $
+  使得存在 2-单纯形
+  #diagram-row[
+    #simplex2($bold(1)times.o X$,$X times.o X^or times.o X$,$bold(1) times.o X$,ab:$coev times.o id$,bc:$id times.o ev$,ac:$id$)
+    #simplex2($X^or times.o bold(1)$,$X^or times.o X times.o X^or$,$X^or times.o bold(1)$,ab:$id times.o coev$,bc:$ev times.o id$,ac:$id$)
+  ]
+]
+
+我们还有一种典范地对可对偶对象构造对偶的方法:
+
+#definition(title:[内部 Hom])[
+  设 $(cal(C), times.o, 1)$ 是可呈示的对称幺半 $oo$-范畴, 且 $times.o$ 对两个分量保持小极限, 那么对任意 $X in cal(C)$, 函子
+  $ - times.o X : cal(C) -> cal(C) $
+  由伴随函子定理有右伴随
+  $ underline(Hom)(X,-) : cal(C) -> cal(C) $
+  于是可以定义 $underline(Hom)(X,Y) in cal(C)$ 是满足泛性质
+  $ Map_(cal(C)) (Z,underline(Hom)(X,Y)) tilde.eq Map_(cal(C)) (Z times.o X,Y) $
+  的对象, 这个构造称之为*内部 Hom*.
+]
+
+#proposition[
+  设 $cal(C)$ 是可呈示的对称幺半 $oo$-范畴, 若 $X in cal(C)$ 是可对偶的, 则
+  $ X^or tilde.eq underline(Hom)(X,bold(1)) $
+]
+
+#proof[
+  显然 by def, 有伴随对
+  $ - times.o X tack.l - times.o X^or $
+  具体地, 单位和余单位分别是
+  $ Y times.o bold(1) larr^(id times.o coev) Y times.o X times.o X^or \
+  Y times.o X^or times.o X larr^(id times.o ev) bold(1) times.o Y $
+]
+
+#proposition[
+  若 $X$ 可对偶, 则 $(X^or)^or tilde.eq X$.
+]
+
+== 对偶模
+
+#proposition[
+  设 $A$ 是生象环, $M,N in Mod_A$, 则作为谱有
+  $ underline(Hom)(M,N) tilde.eq underline(Map)(M,N) $
+]
+
+#proof[
+  作为谱有
+  $ underline(Hom)(M,N) &tilde.eq underline(Map)(A,underline(Hom)(M,N)) \
+  &tilde.eq underline(Map)(A times.o_A M,N) \ 
+  &tilde.eq underline(Map)(M,N)
+  $
+]
+
+#theorem(title:[完美复形与可对偶复形等价])[
+  设 $A$ 是生象环, $Mod_A$ 是其复形范畴, 则 $M in Mod_A$ 是可对偶复形当且仅当其为完美复形.
+]
+
+#proof[
+  先假设 $M$ 是完美的, 记录 $M^or = underline(Hom)_A (M,A)$, 对任意 $M,N$ 都有自然态射
+  $ theta_(M,N) : M^or times.o_A N -> underline(Hom)_A (M,N) $
+  则一个对象可对偶当且仅当对所有 $N$, 该态射都为等价 (读者可自证). 令
+  $ cal(D) = {M | theta_(M,N) "对所有" N "都是等价"} $
+  显然 $A in cal(D)$, 因为 $A^or tilde.eq A$, $A times.o_A N tilde.eq N tilde.eq underline(Hom)_A (A,N)$, 而 $cal(D)$ 容易验证是粗的, 从而每个完美 $A$-复形都可对偶.
+
+  反之, 若 $M$ 可对偶, 对偶为 $M^or$, 则
+  $ underline(Hom)_A (M,N) tilde.eq M^or times.o_A N $
+  因此对任意滤过 $N_i, i in I$ 有
+  $
+  Map_A (M, varinjlim(i)N_i) &tilde.eq Map_A (A, M^or times.o_A varinjlim(i)N_i)\
+  &tilde.eq Map_A (A, varinjlim(i) M^or times.o_A N_i)\
+  &tilde.eq varinjlim(i) Map_A (A, M^or times.o_A N_i)\
+  &tilde.eq varinjlim(i) Map_A (M,N_i)
+  $
+  故 $M$ 紧.
 ]

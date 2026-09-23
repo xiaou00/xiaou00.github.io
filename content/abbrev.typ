@@ -13,6 +13,7 @@
 #let Amp = "Amp"
 
 #let act = $arrow.half.cw$
+#let coev = "coev"
 #let wedge = $or$
 #let smash = $and$
 #let cop = $union.sq$
@@ -159,4 +160,5 @@
 #let leftarrow = $stretch(<-, size: #15pt)$
 #let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
 #let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
+
 

@@ -125,4 +125,66 @@
   caption: caption,
 )
 
+// Keep related diagrams on one row, with horizontal scrolling on narrow screens.
+#let diagram-row(body) = html.elem("div", attrs: (
+  class: "diagram-row",
+  role: "region",
+  "aria-label": "并排图形, 可横向滚动",
+  tabindex: "0",
+), body)
+
+#import "@preview/fletcher:0.5.8" as _fletcher
+
+// Like web-diagram, call these in markup: #simplex2($x$, $y$, $z$).
+// Keep the HTML figure outside MathML; only its labels are math content.
+#let simplex2(a, b, c, ab: none, bc: none, ac: none, edge-stroke: .65pt) = web-diagram(_fletcher.diagram(
+  edge-stroke: edge-stroke,
+  spacing: 20pt,
+  cell-size: 0pt,
+  node-inset: 5pt,
+  {
+    _fletcher.edge(
+      (-0.18, 1.02), (1.18, 1.02),
+      label: $#ac$, label-side: right, marks: "->",
+    )
+    _fletcher.edge(
+      (0.5, -0.18), (1.18, 1.02),
+      label: $#bc$, label-side: left, marks: "->",
+    )
+    _fletcher.edge(
+      (-0.18, 1.02), (0.5, -0.18),
+      label: $#ab$, label-side: left, marks: "->",
+    )
+
+    _fletcher.node((-0.18, 1.02), $#a$)
+    _fletcher.node((1.18, 1.02), $#c$)
+    _fletcher.node((0.5, -0.18), $#b$)
+    _fletcher.node((0.5, 0.61), text(size: 10pt, "///"))
+  },
+))
+#let simplex2hollow(a, b, c, ab: none, bc: none, ac: none) = web-diagram(_fletcher.diagram(
+  spacing: 20pt,
+  cell-size: 0pt,
+  node-inset: 5pt,
+  {
+    _fletcher.edge(
+      (-0.18, 1.02), (1.18, 1.02),
+      label: $#ac$, label-side: right, marks: "->",
+    )
+    _fletcher.edge(
+      (0.5, -0.18), (1.18, 1.02),
+      label: $#bc$, label-side: left, marks: "->",
+    )
+    _fletcher.edge(
+      (-0.18, 1.02), (0.5, -0.18),
+      label: $#ab$, label-side: left, marks: "->",
+    )
+
+    _fletcher.node((-0.18, 1.02), $#a$)
+    _fletcher.node((1.18, 1.02), $#c$)
+    _fletcher.node((0.5, -0.18), $#b$)
+  },
+))
+
+
 #import "abbrev.typ" : *

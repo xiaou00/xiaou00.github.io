@@ -52,7 +52,7 @@ const devClient = () => `(() => {
         overlay = document.createElement('aside');
         overlay.id = 'typst-build-error';
         overlay.setAttribute('role', 'alert');
-        overlay.style.cssText = 'position:fixed;inset:auto 16px 16px;max-height:60vh;overflow:auto;padding:24px;background:#2c2022;color:#fff3ed;border-top:3px solid #b02032;z-index:100;font:13px/1.6 monospace;white-space:pre-wrap;box-shadow:0 8px 40px #0003';
+        overlay.style.cssText = 'position:fixed;inset:auto 16px 16px;max-height:60vh;overflow:auto;padding:24px;background:#111111;color:#ffffff;border-top:3px solid #ff0000;z-index:100;font:13px/1.6 monospace;white-space:pre-wrap;box-shadow:0 8px 40px #0003';
         document.body.append(overlay);
       }
       overlay.textContent = 'Typst 编译失败 · 修正后会自动恢复\\n\\n' + state.error;
