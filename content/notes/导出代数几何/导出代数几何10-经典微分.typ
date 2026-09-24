@@ -38,21 +38,21 @@
 
 #remark(title:[泛性质])[
   总有自然同构
-  $ Hom_R (Omega^1_(R/k),M) tilde.eq Der_k (R,M), quad u |-> u compose dif $
+  $ Hom_R (Omega^1_(R/k),M) simeq Der_k (R,M), quad u |-> u compose dif $
   这是因为给出 $u(dif r)$ 的相容取值, 恰好就是给出一个导子.
 ]
 
 #example(title:[多项式与局部化])[
   对 $P=k[x_1,...,x_n]$, 导子由 $x_i$ 的像任意且唯一地确定, 因而
-  $ Omega^1_(P/k) tilde.eq plus.o.big_(i=1)^n P dif x_i $
-  若 $S subset R$ 是乘法集, 则 $Omega^1_(S^(-1)R/k) tilde.eq S^(-1)Omega^1_(R/k)$: 导子唯一延拓为 $d(r/s)=s^(-1)d(r)-r s^(-2)d(s)$.
+  $ Omega^1_(P/k) simeq plus.o.big_(i=1)^n P dif x_i $
+  若 $S subset R$ 是乘法集, 则 $Omega^1_(S^(-1)R/k) simeq S^(-1)Omega^1_(R/k)$: 导子唯一延拓为 $d(r/s)=s^(-1)d(r)-r s^(-2)d(s)$.
 ]
 
 == 切, 余切与法, 余法
 
 #definition(title:[四类模])[
   对 $k$-代数 $R$, *余切模* (cotangent module) 就是 $Omega^1_(R/k)$, *切模* (tangent module) 是其对偶
-  $ T_(R/k) := Der_k (R,R) tilde.eq Hom_R (Omega^1_(R/k),R) $
+  $ T_(R/k) := Der_k (R,R) simeq Hom_R (Omega^1_(R/k),R) $
   对商映射 $R->>B=R/I$, 对应闭浸入 $Z=Spec B arrow.hook X=Spec R$, 定义 *余法模* (conormal module) 和 *法模* (normal module)
   $ C_(Z/X) := I/I^2, quad N_(Z/X) := Hom_B (I/I^2,B) $
   后两者是 $B$-模, 依赖于嵌入 $Z arrow.hook X$. 尤其 $Omega^1_(B/R)=0$, 一般不能把它与 $I/I^2$ 混同.
@@ -62,14 +62,14 @@
 
 #remark(title:[点的切空间])[
   若 $k$ 是域, $x in X(k)$ 对应极大理想 $frak(m)$, 则
-  $ T_x^* X := Omega^1_(R/k) times.o_R k tilde.eq frak(m)/frak(m)^2, $
-  $ T_x X := Der_k (R,k) tilde.eq Hom_k (frak(m)/frak(m)^2,k) $
+  $ T_x^* X := Omega^1_(R/k) times.o_R k simeq frak(m)/frak(m)^2, $
+  $ T_x X := Der_k (R,k) simeq Hom_k (frak(m)/frak(m)^2,k) $
   事实上 $R=k plus.o frak(m)$, 导子恰好是在 $frak(m)^2$ 上为零的 $k$-线性映射 $frak(m)->k$. 一般不能将 $T_x X$ 与 $T_(R/k) times.o_R k$ 混同 $R/k$ 光滑时二者相同.
 ]
 
 #remark(title:[余切是对角线的余法])[
   令 $J=ker(R times.o_k R larr^mu R)$, 其中 $mu(a times.o b)=a b$. 则
-  $ Omega^1_(R/k) tilde.eq J/J^2, quad dif r |-> [1 times.o r-r times.o 1] $
+  $ Omega^1_(R/k) simeq J/J^2, quad dif r |-> [1 times.o r-r times.o 1] $
   右侧的映射满足 Leibniz 律. 逆映射为 $[sum_i a_i times.o b_i] |-> sum_i a_i dif b_i$, 它在 $J^2$ 上为零. 因而切模也是对角线的法模. 参见 #link("https://stacks.math.columbia.edu/tag/00RW")[Stacks, 00RW].
 ]
 
@@ -108,13 +108,13 @@
 ]
 
 #proof[
-  由光滑代数的平方零提升性质, $R/I^2->>B$ 有 $k$-代数截面 $s$. 映射 $r |-> (r mod I^2)-s(r mod I)$ 是到 $I/I^2$ 的导子, 在 $I$ 上是自然投影, 故诱导 $delta$ 的左逆. 这给出分裂短正合列, 对偶仍正合. 若 $R/k$ 光滑, $Omega^1_(R/k)$ 有限投射, 故 $Der_k (R,B) tilde.eq B times.o_R T_(R/k)$. 几何版本见 #link("https://stacks.math.columbia.edu/tag/06AA")[Stacks, 06AA].
+  由光滑代数的平方零提升性质, $R/I^2->>B$ 有 $k$-代数截面 $s$. 映射 $r |-> (r mod I^2)-s(r mod I)$ 是到 $I/I^2$ 的导子, 在 $I$ 上是自然投影, 故诱导 $delta$ 的左逆. 这给出分裂短正合列, 对偶仍正合. 若 $R/k$ 光滑, $Omega^1_(R/k)$ 有限投射, 故 $Der_k (R,B) simeq B times.o_R T_(R/k)$. 几何版本见 #link("https://stacks.math.columbia.edu/tag/06AA")[Stacks, 06AA].
 ]
 
 #example(title:[方程与 Jacobian])[
   若 $P=k[x_1,...,x_n]$, $I=(f_1,...,f_m)$, $B=P/I$, 余法正合列给出
   $ B^m larr^J B^n -> Omega^1_(B/k) -> 0, quad J(e_j)=sum_i overline((partial f_j)/(partial x_i))e_i $
-  因而 $Omega^1_(B/k)=coker J$, $T_(B/k)=ker(J^*:B^n->B^m)$, 其中 $J^*$ 为对偶映射. 若 $f_1,...,f_m$ 是正则序列, 则 $I/I^2 tilde.eq B^m$, $N_(Z/Spec P) tilde.eq B^m$.
+  因而 $Omega^1_(B/k)=coker J$, $T_(B/k)=ker(J^*:B^n->B^m)$, 其中 $J^*$ 为对偶映射. 若 $f_1,...,f_m$ 是正则序列, 则 $I/I^2 simeq B^m$, $N_(Z/Spec P) simeq B^m$.
 ]
 
 = 平方零扩张
@@ -140,13 +140,13 @@
 ]
 
 平凡平方零扩张是许多平方零扩张现象的基本模型, 例如最典型的例子就是
-$ k[epsilon]/(epsilon^2) tilde.eq k plus.o k epsilon $
-若平方零扩张有环截面 $s:A->A'$, 则 $(a,m)|->s(a)+m$ 给出 $A plus.o I tilde.eq A'$, 所以它是平凡平方零扩张.
+$ k[epsilon]/(epsilon^2) simeq k plus.o k epsilon $
+若平方零扩张有环截面 $s:A->A'$, 则 $(a,m)|->s(a)+m$ 给出 $A plus.o I simeq A'$, 所以它是平凡平方零扩张.
 
 #example(title:[非平凡的例子])[
   一个非常简单的例子是
   $ ZZ/p^2 -> FF_p $
-  其核为 $p ZZ/p^2 tilde.eq FF_p$, 而 $(p ZZ/p^2)^2 = 0$, 于是有
+  其核为 $p ZZ/p^2 simeq FF_p$, 而 $(p ZZ/p^2)^2 = 0$, 于是有
   $ 0 -> FF_p -> ZZ/p^2 -> FF_p -> 0 $
   是平方零扩张, 但它没有环截面 $FF_p -> ZZ/p^2$: 保幺映射会把等式 $p dot 1=0$ 映到矛盾.
 ]
@@ -155,11 +155,11 @@ $ k[epsilon]/(epsilon^2) tilde.eq k plus.o k epsilon $
 
 == 导子的无穷小解释
 
-设 $S$ 是交换 $k$-代数, 记 $CAlg_(k"//"S) tilde.eq (CAlg_k)_("/"S)$.
+设 $S$ 是交换 $k$-代数, 记 $CAlg_(k"//"S) simeq (CAlg_k)_("/"S)$.
 
 #theorem[
   设 $g : R->S$ 是 $CAlg_(k"//"S)$ 的对象, 且 $f:S plus.o J->>S$ 是平凡的平方零扩张, 那么有自然的同构
-  $ Hom_(CAlg_(k"//"S))((R,g),(S plus.o J,f)) tilde.eq Hom_R (Omega^1_(R/k),J) tilde.eq Der_k (R,J) $
+  $ Hom_(CAlg_(k"//"S))((R,g),(S plus.o J,f)) simeq Hom_R (Omega^1_(R/k),J) simeq Der_k (R,J) $
 ]
 
 #proof[

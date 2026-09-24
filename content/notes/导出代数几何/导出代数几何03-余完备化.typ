@@ -20,19 +20,19 @@
 
 #theorem(title:[1-Yoneda 稠密性])[
   对任意 $X in PSh(cal(C))^suit.heart$, 有典范的等价
-  $ X tilde.eq colim_(yo(c) -> X) yo(c) $
+  $ X simeq colim_(yo(c) -> X) yo(c) $
   这里指标范畴是逗号范畴 $(yo arrow.b X)$.
 ]
 
 #proof[
   由余 Yoneda 引理, 有典范等价
-  $ X tilde.eq integral^(c in cal(C)) X(c) times.o yo(c) tilde.eq colim_((c,x) in integral_(cal(C)) X) yo(c) $
+  $ X simeq integral^(c in cal(C)) X(c) times.o yo(c) simeq colim_((c,x) in integral_(cal(C)) X) yo(c) $
   Yoneda 引理给出
-  $ X(c) tilde.eq Map_(PSh(cal(C))) (yo(c),X) $
+  $ X(c) simeq Map_(PSh(cal(C))) (yo(c),X) $
   从而 Grothendieck 构造
   $ integral_cal(C) X $
   恰好是所有 $yo(c)->X$ 组成的指标范畴, 从而
-  $ X tilde.eq colim_(yo(c)->X) yo(c) $
+  $ X simeq colim_(yo(c)->X) yo(c) $
 ]
 
 也就是说, 所有预层本质上都能被可表的预层拼成.
@@ -42,7 +42,7 @@
 
   + 预层范畴 $PSh(cal(C))^suit.heart$ 具有所有小极限.
   + 对任意余完备的范畴 $cal(D)$, 沿着 Yoneda 嵌入的限制诱导了一个等价
-    $ yo^* : Fun'(PSh(cal(C))^suit.heart,cal(D)) tilde.eq Fun(cal(C),cal(D)) $
+    $ yo^* : Fun'(PSh(cal(C))^suit.heart,cal(D)) simeq Fun(cal(C),cal(D)) $
     其中 $Fun'(PSh(cal(C)^suit.heart,cal(D)) subset Fun(PSh(cal(C))^suit.heart,cal(D))$ 是保持余极限函子的全子范畴. 
 ]
 
@@ -56,13 +56,13 @@
 
 #proofsketch[
   自然考虑 $Lan_yo tack.l yo^*$, 设 $F:PSh(cal(C))^suit.heart->cal(D)$ 保持所有余极限, Yoneda 稠密给出
-  $ F(X) tilde.eq F(colim_(yo(c)->X) yo(c)) tilde.eq colim_(yo(c)->X) F(yo(c)) = colim_(yo(c)->X) yo^* F(c) = Lan_yo (yo^* F)(X) $
+  $ F(X) simeq F(colim_(yo(c)->X) yo(c)) simeq colim_(yo(c)->X) F(yo(c)) = colim_(yo(c)->X) yo^* F(c) = Lan_yo (yo^* F)(X) $
   这就导出了互逆.
 ]
 
 #remark[
   若 $cal(D)$ 额外是可呈示的, 则由伴随函子定理有
-  $ Fun'(PSh(cal(C)),cal(D)) tilde.eq Fun^"L" (PSh(cal(C)),cal(D)) $
+  $ Fun'(PSh(cal(C)),cal(D)) simeq Fun^"L" (PSh(cal(C)),cal(D)) $
   右边是全体存在右伴随的函子.
 ]
 
@@ -90,7 +90,7 @@
   反过来则需要一个小论证, 取
   $ F_1 (c) = Hom(c_1,c), quad F_2 (c) = Hom(c_2,c) $
   筛条件给出
-  $ colim_c (Hom(c_1,c) times Hom(c_2,c)) tilde.eq * $
+  $ colim_c (Hom(c_1,c) times Hom(c_2,c)) simeq * $
   而左边恰是逗号范畴 $(c_1,c_2)/Delta$ 的连通分支集合, 于是 $Delta$ 共尾.
 ]
 
@@ -107,11 +107,11 @@
   对固定的 $c$, 有
   $ lim_(j in J^opp) Hom_(cal(C)) (D(j),c) $
   而这个集合恰好是 $D$ 到常值图表 $c$ 的全部余锥. 而
-  $ colim_(c in cal(C)) lim_(j in J^opp) Hom_(cal(C))(D(j),c) tilde.eq lim_(j in J^opp) colim_(c in cal(C)) Hom_(cal(C))(D(j),c) $
-  容易证明 $colim_(c in cal(C)) Hom_(cal(C))(x,c) tilde.eq *$ 对任给的 $x in cal(C)$ 成立, 于是右边是
-  $ lim_(j in J^opp) * tilde.eq * $
+  $ colim_(c in cal(C)) lim_(j in J^opp) Hom_(cal(C))(D(j),c) simeq lim_(j in J^opp) colim_(c in cal(C)) Hom_(cal(C))(D(j),c) $
+  容易证明 $colim_(c in cal(C)) Hom_(cal(C))(x,c) simeq *$ 对任给的 $x in cal(C)$ 成立, 于是右边是
+  $ lim_(j in J^opp) * simeq * $
   即
-  $ colim_(c in cal(C)) lim_(j in J^opp) Hom_(cal(C))(D(j),c) tilde.eq * $
+  $ colim_(c in cal(C)) lim_(j in J^opp) Hom_(cal(C))(D(j),c) simeq * $
   非空, 也就是说存在某个 $c in cal(C)$ 使得 $lim_(j in J^opp) Hom_(cal(C))(D(j),c)!=nothing$, 等价于说存在余锥 $D(j)->c$ 对 $J$ 的所有箭头相容. 反之显然. 
 ]
 
@@ -178,7 +178,7 @@
 
   + 包含函子 $i: sInd(cal(C)) arrow.hook PSh(cal(C))$ 保持筛的余极限, 并且存在左伴随, 从而 $sInd(cal(C))$ 是可呈示的.
   + Yoneda 函子 $yo : cal(C) -> PSh(cal(C))$ 落在 $sInd(cal(C))$ 中.
-  + 一个对象 $X in PSh(cal(C))$ 落在 $sInd(cal(C))$ 中当且仅当存在一个单纯对象 $X_bullet : Delta^opp->PSh(cal(C))$ 使得 $X tilde.eq abs(X_bullet) = colim_([n] in Delta^opp) X_n$, 并且每个 $X_n$ 都是 $cal(C) subset PSh(cal(C))$ 中的滤过余极限.
+  + 一个对象 $X in PSh(cal(C))$ 落在 $sInd(cal(C))$ 中当且仅当存在一个单纯对象 $X_bullet : Delta^opp->PSh(cal(C))$ 使得 $X simeq abs(X_bullet) = colim_([n] in Delta^opp) X_n$, 并且每个 $X_n$ 都是 $cal(C) subset PSh(cal(C))$ 中的滤过余极限.
 ]
 
 #proposition[
@@ -234,7 +234,7 @@
 ]
 
 也就是说
-$ colim_(i in I) Map(X,Y_i) tilde.eq Map(X,colim_(i in I) Y_i) $
+$ colim_(i in I) Map(X,Y_i) simeq Map(X,colim_(i in I) Y_i) $
 对若有 $kappa$-滤过的 $I$ 成立.
 
 通常, 我们记 $cal(C)^kappa subset cal(C)$ 为 $kappa$-紧对象张成的全子范畴, 若不指定序数说紧对象, 通常指 $omega$-紧对象.
@@ -257,7 +257,7 @@ $ Ind_kappa (cal(C)) = chevron yo(C) chevron.r_(kappa"-滤过余极限") $
   一个 $oo$-范畴 $cal(C)$ 是 *$kappa$-可及的*, 是指:
 
   + $cal(C)$ 存在所有 $kappa$-滤过极限.
-  + 存在本质小的 $kappa$-紧对象族 (张成子范畴) $cal(C)_0 subset cal(C)$ 使得 $cal(C) tilde.eq Ind_kappa (cal(C)_0)$.
+  + 存在本质小的 $kappa$-紧对象族 (张成子范畴) $cal(C)_0 subset cal(C)$ 使得 $cal(C) simeq Ind_kappa (cal(C)_0)$.
 
   若存在某个正则基数 $kappa$ 使得 $cal(C)$ 是 $kappa$-可及的, 则称之为*可及的* (accessible).
 ]

@@ -54,7 +54,7 @@ $ ... -> P_2 -> P_1 -> P_0 -> M -> 0 $
 }))
 
 投射解消的意义非常明确, 因为在导出范畴中, 这两个复形可以视作是同构
-$ P_bullet tilde.eq M $
+$ P_bullet simeq M $
 可以理解成投射解消是用同调上等价但更容易计算的链复形代替原本的模, 我们可以在复形的意义下, 定义
 $ M times.o^"L"_R N = P_bullet times.o_R N, quad "RHom"_R (M,N) = Hom_R (P_bullet,N) $
 同样也允许我们计算导出函子, 并且在有充分投射对象的假设下, 投射解消是总是存在的.
@@ -92,18 +92,18 @@ $ P_bullet -> c M $
   若 $R$-模 $M$ 的一个单纯模增广 $P_bullet -> c M$ 是 $simp(Mod_R)$ 模型中的弱等价, 则称之为一个*单纯解消*.
 ]
 
-显然, 若 $P_bullet -> c M$ 是单纯解消, 那么 $pi_0 (P_bullet) tilde.eq M$, 并且 $pi_n (P_bullet) = 0$ 对于 $n>0$.
+显然, 若 $P_bullet -> c M$ 是单纯解消, 那么 $pi_0 (P_bullet) simeq M$, 并且 $pi_n (P_bullet) = 0$ 对于 $n>0$.
 由 Dold--Kan, 这等价于
 $ ... -> DK_2 (P) -> DK_1 (P) -> DK_0 (P) -> M -> 0 $
 正合.
 
 #proposition[
-  若 $P_bullet -> M$ 是单纯解消, 那么在 $Dcat_(>=0)(R)$ 中有 $M tilde.eq abs(P_bullet)$.
+  若 $P_bullet -> M$ 是单纯解消, 那么在 $Dcat_(>=0)(R)$ 中有 $M simeq abs(P_bullet)$.
 ]
 
 #proof[
   显然 $DK(P_bullet) ->^~ M[0]$ 是拟同构, 他们在 $Dcat_(>=0) (R)$ 是等价的, 另一方面在 Dold--Kan 等价下
-  $ simp(Mod_R)[W^(-1)] tilde.eq Dcat_(>=0)(R) $
+  $ simp(Mod_R)[W^(-1)] simeq Dcat_(>=0)(R) $
   $P_bullet$ 的几何实现对应的对象恰好是 $DK(P_bullet)$.
 
 ]
@@ -115,7 +115,7 @@ $ ... -> DK_2 (P) -> DK_1 (P) -> DK_0 (P) -> M -> 0 $
 ]
 
 回顾恒等式
-$ P_n tilde.eq plus.o.big_([n]->>[k]) DK_k (P) $
+$ P_n simeq plus.o.big_([n]->>[k]) DK_k (P) $
 也就是 Dold--Kan 的逆公式
 $ Gamma(C)_n = plus.o.big_([n]->>[k]) C_k $
 我们有如下命题
@@ -126,9 +126,9 @@ $ Gamma(C)_n = plus.o.big_([n]->>[k]) C_k $
 
 #proof[
   由于
-  $ P_n tilde.eq plus.o.big_([n]->>[k]) DK_k (P) $
+  $ P_n simeq plus.o.big_([n]->>[k]) DK_k (P) $
   从而 $DK_n (P)$ 是直和因子, 若每个 $P_n$ 投射, $DK_n (P)$ 也投射. 反之, 若每个 $DK_n (P)$ 投射, 那么
-  $ P_n tilde.eq plus.o.big_k DK_k (P)^(plus.o binom(n,k)) $
+  $ P_n simeq plus.o.big_k DK_k (P)^(plus.o binom(n,k)) $
   也投射.
 ]
 
@@ -191,7 +191,7 @@ $ B_0 (M) = G(M) -->^(epsilon_M) M $
   正向
   $ P "是投射模" <=> Hom(P,-) "正合" => "保持余核" => "保持几何实现" $
   反向对任意满射 $E->>M$ 取 Cech 脉
-  $ abs(E^(times_M (bullet + 1))) tilde.eq M $
+  $ abs(E^(times_M (bullet + 1))) simeq M $
   于是
   $ Hom(P,E) ->> Hom(P,M) $
   所以 $P$ 满足提升性质, 从而是投射模.
@@ -213,9 +213,9 @@ $ B_0 (M) = G(M) -->^(epsilon_M) M $
   因为 $R$ 投射, 存在截面
   $ s : P -> R^I $
   满足 $q compose s = id_P$. 我们可以把无限自由模写成滤过余极限
-  $ R^I tilde.eq varinjlim(J subset I\, J "有限") R^J $
+  $ R^I simeq varinjlim(J subset I\, J "有限") R^J $
   由于 $P$ 紧, 有
-  $ Hom_R (P,R^I) tilde.eq varinjlim(J subset I\, J "有限") Hom_R (P,R^J) $
+  $ Hom_R (P,R^I) simeq varinjlim(J subset I\, J "有限") Hom_R (P,R^J) $
   映射 $s:P->R^I$ 必然已经在某个有限阶段出现: 即存在有限集合 $J subset I$ 和
   $ s_J : P -> R^J $
   使得
@@ -253,5 +253,5 @@ $ delta : F eta U : G -> G^2 $
 杠解消有下述标准结论, 证明暂且略过
 
 #theorem[
-  若 $cal(D)$ 有几何实现, $U$ 是保守的 ($U(f)$ 是同构蕴含 $f$ 是同构), 且 $U:cal(D)->cal(C)$ 保持几何实现, 那么 $abs(Bar_bullet (F,G;X)) tilde.eq X$
+  若 $cal(D)$ 有几何实现, $U$ 是保守的 ($U(f)$ 是同构蕴含 $f$ 是同构), 且 $U:cal(D)->cal(C)$ 保持几何实现, 那么 $abs(Bar_bullet (F,G;X)) simeq X$
 ]

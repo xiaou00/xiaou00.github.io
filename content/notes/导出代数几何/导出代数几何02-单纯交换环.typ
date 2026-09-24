@@ -93,12 +93,12 @@ $ d = d_0 : DK_n (M) -> DK_(n-1) (M) $
 ]
 
 $Ch_(>=0)(k)$ 逆掉所有的拟同构恰好是导出范畴的定义, 实际上我们有
-$ Ner(Ch_(>=0)(k))["qis"^(-1)] tilde.eq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] tilde.eq Dcat_(>=0)(k) $
-从而 $simp(Mod_k)[W^(-1)] tilde.eq Dcat_(>=0)(k)$ 是一种 Dold--Kan 对应.
+$ Ner(Ch_(>=0)(k))["qis"^(-1)] simeq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] simeq Dcat_(>=0)(k) $
+从而 $simp(Mod_k)[W^(-1)] simeq Dcat_(>=0)(k)$ 是一种 Dold--Kan 对应.
 
 #proposition(title:[同伦--同调对应])[
   我们可以将 $X_bullet in simp(Mod_k)$ 遗忘成单纯集后取几何实现, 以零元为基点可作同伦群 $pi_n (abs(X_bullet),0)$. 我们也可以定义单纯集的同伦群为显然的 $pi_n^"simp" (X_bullet,0) := [S^n,X_bullet]$, 其中 $S^n := Delta^n/partial Delta^n$. 那么我们有
-  $ pi_n (abs(X_bullet),0) tilde.eq pi_n^"simp" (X_bullet,0) tilde.eq H_n (DK(X)) $
+  $ pi_n (abs(X_bullet),0) simeq pi_n^"simp" (X_bullet,0) simeq H_n (DK(X)) $
 ] <prop-simplicial-module-homotopy-homology>
 
 #proof[
@@ -116,7 +116,7 @@ $ Ner(Ch_(>=0)(k))["qis"^(-1)] tilde.eq Ner^"dg" (Ch_(>=0)(k))["qis"^(-1)] tilde
   也就是说一个边界长成 $x=d_0 y$, 其中
   $ y in X_(n+1), quad d_1 y = ... = d_(n+1) y = 0 $
   而这样的一个 $y$ 恰好提供了 $x$ 的一个单纯零伦, 从而 $x$ 在 $pi_n (X)$ 中为零当且仅当 $x in d_0 (DK_(n+1)(X))$. 从而我们证明了
-  $ pi_n^"simp" (X,0) tilde.eq frac(Z_n (DK(X)),B_n (DK(X))) tilde.eq H_n (DK(X)) $
+  $ pi_n^"simp" (X,0) simeq frac(Z_n (DK(X)),B_n (DK(X))) simeq H_n (DK(X)) $
 ]
 
 这个结论很有启发性, 它告诉我们如果一个同伦对象能够用单纯 Abel 群建模,那么其同伦群可以用链复形的同调计算.
@@ -192,11 +192,11 @@ $ T(V) = k plus.o V plus.o V^(times.o 2) plus.o ... $
 ]
 
 局部化得到 $dga_(k,>=0) ["qis"^(-1)]$ 就是连通结合导出 $k$-代数的一个模型. $oo$-范畴角度我们可以干净地写
-$ dga_(k,>=0) ["qis"^(-1)] tilde.eq Alg_(EE_1) (Dcat_(>=0) (k)) $
+$ dga_(k,>=0) ["qis"^(-1)] simeq Alg_(EE_1) (Dcat_(>=0) (k)) $
 并且在谱代数的意义下
-$ Dcat_(>=0) (k) tilde.eq Mod_(H k,>=0) $
+$ Dcat_(>=0) (k) simeq Mod_(H k,>=0) $
 是对称幺半稳定 $oo$-范畴的等价, 从而
-$ dga_(k,>=0) ["qis"^(-1)] tilde.eq Alg(Mod_(H k))_(>=0) $
+$ dga_(k,>=0) ["qis"^(-1)] simeq Alg(Mod_(H k))_(>=0) $
 右边是 $H k$ 上的连通结合代数谱, 常称为*导出代数*.
 
 === cdga 的模型结构

@@ -11,6 +11,9 @@
 #let Ann = "Ann"
 #let Lift = "Lift"
 #let Amp = "Amp"
+#let dR = "dR"
+#let FH = $"F"_"H"$
+#let gr = "gr"
 
 #let act = $arrow.half.cw$
 #let coev = "coev"
@@ -136,6 +139,7 @@
 #let Ind = $bold(sans("Ind"))$
 #let sInd = $bold(sans("sInd"))$
 #let cdga = $bold(sans("cdgAlg"))$
+#let scdga = $bold(sans("scdgAlg"))$
 #let AniRing = $bold(sans("AniRing"))$
 #let AniAlg = $bold(sans("AniAlg"))$
 #let AniCAlg = $bold(sans("AniCAlg"))$
@@ -145,9 +149,14 @@
 #let PrL = $bold(sans("Pr"))^"L"$
 #let Cell = $bold(sans("Cell"))$
 #let Idem = $bold(sans("Idem"))$
+#let dCAlg = $bold(sans("dCAlg"))$
+#let dRing = $bold(sans("dRing"))$
+#let dMod = $bold(sans("dMod"))$
+#let dSch = $bold(sans("dSch"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
+#let simeq = $tilde.eq$
 
 #let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$

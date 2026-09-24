@@ -20,17 +20,17 @@
 
 #proposition[
   有范畴的等价
-  $ Perf(A) tilde.eq Idem(Cell^"fin"_A) $
+  $ Perf(A) simeq Idem(Cell^"fin"_A) $
 ]
 
 #proof[
   首先 $A$ 是紧的, 这源自一个事实:
-  $ Map_A (A,M) tilde.eq Omega^oo M $
+  $ Map_A (A,M) simeq Omega^oo M $
   保持滤过余极限. 紧对象在稳定 $oo$-范畴中对有限余极限, 移位和收缩封闭, 故 $cal(D):=Idem(Cell^"fin"_A) subset Perf(A)$.
 
   反过来, 注意到 $A$ 是 $Mod_A$ 的紧生成元, 若
-  $ Map_A (A[n],M) tilde.eq *, quad (forall n in ZZ) $
-  则 $pi_n M = 0$ 对任意 $n$ 成立, 从而 $M tilde.eq 0$. 回顾一个标准结论
+  $ Map_A (A[n],M) simeq *, quad (forall n in ZZ) $
+  则 $pi_n M = 0$ 对任意 $n$ 成立, 从而 $M simeq 0$. 回顾一个标准结论
   #lemma[
     若可呈示 $oo$-范畴 $cal(C)tilde Ind(S)$ 且 $S$ 由紧对象构成, 则
     $ cal(C)^omega = "thick"(S) $
@@ -75,15 +75,15 @@
 ]
 
 显然完美复形总是几乎完美的, 因为有限操作保证了下界性, 并且截断的泛性质给出了对于 $X_i in Mod^(<=n)_A$, 有
-$ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq Map_A (M,X_i) $
+$ Map_A (tau_(<=n)M,colim_i X_i) simeq Map_A (M,X_i) $
 不难验证
-$ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
+$ Map_A (tau_(<=n)M,colim_i X_i) simeq colim_i Map_A (tau_(<=n)M,X_i) $
 
 #lemma(title:[导出 Nakayama 引理])[
   若 $M in Mod_A$ 有下界, 则对任意 $n in ZZ$ 有
   $ M times.o_A pi_0 A in Mod^(>=n)_(pi_0 A) => M in Mod^(>=n)_A $
   特别地
-  $ M times.o_A pi_0 A tilde.eq 0 => M tilde.eq 0 $
+  $ M times.o_A pi_0 A simeq 0 => M simeq 0 $
 ]
 
 #proof[
@@ -108,17 +108,17 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
   正向已证. 记 $R=pi_0A$. 设 $M$ 几乎完美, 且 $Amp(M) subset [a,b]$, 适当平移后可设 $Amp(M) subset [0,n]$. 由于 $M$ 有下界, 且
   $ M times.o_A R in Mod^[0,n]_R $
   由导出 Nakayama, $M in Mod^(>=0)_A$. 下面对 $n$ 归纳证明. 对 $n=0$, $M$ 振幅为 $[0,0]$, 即平坦. 因为 $M$ 几乎完美, $pi_0 M$ 有限表示, 有因为其平坦, $pi_0 M$ 有限生成且投射. 有限生成投射 $R$-模唯一提升为有限生成投射 $A$-模, 平坦模判别给出
-  $ pi_i M tilde.eq pi_i A times.o_R pi_0 M $
+  $ pi_i M simeq pi_i A times.o_R pi_0 M $
   因而 $M$ 本身就是有限生成的投射 $A$-模, 即某个 $A^r$ 的收缩, 故
   $ M in Perf(A) $
   其余归纳即可, 设 $n>0$, 假设结论对于 Tor 振幅 $[0,n-1]$ 都成立, 因为 $M$ 几乎完美, $pi_0M$ 有限生成, 取有限自由模 $F=A^(plus.o r)$ 以及态射
   $ f:F->M $
   使 $pi_0F->>pi_0M$ 满. 令 $K = fib(F->M)$, 由于几乎完美对纤维封闭, 显然 $K$ 几乎完美, 现在任取离散的 $R$-模 $N$, 首先由于
-  $ F times.o_A N tilde.eq N^(plus.o r) $
+  $ F times.o_A N simeq N^(plus.o r) $
   因此 $F times.o_A N$ 离散, 并且
-  $ pi_0 (F times.o_A N) tilde.eq N^(plus.o r) $
+  $ pi_0 (F times.o_A N) simeq N^(plus.o r) $
   另一方面由于 $M,N$ 都连通, 从 Künneth 谱序列容易看出
-  $ pi_0 (M times.o_A N) tilde.eq pi_0 M times.o_R pi_o N tilde.eq pi_0 M times.o_R N $
+  $ pi_0 (M times.o_A N) simeq pi_0 M times.o_R pi_o N simeq pi_0 M times.o_R N $
   现在看
   $ f times.o_A N : F times.o_A N -> M times.o_A N $
   在 $pi_0$ 上, 这个映射在上述识别下恰好是
@@ -136,7 +136,7 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
   作其同伦长正合列看出:
 
   - 当 $i<0$ 时 $pi_i (K times.o_A N) =0$.
-  - 当 $i>=1$ 时 $pi_i (K times.o_A N) tilde.eq pi_(i+1) (M times.o_A N)$.
+  - 当 $i>=1$ 时 $pi_i (K times.o_A N) simeq pi_(i+1) (M times.o_A N)$.
 
   因此 $K times.o_A N in Mod^[0,n-1]_A$, 由于 $N$ 任意, $Amp(K)subset[0,n-1]$, 由归纳假设 $K$ 完美. $F$ 是有限自由模从而完美, 由纤维序列 $K->F->M$, $M$ 完美, 证毕.
 ]
@@ -165,13 +165,13 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
   由伴随函子定理有右伴随
   $ underline(Hom)(X,-) : cal(C) -> cal(C) $
   于是可以定义 $underline(Hom)(X,Y) in cal(C)$ 是满足泛性质
-  $ Map_(cal(C)) (Z,underline(Hom)(X,Y)) tilde.eq Map_(cal(C)) (Z times.o X,Y) $
+  $ Map_(cal(C)) (Z,underline(Hom)(X,Y)) simeq Map_(cal(C)) (Z times.o X,Y) $
   的对象, 这个构造称之为*内部 Hom*.
 ]
 
 #proposition[
   设 $cal(C)$ 是可呈示的对称幺半 $oo$-范畴, 若 $X in cal(C)$ 是可对偶的, 则
-  $ X^or tilde.eq underline(Hom)(X,bold(1)) $
+  $ X^or simeq underline(Hom)(X,bold(1)) $
 ]
 
 #proof[
@@ -183,21 +183,21 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
 ]
 
 #proposition[
-  若 $X$ 可对偶, 则 $(X^or)^or tilde.eq X$.
+  若 $X$ 可对偶, 则 $(X^or)^or simeq X$.
 ]
 
 == 对偶模
 
 #proposition[
   设 $A$ 是生象环, $M,N in Mod_A$, 则作为谱有
-  $ underline(Hom)(M,N) tilde.eq underline(Map)(M,N) $
+  $ underline(Hom)(M,N) simeq underline(Map)(M,N) $
 ]
 
 #proof[
   作为谱有
-  $ underline(Hom)(M,N) &tilde.eq underline(Map)(A,underline(Hom)(M,N)) \
-  &tilde.eq underline(Map)(A times.o_A M,N) \ 
-  &tilde.eq underline(Map)(M,N)
+  $ underline(Hom)(M,N) &simeq underline(Map)(A,underline(Hom)(M,N)) \
+  &simeq underline(Map)(A times.o_A M,N) \ 
+  &simeq underline(Map)(M,N)
   $
 ]
 
@@ -210,16 +210,16 @@ $ Map_A (tau_(<=n)M,colim_i X_i) tilde.eq colim_i Map_A (tau_(<=n)M,X_i) $
   $ theta_(M,N) : M^or times.o_A N -> underline(Hom)_A (M,N) $
   则一个对象可对偶当且仅当对所有 $N$, 该态射都为等价 (读者可自证). 令
   $ cal(D) = {M | theta_(M,N) "对所有" N "都是等价"} $
-  显然 $A in cal(D)$, 因为 $A^or tilde.eq A$, $A times.o_A N tilde.eq N tilde.eq underline(Hom)_A (A,N)$, 而 $cal(D)$ 容易验证是粗的, 从而每个完美 $A$-复形都可对偶.
+  显然 $A in cal(D)$, 因为 $A^or simeq A$, $A times.o_A N simeq N simeq underline(Hom)_A (A,N)$, 而 $cal(D)$ 容易验证是粗的, 从而每个完美 $A$-复形都可对偶.
 
   反之, 若 $M$ 可对偶, 对偶为 $M^or$, 则
-  $ underline(Hom)_A (M,N) tilde.eq M^or times.o_A N $
+  $ underline(Hom)_A (M,N) simeq M^or times.o_A N $
   因此对任意滤过 $N_i, i in I$ 有
   $
-  Map_A (M, varinjlim(i)N_i) &tilde.eq Map_A (A, M^or times.o_A varinjlim(i)N_i)\
-  &tilde.eq Map_A (A, varinjlim(i) M^or times.o_A N_i)\
-  &tilde.eq varinjlim(i) Map_A (A, M^or times.o_A N_i)\
-  &tilde.eq varinjlim(i) Map_A (M,N_i)
+  Map_A (M, varinjlim(i)N_i) &simeq Map_A (A, M^or times.o_A varinjlim(i)N_i)\
+  &simeq Map_A (A, varinjlim(i) M^or times.o_A N_i)\
+  &simeq varinjlim(i) Map_A (A, M^or times.o_A N_i)\
+  &simeq varinjlim(i) Map_A (M,N_i)
   $
   故 $M$ 紧.
 ]

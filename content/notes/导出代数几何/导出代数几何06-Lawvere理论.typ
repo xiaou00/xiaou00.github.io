@@ -42,9 +42,9 @@ Lawvere 理论之间的态射 $TT->TT'$ 是保持积和泛对象的函子, 记�
   $ {0,1,2,...} |-> {0, ZZ^1, ZZ^2, ...} $
   我们来检查 $TT(n,1)$ 在此处的含义, 对于 Abel 群, 任何由群运算构造出来的 $n$-元运算最终都能唯一写成
   $ a_1 x_1 + ... + a_n x_n, quad a_i in ZZ $
-  因此 $TT_Ab (n,1) tilde.eq ZZ^n$, 例如 $TT_(Ab) (2,1) tilde.eq ZZ^2$, 元素 $(a,b)$ 对应操作 $(x,y)|->(a x + b y)$. 反范畴恰好把自由代数之间的同态反转为多元代数操作. 一个 $TT_Ab$ 代数是一个保持有限积的函子
+  因此 $TT_Ab (n,1) simeq ZZ^n$, 例如 $TT_(Ab) (2,1) simeq ZZ^2$, 元素 $(a,b)$ 对应操作 $(x,y)|->(a x + b y)$. 反范畴恰好把自由代数之间的同态反转为多元代数操作. 一个 $TT_Ab$ 代数是一个保持有限积的函子
   $ A : TT_Ab -> Set $
-  令 $X = A(1) := A(ZZ)$, 由于保持有限积, $A(n)=A(1^n) tilde.eq X^n$. $T$ 中的态射
+  令 $X = A(1) := A(ZZ)$, 由于保持有限积, $A(n)=A(1^n) simeq X^n$. $T$ 中的态射
   $ + : 2->1, quad - : 1->1, quad 0 : 0->1 $
   被 $A$ 送到
   $ A times A -> A, quad A -> A, quad * -> A $
@@ -53,7 +53,7 @@ Lawvere 理论之间的态射 $TT->TT'$ 是保持积和泛对象的函子, 记�
   作用为
   $ (x_1,...,x_n) |-> a_1 x_1 + ... + a_n x_n $
   我们导出了核心等价
-  $ Fun^times (TT_Ab,Set) tilde.eq Ab $
+  $ Fun^times (TT_Ab,Set) simeq Ab $
 ]
 
 = 交换代数的 Lawvere 理论
@@ -61,12 +61,12 @@ Lawvere 理论之间的态射 $TT->TT'$ 是保持积和泛对象的函子, 记�
 == 如何通往生象环的理论
 
 接下来我们进入我们引入 Lawvere 理论的正题: 我们希望定义一个编码 $CAlg_k$, 即 $k$-交换代数的 Lawvere 结构 $TT$, 使得
-$ CAlg_k tilde.eq Fun^times (TT,Set) $
+$ CAlg_k simeq Fun^times (TT,Set) $
 并且我们有如下引理
 
 #lemma[
   设 $cal(C)$ 是具有有限余极限的范畴, 则
-  $ sInd(cal(C)) tilde.eq sInd(cat("Idem")(cal(C))) $  
+  $ sInd(cal(C)) simeq sInd(cat("Idem")(cal(C))) $  
 ]
 
 #proof[显然, 因为 $cat("Idem")(cal(C)) subset sInd(cal(C))$ 是自动的.]
@@ -86,11 +86,11 @@ $ TT_k := Poly^opp_k $
 并令
 $ n <-> k[x_1,...,x_n] $
 因为在 $CAlg_k$ 中的推出就是张量积 $times.o_k$, 因此在 $TT_k$ 中
-$ n times m := k[x_1,...,x_n] times.o_k k[x_1,...,x_m] tilde.eq k[x_1,...,x_(n+m)] =: n + m $
+$ n times m := k[x_1,...,x_n] times.o_k k[x_1,...,x_m] simeq k[x_1,...,x_(n+m)] =: n + m $
 确实满足 Lawvere 理论的对象结构.
 
 #proposition[
-  我们有 $TT_k (n,m) tilde.eq k[x_1,...,x_n]^m$ 也就是 $m$ 个 $n$ 元多项式组成的集合.
+  我们有 $TT_k (n,m) simeq k[x_1,...,x_n]^m$ 也就是 $m$ 个 $n$ 元多项式组成的集合.
 ]
 
 #proof[
@@ -106,9 +106,9 @@ $ n times m := k[x_1,...,x_n] times.o_k k[x_1,...,x_m] tilde.eq k[x_1,...,x_(n+m
 
 #proof[
   记 $P_n = k[x_1,...,x_n]$. 只需证明 $Hom_(CAlg_k) (P_n, -)$ 保持筛余极限, 由自由的泛性质
-  $ Hom_(CAlg_k) (P_n,A) tilde.eq "oblv"(A)^n $
+  $ Hom_(CAlg_k) (P_n,A) simeq "oblv"(A)^n $
   其中 $"oblv":CAlg_k->Set$ 是遗忘函子. 设 $I$ 是筛的, 给定图表 $D : I -> CAlg_k$, 计算得
-  $ Hom_(CAlg_k) (P_n, colim_(i in I) D(i)) & tilde.eq "oblv"(colim_(i in I) D(i))^n \ & tilde.eq (colim_(i in I) "oblv"(D(i)))^n \ & tilde.eq colim_(i in I) "oblv"(D(i))^n \ & tilde.eq colim_(i in I) Hom_(CAlg_k) (P_n, A) $
+  $ Hom_(CAlg_k) (P_n, colim_(i in I) D(i)) & simeq "oblv"(colim_(i in I) D(i))^n \ & simeq (colim_(i in I) "oblv"(D(i)))^n \ & simeq colim_(i in I) "oblv"(D(i))^n \ & simeq colim_(i in I) Hom_(CAlg_k) (P_n, A) $
   其中 $"oblv"$ 显然保持筛余极限, 并且筛余极限在 $Set$ 中与有限积交换.
 ]
 
@@ -124,39 +124,39 @@ Lawvere 重构定理是 Lawvere 理论最核心的定理
   设有 1-范畴的伴随 $F:Set arrows.lr cal(C):"oblv"$, 并且 $cal(C)$ 具有筛余极限, $"oblv"$ 是保守的 ($"oblv"(f)$ 是同构蕴含 $f$ 是同构) 且保持筛余极限, 记 $cal(C)_"ff" subset cal(C)$ 是有限自由对象生成的全子范畴
   $ "Ob"(cal(C)_"ff") := {F(S) | S in cat("FinSet")} $
   定义该伴随对应的 Lawvere 理论 $TT_F := cal(C)^opp_"ff"$, 那么有等价
-  $ cal(C) tilde.eq Fun^times (TT_F, Set) $
+  $ cal(C) simeq Fun^times (TT_F, Set) $
 ] <thm-lawvere-reconstruction>
 
 #proof[
   记 $cal(D)=cal(C)_"ff"$, 函子
   $ h' : cal(C) -> Fun(cal(D)^opp, Set), quad h'_X := h_X|_(cal(D)) = Hom_(cal(C))(-,X) $
   首先由于 $cal(D)$ 具有有限余积, 因为 $F$ 是左伴随, 从而
-  $ F(S union.sq T) tilde.eq F(S) union.sq F(T), quad F(nothing) tilde.eq 0 $
+  $ F(S union.sq T) simeq F(S) union.sq F(T), quad F(nothing) simeq 0 $
   于是在 $TT_F = cal(D)^opp$ 中, 这些变为有限乘积, 于是
-  $ h'_X ((P union.sq Q)^opp) &= Hom_(cal(C))(P union.sq Q, X) \ &tilde.eq Hom_(cal(C))(P,X) times Hom_(cal(C))(Q,X) $
+  $ h'_X ((P union.sq Q)^opp) &= Hom_(cal(C))(P union.sq Q, X) \ &simeq Hom_(cal(C))(P,X) times Hom_(cal(C))(Q,X) $
   且 $h'_X (0) = *$, 从而
   $ h'_X : cal(C) -> Fun^times (TT_F,Set) $
   特别地, 对有限集 $S$, 有
-  $ h'_X (F(S)) tilde.eq Hom_Set (S,"oblv"(X)) tilde.eq "oblv"(X)^S $
+  $ h'_X (F(S)) simeq Hom_Set (S,"oblv"(X)) simeq "oblv"(X)^S $
   若 $P=F(S)$, 其中 $S$ 是有限集, 而 $I$ 是筛范畴, 则
-  $ Hom_(cal(C))(P,colim_(i in I)X_i) &tilde.eq Hom_Set (S,"oblv"(colim_(i in I)X_i)) \ &tilde.eq Hom_Set (S,colim_(i in I) "oblv"(X_i)) \ &tilde.eq colim_(i in I) (Hom_Set (S,"oblv"(X_i))) $
+  $ Hom_(cal(C))(P,colim_(i in I)X_i) &simeq Hom_Set (S,"oblv"(colim_(i in I)X_i)) \ &simeq Hom_Set (S,colim_(i in I) "oblv"(X_i)) \ &simeq colim_(i in I) (Hom_Set (S,"oblv"(X_i))) $
   因此
-  $ h'_(colim_(i in I) X_i) tilde.eq colim_(i in I) h'_(X_i) $
+  $ h'_(colim_(i in I) X_i) simeq colim_(i in I) h'_(X_i) $
   点态成立, 即 $h'_((-))$ 保持筛余极限. 接下来考虑这对伴随 $F tack.l "oblv"$ 的杠解消 $Bar_bullet (F,"oblv";X)$. 显然由上一节的结论, 有
-  $ abs(Bar_bullet (F,"oblv";X)) tilde.eq X $
+  $ abs(Bar_bullet (F,"oblv";X)) simeq X $
   并且每个
   $ Bar_n (F,"oblv";X) = F(S_n) $
   都是某个集合 $S_n$ 上的自由对象, 而任何集合都是其有限子集的滤过余极限
-  $ S_n tilde.eq varinjlim(S' subset_"fin" S_n) S' $
+  $ S_n simeq varinjlim(S' subset_"fin" S_n) S' $
   由于 $F$ 是左伴随, 有
-  $ F(S_n) tilde.eq varinjlim(S' subset_"fin" S_n) F(S') $
+  $ F(S_n) simeq varinjlim(S' subset_"fin" S_n) F(S') $
   滤过余极限也是筛余极限, 因此每个 $Bar_n (X)$ 都在有限自由对象筛余极限的闭包中, 再取几何实现, 可知 $cal(C)$ 由 $cal(D)$ 在筛余极限下生成.
 
   接下来证明 $h'_((-))$ 本质满. 取
   $ A in Fun^times (cal(D)^opp,Set) $
   考虑 Grothendieck 构造
   $ integral_(cal(D)) A $
-  下面证明这是一个筛范畴, 首先 $A(0) tilde.eq *$, 从而 $integral A$ 非空. 再取两个对象 $(P,a),(Q,b)$, 由于 $A$ 将积送到余积, 即
+  下面证明这是一个筛范畴, 首先 $A(0) simeq *$, 从而 $integral A$ 非空. 再取两个对象 $(P,a),(Q,b)$, 由于 $A$ 将积送到余积, 即
   $ A(P union.sq Q) -->^~ A(P) times A(Q) $
   存在唯一 $c in A(P union.sq Q)$ 对应于 $(a,b)$. 于是有典范的图表
   $ (P,a) -> (P union.sq Q,c) <- (Q,b) $
@@ -167,32 +167,32 @@ Lawvere 重构定理是 Lawvere 理论最核心的定理
   并且 $A([f,g])(r)=c$. 因为其在 $A(P) times A(Q)$ 两个分量中正是
   $ A(f)(r) = a, quad A(g)(r) = b $
   于是任意两个对象的形如 $i -> bullet <- j$ 的范畴都有始对象, 其中 $i,j in integral A$ , 而这个范畴恰好是逗号范畴 $(i,j) arrow.b Delta$, 其中 $Delta:integral A -> integral A times integral A$ 是对角函子. 对任意 $i,j$ 该逗号范畴非空且连通等价于说 $Delta$ 是共尾的, 从而 $integral A$ 是筛的. 另一方面, Yoneda 稠密性给出
-  $ A tilde.eq colim_((P,a) in integral A) yo(P) $
+  $ A simeq colim_((P,a) in integral A) yo(P) $
   我们可以在 $cal(C)$ 中取
   $ X = colim_((P,a) in integral A) P $
   存在性由上述证明的筛性保证, 由于 $h'_((-))$ 保持筛余极限以及 $h'_P = yo(P)$, 不难推出
-  $ h'_X tilde.eq colim_((P,a) in integral A) h'_P = colim_((P,a) in integral A) yo(P) tilde.eq A $
+  $ h'_X simeq colim_((P,a) in integral A) h'_P = colim_((P,a) in integral A) yo(P) simeq A $
   从而 $h'_((-))$ 本质满.
 
   最后考察全忠实性, 固定 $Y in cal(C)$, 考虑全体满足
   $ Hom_(cal(C))(X,Y) -->^~ "Nat"(h'_X,h'_Y) quad (*) $
   的 $X$, 对 $P in cal(D)$, 由 Yoneda 有
-  $ "Nat"(h'_P,h'_Y) = "Nat"(yo(P),h'_Y) tilde.eq h'_Y (P) = Hom_(cal(C))(P,Y) $
+  $ "Nat"(h'_P,h'_Y) = "Nat"(yo(P),h'_Y) simeq h'_Y (P) = Hom_(cal(C))(P,Y) $
   从而所以 $P in cal(D)$ 都满足 $(*)$. 更进一步, 若
   $ X = colim_i X_i $
   且所有 $X_i$ 都满足 $(*)$, 则
-  $ Hom_(cal(C))(X,Y) &tilde.eq lim_i Hom_(cal(C))(X_i,Y) \
-  &tilde.eq lim_i "Nat"(h'_(X_i),h'_Y) \
-  &tilde.eq "Nat"(colim_i h'_(X_i),h'_Y) \
-  &tilde.eq "Nat"(h'_X,h'_Y) $
+  $ Hom_(cal(C))(X,Y) &simeq lim_i Hom_(cal(C))(X_i,Y) \
+  &simeq lim_i "Nat"(h'_(X_i),h'_Y) \
+  &simeq "Nat"(colim_i h'_(X_i),h'_Y) \
+  &simeq "Nat"(h'_X,h'_Y) $
   而 $cal(D)$ 筛生成 $cal(C)$, 从而所有 $X$ 都满足 $(*)$. 从而全忠实.
 ]
 
 #corollary[
   我们有
-  $ CAlg_k tilde.eq Fun^times (Poly^opp_k, Set) $
+  $ CAlg_k simeq Fun^times (Poly^opp_k, Set) $
   也就是说
-  $ "1-"sInd(Poly_k) tilde.eq CAlg_k $
+  $ "1-"sInd(Poly_k) simeq CAlg_k $
 ] <cor-1sind-poly-calg>
 
 最后我们来证明@prop-poly-compact-projective-side-1 的另一半
@@ -203,9 +203,9 @@ Lawvere 重构定理是 Lawvere 理论最核心的定理
 
 #proof[
   设 $A in CAlg_k^(omega"p")$, 由@cor-1sind-poly-calg, 可作
-  $ A tilde.eq colim_(i in I) P_i, quad P_i in Poly_k $
+  $ A simeq colim_(i in I) P_i, quad P_i in Poly_k $
   其中 $I$ 是筛的. 由于 $A$ 紧投射, 有
-  $ Hom(A,A) tilde.eq colim_(i in I) Hom(A,P_i) $
+  $ Hom(A,A) simeq colim_(i in I) Hom(A,P_i) $
   特别地, $id_A in Hom(A,A)$ 必定来自某个 $Hom(A,P_i)$ 元素 $s:A->P_i$. 若 $r_i:P_i->A$ 是余极限的结构映射, 那么 $s$ 被映射到 $id_A$ 恰好意味着
   $ r_i compose s = id_A $
   也就是

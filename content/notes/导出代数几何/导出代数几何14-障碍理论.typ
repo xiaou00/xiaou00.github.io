@@ -42,7 +42,7 @@ $ o_p (f) $
 ]
 
 通常我们选取障碍类, 就是在 $cal(O)_p (f)$ 中选取一个元素, 具体实现为
-$ pi_0 cal(O)_p (f) = pi_0 Map_R (LL_(R/k),M[1]) tilde.eq Ext^1_R (LL_(R/k),M) $
+$ pi_0 cal(O)_p (f) = pi_0 Map_R (LL_(R/k),M[1]) simeq Ext^1_R (LL_(R/k),M) $
 这也是为什么我们说 $Ext^1$ 分类障碍.
 
 == 平方零扩张的分类
@@ -62,10 +62,10 @@ $ E_partial = fib(partial) $
 那么有
 $ M -> E_partial ->S ->^partial M[1] $
 从而
-$ { S "的以" M "为纤维的模扩张" } tilde.eq Map(S,M[1]) $
+$ { S "的以" M "为纤维的模扩张" } simeq Map(S,M[1]) $
 
 回顾一个平方零扩张, 其构成群胚 $SqExt_k (S,M)$, 由定义, 显然固定 $S,M$ 后平方零扩张完全由导子 $d:S->S plus.o M[1]$ 决定. 不难验证
-$ SqExt_k (S,M) tilde.eq Der_k (S,M[1]) $
+$ SqExt_k (S,M) simeq Der_k (S,M[1]) $
 而导子又被余切复形表示, 于是就有了如下的结论:
 
 #proposition[
@@ -139,11 +139,11 @@ $ o_p (f) in pi_0 Map_R (LL_(R/k),f^* M[1]) $
   若一个平方零扩张 $q:E->R$ 由导子
   $ d:R->R plus.o N[1] $
   定义, 则
-  $ E tilde.eq R times_(R plus.o N[1]) R $
+  $ E simeq R times_(R plus.o N[1]) R $
   两个映射是 $d$ 和零导子.  一个截面 $s:R->E$ 由拉回的泛性质恰好等价于给出一个同伦
-  $ d tilde.eq 0 $
+  $ d simeq 0 $
   而
-  $ [d] = eta_q in pi_0 Der_k (R,N[1]) tilde.eq pi_0 Map_R (LL_(R/k),N[1]) $
+  $ [d] = eta_q in pi_0 Der_k (R,N[1]) simeq pi_0 Map_R (LL_(R/k),N[1]) $
   从而 $q$ 有截面当且仅当 $eta_q = 0$. 代回 $p_f$ 的论证即可.
 ]
 
@@ -155,7 +155,7 @@ $ o_p (f) in pi_0 Map_R (LL_(R/k),f^* M[1]) $
 
 #proposition(title:[形式光滑判据])[
   $R in AniCAlg_k$ 是形式光滑的当且仅当对任意 $M in AniMod_R$, 都有
-  $ pi_0 Map_(AniMod_R) (LL_(R/k), M[1]) tilde.eq 0 $
+  $ pi_0 Map_(AniMod_R) (LL_(R/k), M[1]) simeq 0 $
 ]
 
 #proof[
@@ -178,7 +178,7 @@ $ o_p (f) in pi_0 Map_R (LL_(R/k),f^* M[1]) $
 ]
 
 #proposition[
-  $R in AniCAlg_k$ 是形式平展的当且仅当 $LL_(R/k) tilde.eq 0$.
+  $R in AniCAlg_k$ 是形式平展的当且仅当 $LL_(R/k) simeq 0$.
 ]
 
 = Postnikov 塔中的障碍理论
@@ -204,7 +204,7 @@ $ A -> ... -> A_n ->^(p_n) A_(n-1) -> ... -> A_0 = pi_0 A $
   且乘法
   $ pi_d I times.o_(pi_0 B) pi_d I -> pi_(2d) I $
   为零, 那么也有同样结论. 该证明涉及相对 Hurwicz 引理
-  $ tau_(<=2d+1) LL_(B/B') tilde.eq I[1] $
+  $ tau_(<=2d+1) LL_(B/B') simeq I[1] $
   引理的证明较为复杂, 有机会我们会继续讨论.
 ]
 
@@ -229,7 +229,7 @@ $ A -> ... -> A_n ->^(p_n) A_(n-1) -> ... -> A_0 = pi_0 A $
 ]
 
 #proof[
-  考虑 $I_n = fib(p_n) tilde.eq pi_n (A)[n] in Mod_A^[n,n]$, 由引理即证.
+  考虑 $I_n = fib(p_n) simeq pi_n (A)[n] in Mod_A^[n,n]$, 由引理即证.
 ]
 
 == 障碍类的识别
@@ -262,9 +262,9 @@ $ pi_0 underline(Map)_A (LL_(A/k),M[n]) $
 $ Ext^n_A (LL_(A/k),M) $
 我们可以识别出其一些平凡的性质, 包括并不限于:
 
-+ $D^0$ 就是普通导子, 因为 $D^0 (A/k;M) = pi_0 Map_A (L_(A/k),M) tilde.eq pi_0 Der_k (A,M)$.
++ $D^0$ 就是普通导子, 因为 $D^0 (A/k;M) = pi_0 Map_A (L_(A/k),M) simeq pi_0 Der_k (A,M)$.
 + $D_0$ 就是 $Omega^1_(pi_0 A/pi_0 k) times.o_(pi_0 A) pi_0 M$ 就是经典 Kähler 微分带系数 $M$.
-+ $D^1$ 分类平方零扩张, 因为 $D^1 (A/k;M) tilde.eq pi_0 Der_k (A,M[1])$.
++ $D^1$ 分类平方零扩张, 因为 $D^1 (A/k;M) simeq pi_0 Der_k (A,M[1])$.
 
 == Jacobi--Zariski 正合列
 

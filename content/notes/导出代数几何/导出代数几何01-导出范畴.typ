@@ -75,7 +75,7 @@
 
 #example[
   对于概形 $X$, 有完美复形的dg-范畴 $Perf^"dg" (X)$, 对象为完美复形, Hom是导出Hom的dg-模型 $underline("RHom")^bullet (E,F)$ 满足
-  $ H^n underline("RHom")(E,F) tilde.eq Ext^n_X (E,F) $
+  $ H^n underline("RHom")(E,F) simeq Ext^n_X (E,F) $
   其dg-脉应该给出稳定 $oo$-范畴 $Perf(X)$.
 ]
 
@@ -135,7 +135,7 @@ $ f_(012) in Hom^(-1) (X_0, X_2) $
 满足
 $ d f_(012) = f_(02) - f_(12) f_(01) $
 也就是要求 $f_(02)$ 和 $f_(12) f_(01)$ 不严格相等, 但链同伦. 更高阶的单形刻画更高阶的相容关系. 因此 dg-脉的核心思想就是将 Hom 复形的负次数方向解释为 $oo$-范畴中的高阶态射, 注意这并没有丢失正次数的信息, 正次数的信息通常可以通过平移来恢复. 核心公式是
-$ pi_n Map_(Ner^"dg" (cal(C))) (X,Y) tilde.eq H^(-n) underline(Hom)_(cal(C)) (X,Y) $
+$ pi_n Map_(Ner^"dg" (cal(C))) (X,Y) simeq H^(-n) underline(Hom)_(cal(C)) (X,Y) $
 
 从现在开始, 我们可以将 $Ch(A)$ 视作一个由链复形, 链映射和高阶链同伦组成的无穷范畴.
 
@@ -151,7 +151,7 @@ $ Fun_W (cal(C),cal(D)) subset Fun(cal(C),cal(D)) $
   给定一个 $oo$-范畴 $cal(C)$ 以及一族 $W subset "Mor"(cal(C))$, 我们定义 *$oo$-范畴的局部化*是一个函子
   $ L:cal(C)->cal(C)[W^(-1)] $
   满足对每个 $w in W$, $L(w)$ 是 $cal(C)[W^(-1)]$ 是等价, 并且满足泛性质
-  $ Fun(cal(C)[W^(-1)],cal(D)) tilde.eq Fun_W (cal(C),cal(D)) $
+  $ Fun(cal(C)[W^(-1)],cal(D)) simeq Fun_W (cal(C),cal(D)) $
   对任意 $oo$-范畴 $cal(D)$ 成立.
 ]
 
@@ -192,7 +192,7 @@ $ Fun_W (cal(C),cal(D)) subset Fun(cal(C),cal(D)) $
 ]
 
 #theorem[
-  $Dcat(cal(A))^suit.heart tilde.eq cal(A)$.
+  $Dcat(cal(A))^suit.heart simeq cal(A)$.
 ]
 
 直观下, 设有复形
@@ -201,7 +201,7 @@ $ ... --> X^(-1) -->^(d^(-1)) X^0 -->^(d^0) X^1 --> ... $
 $ tau_(<=0) X = (... -> X^(-1) -> ker(d^0) -> 0 -> ...) $
 再作 $tau_(>=0)$ 就只剩
 $ coker(X^(-1) -> ker(d^0)) = H^0 (X) $
-从而 $tau_(<=0)tau_(>=0) X = H^0(X)[0]$, 而由于 $X$ 没有其他上同调, 所有的截断态射都是拟同构, 因此在导出范畴中 $X tilde.eq H^0 (X)[0]$.
+从而 $tau_(<=0)tau_(>=0) X = H^0(X)[0]$, 而由于 $X$ 没有其他上同调, 所有的截断态射都是拟同构, 因此在导出范畴中 $X simeq H^0 (X)[0]$.
 
 通常来说, $"h"Dcat(cal(A))$ 就是同调代数里引入过的三角范畴意义下的导出范畴, 不过从现在开始我们统一使用 $Dcat(cal(A))$ 作为导出 $oo$-范畴的语言.
 
@@ -221,7 +221,7 @@ $ coker(X^(-1) -> ker(d^0)) = H^0 (X) $
 ]
 
 一个普通的环可以通过 Eilenberg-MacLane 谱典范地视作一个环谱: 令 $K(A,n)$ 是只有第 $n$ 个同伦群是 $A$ 的 Eilenberg-MacLane 生象, 令 $K(A,0)$ 是离散生象, 标准等价
-$ K(A,n) tilde.eq Omega K(A,n+1) $
+$ K(A,n) simeq Omega K(A,n+1) $
 给出 $Omega$-谱 
 $ H A = (A,K(A,1),K(A,2),...) $
 环结构所诱导的代数结构典范地经此提升, 这可以理解作一对伴随
@@ -237,8 +237,8 @@ $ pi_0 : Sp^suit.heart <->^~ Ab : H $
 显示地, 一个 $EE_1$-环谱 $A$ 可以视作一个谱指定了运算和单位
 $ mu : A smash A -> A quad eta : SS -> A $
 再配备一系列同伦信息,  例如存在决定结合律的同伦
-$ mu(mu smash 1) tilde.eq mu(1 smash mu) $
-以及更多高阶同伦. $EE_oo$-环谱还要添加更高阶融贯的交换律 $mu tilde.eq mu compose tau$ 等.
+$ mu(mu smash 1) simeq mu(1 smash mu) $
+以及更多高阶同伦. $EE_oo$-环谱还要添加更高阶融贯的交换律 $mu simeq mu compose tau$ 等.
 
 #definition(title:[同伦分次环])[
   设 $A$ 是一个 $EE_1$-环谱, 则
@@ -250,7 +250,7 @@ $ mu(mu smash 1) tilde.eq mu(1 smash mu) $
 ]
 
 具体地, 由于同伦群定义为 $pi_p A = [S^p, A]$, 一个元素 $a in pi_p A$ 可以由谱映射 $a:S^p -> A$ 表示, 乘积 $a b in pi_(p+q) A$ 就定义为
-$ S^(p+q) tilde.eq S^p smash S^q larr^(a smash b) A smash A -->^mu A $
+$ S^(p+q) simeq S^p smash S^q larr^(a smash b) A smash A -->^mu A $
 
 这个构造通过广义上同调理论, 就诱导了我们熟悉的(上)同调环, 而dga通过取 $H^*$ 也天然诱导(上)同调环. 其间有关系图
 
@@ -301,7 +301,7 @@ $ LMod_A (Sp) := Alg_(cat("LM")^times.o) (Sp) times_(Alg_(EE_1) (Sp)) {A} $
 
 #proposition[
   $pi_0$ 给出普通 Abel 范畴的等价
-  $ Mod_A^suit.heart tilde.eq Mod_(pi_0 A)^"ord" $
+  $ Mod_A^suit.heart simeq Mod_(pi_0 A)^"ord" $
   右边表示是常规的模范畴
 ]
 
@@ -309,7 +309,7 @@ $ LMod_A (Sp) := Alg_(cat("LM")^times.o) (Sp) times_(Alg_(EE_1) (Sp)) {A} $
 
 #theorem[
   对于普通的交换环 $A$, 我们有 $oo$-范畴的等价
-  $ Dcat(A) tilde.eq Mod_(H A) $
+  $ Dcat(A) simeq Mod_(H A) $
 ]
 
 我们之后如果直接对环谱的模范畴定义函子, 一般意义下它都已经蕴含了导出信息, 例如 $Hom$ 自动替换为 $"RHom"$, 而 $times.o $ 换成 $times.o^"L"$.

@@ -27,38 +27,38 @@
 
 #proposition(title:[局部化的望远镜结构])[
   作为 $A$-模, 有典范等价
-  $ A[f^(-1)] tilde.eq varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...) $
+  $ A[f^(-1)] simeq varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...) $
   这个构造称之为*局部化望远镜* (localization telescope).
 ]
 
 #proof[
   我们知道作为 $k[t]$-模有
-  $ k[t,t^(-1)] tilde.eq varinjlim("") (k[t]->^(dot t) k[t]->^(dot t) k[t]->^(dot t)...) $
+  $ k[t,t^(-1)] simeq varinjlim("") (k[t]->^(dot t) k[t]->^(dot t) k[t]->^(dot t)...) $
   由于 $A times.o_(k[t]) (-)$ 是左伴随, 有
   $
-  A[f^(-1)] &tilde.eq A times.o_(k[t]) k[t,t^(-1)] \
-  &tilde.eq A times.o_(k[t]) varinjlim("") (k[t]->^(dot t) k[t]->^(dot t) k[t]->^(dot t)...) \
-  &tilde.eq varinjlim("") (A times.o_(k[t]) k[t]->^(dot t) A times.o_(k[t]) k[t]->^(dot t) A times.o_(k[t]) k[t]->^(dot t)...) \
-  &tilde.eq varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...)
+  A[f^(-1)] &simeq A times.o_(k[t]) k[t,t^(-1)] \
+  &simeq A times.o_(k[t]) varinjlim("") (k[t]->^(dot t) k[t]->^(dot t) k[t]->^(dot t)...) \
+  &simeq varinjlim("") (A times.o_(k[t]) k[t]->^(dot t) A times.o_(k[t]) k[t]->^(dot t) A times.o_(k[t]) k[t]->^(dot t)...) \
+  &simeq varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...)
   $
 ]
 
 #corollary[
   类似地, 对于一般的模也有
-  $ M[f^(-1)] tilde.eq varinjlim("") (M ->^(dot f) M ->^(dot f) M ->^(dot f) ...) $
+  $ M[f^(-1)] simeq varinjlim("") (M ->^(dot f) M ->^(dot f) M ->^(dot f) ...) $
 ]
 
 #proposition[
   总有
-  $ pi_n (A[f^(-1)]) tilde.eq pi_n (A) [f^(-1)] $
+  $ pi_n (A[f^(-1)]) simeq pi_n (A) [f^(-1)] $
   后面将 $pi_n (A)$ 看作 $pi_0 A$-模.
 ]
 
 #proof[
   只需识别到
-  $ pi_n (A[f^(-1)]) &tilde.eq pi_n (varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...)) \
-  &tilde.eq varinjlim("") (pi_n (A) ->^(dot f) pi_n (A) ->^(dot f)...) \
-  &tilde.eq pi_n (A)[f^(-1)] $
+  $ pi_n (A[f^(-1)]) &simeq pi_n (varinjlim("") (A->^(dot f) A->^(dot f) A->^(dot f)...)) \
+  &simeq varinjlim("") (pi_n (A) ->^(dot f) pi_n (A) ->^(dot f)...) \
+  &simeq pi_n (A)[f^(-1)] $
 ]
 
 == 乘性集的局部化
@@ -70,7 +70,7 @@
 
 #proposition[
   对于同样的假设有
-  $ pi_n (A[S^(-1)]) tilde.eq S^(-1) pi_n (A) $
+  $ pi_n (A[S^(-1)]) simeq S^(-1) pi_n (A) $
 ]
 
 = 生象环的商
@@ -102,24 +102,24 @@
 
 #proposition[
   作为底层 $A$-模, 有
-  $ A /\/ f tilde.eq cofib(A ->^(dot f) A) $
+  $ A /\/ f simeq cofib(A ->^(dot f) A) $
 ]
 
 #proof[
   由基础代数学可构造出纤维序列
   $ k[t] ->^(dot t) k[t] -> k $
   也就是说
-  $ k tilde.eq cofib(k[t]->^(dot t)k[t]) $
+  $ k simeq cofib(k[t]->^(dot t)k[t]) $
   沿着 $k[t]->A$ 做基变换, 基变换保持纤维序列, 证毕.
 ]
 
 #corollary[
-  设 $A$ 是普通交换环, 那么 $pi_1 (A/\/f) tilde.eq Ann_A (f)$.
+  设 $A$ 是普通交换环, 那么 $pi_1 (A/\/f) simeq Ann_A (f)$.
 ]
 
 #proof[
   显然由定义
-  $ pi_1 (A/\/f) tilde.eq ker(A ->^(dot f) A) = {a in A: a f = 0} =: Ann_A (f) $
+  $ pi_1 (A/\/f) simeq ker(A ->^(dot f) A) = {a in A: a f = 0} =: Ann_A (f) $
 ]
 
 == 对多个方程的商
@@ -150,7 +150,7 @@
 
 对于前面提到的
 
-$ A /\/ f tilde.eq cofib(A ->^(dot f) A) $
+$ A /\/ f simeq cofib(A ->^(dot f) A) $
 复形
 $ [A ->^(dot f) A] $
 这个复形非常具有研究价值, 也就是下面的定义
@@ -170,9 +170,9 @@ $ [A ->^(dot f) A] $
 #proposition[
   显然有
 
-  + $pi_0 K_A (f_1,...,f_r) tilde.eq pi_0 A / (f_1,...,f_r)$.
-  + $pi_r K_A (f_1,...,f_r) tilde.eq Ann_A (f_1,...,f_r)$.
-  + $U(A/\/(f_1,...,f_r)) tilde.eq K_A (f_1,...,f_r)$.
+  + $pi_0 K_A (f_1,...,f_r) simeq pi_0 A / (f_1,...,f_r)$.
+  + $pi_r K_A (f_1,...,f_r) simeq Ann_A (f_1,...,f_r)$.
+  + $U(A/\/(f_1,...,f_r)) simeq K_A (f_1,...,f_r)$.
 ]
 
 == 正则序列
@@ -185,21 +185,21 @@ $ [A ->^(dot f) A] $
 
 #lemma[
   显然有
-  $ K_A (f_1,...,f_r) tilde.eq cofib(K_A (f_1,...,f_(r-1)) ->^(dot f_r) K_A (f_1,...,f_(r-1)) ) $
+  $ K_A (f_1,...,f_r) simeq cofib(K_A (f_1,...,f_(r-1)) ->^(dot f_r) K_A (f_1,...,f_(r-1)) ) $
 ]
 
 #proposition[
   若 $f_1,...,f_r$ 是 $A$ 中的正则序列, 则
   $ H_i (K_A (f_1,...,f_r)) = 0, quad i>0 $
   此时作为模有
-  $ K_A (f_1,...,f_r) tilde.eq A/(f_1,...,f_r) $
+  $ K_A (f_1,...,f_r) simeq A/(f_1,...,f_r) $
 ]
 
 #proof[
   归纳法. 对 $r=1$ 显然. 假设已经证明
   $ H_i (K_(r-1)) = 0, quad i>0 $
   且
-  $ H_0 (K_(r-1)) tilde.eq A/(f_1,...,f_(r-1)) $
+  $ H_0 (K_(r-1)) simeq A/(f_1,...,f_(r-1)) $
   记上式为 $B$. 对引理给出的纤维序列
   $ K_(r-1) -->^(dot f_r) K_(r-1) --> K_r $
   作用长正合列
@@ -214,7 +214,7 @@ $ [A ->^(dot f) A] $
 上述论证可以典范地放进生象环的语境, 此处略.
 
 可以看出, 正则序列给出的条件本质是 Koszul 复形没有高次同调, 后面的条件我们一般称之为 *Koszul 正则*, 这是导出商和常规环的商能够等同
-$ A/\/(f_1,...,f_r) tilde.eq A/(f_1,...,f_r) $
+$ A/\/(f_1,...,f_r) simeq A/(f_1,...,f_r) $
 的等价条件.
 
 = 一般态射的商
@@ -228,15 +228,15 @@ $ I = (x) $
 可以用一个方程表示, 也可以冗余地用两个一样的方程
 $ I = (x,x) $
 在普通环论里当然没区别
-$ A/(x) tilde.eq A/(x,x) $
+$ A/(x) simeq A/(x,x) $
 但是当上升到导出
 $ A/\/(x,x) $
 时, 底层的 Koszul 复形是
 $ K_A (x,x) = K_A (x) dtens_A K_A (x) $
-先有 $K_A (x) tilde.eq k$, 所以
-$ K_A (x,x) tilde.eq k dtens_A k $
-在常规的环论里, $k times.o_A k tilde.eq k$, 但在导出层面这绝不是平凡的结构, 我们有
-$ k dtens_A k tilde.eq [A ->^x A] dtens_A k tilde.eq [k ->^0 k] tilde.eq k plus.o k[1] $
+先有 $K_A (x) simeq k$, 所以
+$ K_A (x,x) simeq k dtens_A k $
+在常规的环论里, $k times.o_A k simeq k$, 但在导出层面这绝不是平凡的结构, 我们有
+$ k dtens_A k simeq [A ->^x A] dtens_A k simeq [k ->^0 k] simeq k plus.o k[1] $
 这很好地解释了为什么将方程包装成理想损失了大量信息.
 
 == 一般导出商

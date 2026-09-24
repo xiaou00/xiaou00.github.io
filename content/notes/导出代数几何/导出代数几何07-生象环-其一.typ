@@ -18,7 +18,7 @@
 ]
 
 由上一节的讨论, 我们也可以定义
-$ AniCAlg_k tilde.eq Fun^times (Poly_k^opp, Ani) $
+$ AniCAlg_k simeq Fun^times (Poly_k^opp, Ani) $
 这个构造可以定义相当显然的 $pi_0:AniRing->CRing$, 只需预复合
 $ pi_0 : Ani -> Set $
 即可.
@@ -33,12 +33,12 @@ $ pi_0 : Ani -> Set $
   定义 $LSym_k:Ani(Mod_k) -> AniCAlg_k$ 为遗忘函子的左伴随, 将有限生成的投射 $k$-模 $P$ 送到交换的 $k$-代数 $Sym_k P$.
 ]
 
-由于 $Ani(Mod_k) tilde.eq Dcat_(>=0)(k)$, 我们也可以想象 $LSym_k : Dcat_(>=0) (k)->AniCAlg_k$.
+由于 $Ani(Mod_k) simeq Dcat_(>=0)(k)$, 我们也可以想象 $LSym_k : Dcat_(>=0) (k)->AniCAlg_k$.
 
 == 导出张量积
 
 为了给出导出张量积定义的同时给出合理的解释 (而不是直接定义成推出), 我个人觉得可以先从多项式 $Poly_k$ 开始. 上节我们也提到, $Poly_k$ 有典范的张量积
-$ k[x_1,...,x_n] times.o_k k[x_1,...,x_m] tilde.eq k[x_1,...,x_(n+m)] $
+$ k[x_1,...,x_n] times.o_k k[x_1,...,x_m] simeq k[x_1,...,x_(n+m)] $
 并且这里 $P times.o_k Q = P cop_k Q$ 正好是 $Poly_k$ 的余积.
 
 记
@@ -74,7 +74,7 @@ $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
   也就是 $b(P,-)$ 在 $yo^*$ 下的原像. 这些延拓关于 $P$ 函子性地组装成
   $ tilde(b) : cal(P) -> Fun^Sigma (cal(A),cal(A)) $
   然后延拓第一个变量, 范畴 $Fun^Sigma (cal(A),cal(A))$ 具有筛余极限且逐点计算. 事实上若 $F_i$ 都保持筛余极限, 则
-  $ (colim_i F_i)(colim_j X_j) tilde.eq colim_i colim_j F_i (X_j) tilde.eq colim_j colim_i F_i (X_j) $
+  $ (colim_i F_i)(colim_j X_j) simeq colim_i colim_j F_i (X_j) simeq colim_j colim_i F_i (X_j) $
   于是 $colim_i F_i$ 也保持筛余极限, 再次应用 $(*)$ 就得到
   $ hat(b) : cal(A) -> Fun^Sigma (cal(A),cal(A)) $
   解 Curry 就得到了
@@ -95,7 +95,7 @@ $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
 
 #theorem(title:[$AniCAlg_k$ 的单纯模型])[
   有 $oo$-范畴等价
-  $ simp(CAlg_k) [W^(-1)] tilde.eq AniCAlg_k $
+  $ simp(CAlg_k) [W^(-1)] simeq AniCAlg_k $
 ]
 
 #proofsketch[
@@ -104,7 +104,7 @@ $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
   为
   $ Phi(A_bullet)(P) := abs(Delta^opp -> Set\, quad [n] |-> Hom_(CAlg_k)(P,A_n)) $
   也就是先形成单纯集后, 再将其视作一个生象 (Kan 复形), 这是典范的, 因为每个 $A_n$ 的加法以及面和退化映射的同态性质使其构成一个单纯 Abel 群, 而单纯 Abel 群必然是 Kan复形. 可以验证其保持有限乘积. 再由于我们有 1-范畴等价
-  $ simp(CAlg_k) tilde.eq Fun^times (Poly^opp_k, simp(Set)) $
+  $ simp(CAlg_k) simeq Fun^times (Poly^opp_k, simp(Set)) $
   我们遂可以证明 $W$ 恰好对应逐点的弱等价, 局部化后由一些 Lawvere 理论技术细节即可导出等价.
 ]
 
@@ -120,7 +120,7 @@ $ pi_i (Phi(A)(k[x])) = pi_i ("oblv"(A_bullet)) = pi_i (A_bullet) $
 
 由于我们有自由-遗忘伴随
 $ LSym : AniMod_k arrows.lr AniCAlg_k : "oblv" $
-我们知道 $AniMod_k tilde.eq Dcat_(>=0)(k) tilde.eq Mod^(>=0)_(H k)$, 即 $k$-生象模等价于 $H k$-连通模谱, 他们共同刻画连通的导出范畴.
+我们知道 $AniMod_k simeq Dcat_(>=0)(k) simeq Mod^(>=0)_(H k)$, 即 $k$-生象模等价于 $H k$-连通模谱, 他们共同刻画连通的导出范畴.
 
 也就是说, 当我们还停留在讨论模的时候, 模谱构造和生象模构造是兼容的. 问题在于, 怎么在这些导出结构上加入乘法?
 
@@ -135,9 +135,9 @@ $ AniCAlg_k = Fun^times (Poly^opp_k,Ani) $
 模型上等价于 $simp(CAlg_k)[W^(-1)]$.
 
 另一条路线则是先把 $Mod_k$ 导出化了, 得到
-$ AniMod_k tilde.eq Mod^(>=0)_(H k) tilde.eq Dcat_(>=0)(k) $
+$ AniMod_k simeq Mod^(>=0)_(H k) simeq Dcat_(>=0)(k) $
 这是一个对称幺半的 $oo$-范畴, 张量积记作 $- dtens_k -$. 我们直接在里面取交换 ($EE_oo$) 代数对象, 就得到
-$ CAlg_(H k) := CAlg(Mod_(H k)) tilde.eq CAlg(AniMod_k) tilde.eq CAlg(Dcat_(>=0)(k)) $
+$ CAlg_(H k) := CAlg(Mod_(H k)) simeq CAlg(AniMod_k) simeq CAlg(Dcat_(>=0)(k)) $
 
 整个过程可以画成
 
@@ -168,7 +168,7 @@ $ CAlg_(H k) := CAlg(Mod_(H k)) tilde.eq CAlg(AniMod_k) tilde.eq CAlg(Dcat_(>=0)
   $ P |-> H P $
   而 $H P$ 又显然是一个 $E_oo$-$H k$-代数, 从而我们有
   $ H : Poly_k -> CAlg^(>=0)_(H k) $
-  那么利用 $AniCAlg_k tilde.eq sInd(Poly_k)$, 这个可以唯一延拓到保持筛余极限的函子
+  那么利用 $AniCAlg_k simeq sInd(Poly_k)$, 这个可以唯一延拓到保持筛余极限的函子
   $ Phi : AniCAlg_k -> CAlg^(>=0)_(H k) $
 ]
 
@@ -176,10 +176,10 @@ $ CAlg_(H k) := CAlg(Mod_(H k)) tilde.eq CAlg(AniMod_k) tilde.eq CAlg(Dcat_(>=0)
 $ A in AniCAlg_k $
 取其一个多项式单纯解消, 也就是自由-遗忘伴随的杠解消
 $ P_bullet -> A, quad P_n in Poly_k^oo quad ("允许任何大小的生成集合") $
-有 $A tilde.eq abs(P_bullet)$. 那么定义 $Phi(A)=abs(H P_bullet)$, 右边的几何实现在 $CAlg_(H k)$ 中计算, 这是非常适合实际计算的一个类比.
+有 $A simeq abs(P_bullet)$. 那么定义 $Phi(A)=abs(H P_bullet)$, 右边的几何实现在 $CAlg_(H k)$ 中计算, 这是非常适合实际计算的一个类比.
 
 实际上, 这两个范畴底层共有的导出模范畴还是一样的, 也就是 $Dcat_(>=0)(k)$. 毕竟 $Mod^(>=0)_(H k)$ 确实等价于 $AniMod_k$, 并且在遗忘函子识别之下这个等价仍然保持, 从而同伦群意义下有
-$ pi_i Phi(A) tilde.eq pi_i A $
+$ pi_i Phi(A) simeq pi_i A $
 恒成立.
 
 事实上, $AniCAlg_k$ 就是导出代数几何中最基础的环对象, 而 $CAlg_(H k)$ 就是*谱代数几何*中最基础的环对象. (笔者在写该笔记的时候还未正式接触谱代数几何, 若有谬误敬请谅解)
@@ -205,11 +205,11 @@ $ pi_i Phi(A) tilde.eq pi_i A $
 通过上述构造的比较态射, 我们可以典范地给每个生象环 $R in AniRing$ 都关联一个环谱 $R in CAlg_SS$. 我们使用同一个记号.
 
 通过这个角度, 我们可以对对称幺半的 $oo$-范畴 $cal(C)$ 定义 $Mod_R (cal(C))$. 我们可以定义连通导出范畴
-$ Dcat_(>=0)(R) := Mod_R (AniMod_ZZ) tilde.eq Mod_R (Dcat_(>=0)(ZZ)) $
+$ Dcat_(>=0)(R) := Mod_R (AniMod_ZZ) simeq Mod_R (Dcat_(>=0)(ZZ)) $
 我们知道通过在 $PrL$ 中形式逆转 $Sigma:M|->M[1]$ 可以得到一个稳定无穷范畴 $Dcat(R)$, 即定义为余极限
 $ colim(Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma ...) $
 当我们在 $PrL$ 中计算这个范畴时, 余极限可以改写作对应右伴随函子的极限
-$ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
+$ Dcat(R) simeq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
 
 == 生象环模的定义
 
@@ -233,13 +233,13 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
 
 #proposition(title:[一个简单但重要的计算引理])[
   设 $M,N in Mod_A^suit.heart$, $f:M->N$ 是导出模态射, 则
-  $ cofib(M->^f N) tilde.eq [M->^f N] $
+  $ cofib(M->^f N) simeq [M->^f N] $
 ]
 
 #proof[
   只需证明 $C=[M->^f N]$ 满足泛性质即可, 即对任意 $X in Mod_A$ 有
-  $ Map(C,X) tilde.eq Map(N,X) times_(Map(M,X)) Map(0,X) $
-  而由于 $Map(0,X) tilde.eq *$, 问题转化成:
+  $ Map(C,X) simeq Map(N,X) times_(Map(M,X)) Map(0,X) $
+  而由于 $Map(0,X) simeq *$, 问题转化成:
 
   #question[
     从 $C$ 到 $X$ 的映射是否恰好等价于 $g:N->X$ 加上 $g f:M->X$ 的一个零同伦.
@@ -247,7 +247,7 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
 
   答案是肯定的, 有自然包含 $i:N->C$, 复合 $M->^f N->^i C$ 并非严格的零映射, 但存在典范的零伦
   $ h: M->C_1 = M, quad h = id_M $
-  由于 $C$ 的微分就是 $f$, 有 $d_C h=f$, 换句话说 $i f = d_C compose id_M$, 也就是 $i f tilde.eq 0$. 现在任取 $X$, 一个映射
+  由于 $C$ 的微分就是 $f$, 有 $d_C h=f$, 换句话说 $i f = d_C compose id_M$, 也就是 $i f simeq 0$. 现在任取 $X$, 一个映射
   $ phi:C->X $
   限制到 $C_0=N$ 给出 $g:N->X$, 同时 $phi$ 在 $C_1=M$ 上的部分给出了同伦 $h:M->X[1]$, 链映射恰好要求了 $d h+ h d = g f$, 由于 $M$ 集中在 $0$ 度, 也就是说 $d h = g f$, 表示 $h$ 是 $g f$ 的零伦.
 ]
@@ -256,6 +256,6 @@ $ Dcat(R) tilde.eq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega D
 
 #theorem(title:[映射锥的对应])[
   对于任意 $M,N in Mod_A$ 和 $f:M->N$, 有
-  $ cofib(f) tilde.eq "Cone"(f) $
+  $ cofib(f) simeq "Cone"(f) $
   是映射锥构造. 也就是说余纤维覆盖了经典的映射锥理论.
 ]

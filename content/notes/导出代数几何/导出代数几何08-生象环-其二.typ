@@ -15,7 +15,7 @@
 对于
 $ A : Poly^opp_k -> Ani $
 保持有限乘积, 显然有
-$ A(k[x_1,...,x_r]) tilde.eq A(k[x])^r $
+$ A(k[x_1,...,x_r]) simeq A(k[x])^r $
 我们用 $abs(A)$ 记录生象 $k$-代数 $A$ 的底层生象
 $ abs(A) := A(k[t]) $
 我们意识到整个 $A$ 已经由其控制. 普通的环运算已经完全由多项式映射给出, 例如加法和乘法
@@ -23,7 +23,7 @@ $ k[t] -> k[x,y], quad t |-> x+y $
 和
 $ k[t] -> k[x,y], quad t |-> x y  $
 取反后都得到
-$ +, dot : abs(A) times abs(A) tilde.eq A(k[x,y]) -> A(k[t]) = abs(A) $
+$ +, dot : abs(A) times abs(A) simeq A(k[x,y]) -> A(k[t]) = abs(A) $
 而
 $ k[t] -> k[x], quad t |-> -x $
 和
@@ -44,7 +44,7 @@ $ pi_0 : Ani -> Set, quad P |-> pi_0 (A(P)) $
 由于 $pi_0$ 保持有限乘积, 因此
 $ pi_0 A in Fun^times (Poly^opp_k,Set) $
 而经典 Lawvere 重构恰好给出
-$ Fun^times (Poly^opp_k,Set) tilde.eq CAlg_k $
+$ Fun^times (Poly^opp_k,Set) simeq CAlg_k $
 其底层的集合恰好是
 $ pi_0 (abs(A)) $
 
@@ -54,8 +54,8 @@ $ pi_0 (abs(A)) $
 $ U : CAlg_k -> Mod_k $
 保持筛余极限, 于是可以生象化为
 $ U : AniCAlg_k -> AniMod_k $
-而 $AniMod_k tilde.eq Dcat_(>=0)(k)$, 从而对于 $A in AniCAlg_k$ 忘掉乘法后, 本质上就是一个连通的导出 $k$-模 (拟同构意义下唯一的链复形), 即 $U(A) in Dcat_(>=0)(k)$, 并且有核心对应
-$ pi_n (A) tilde.eq H_n (U(A)) $
+而 $AniMod_k simeq Dcat_(>=0)(k)$, 从而对于 $A in AniCAlg_k$ 忘掉乘法后, 本质上就是一个连通的导出 $k$-模 (拟同构意义下唯一的链复形), 即 $U(A) in Dcat_(>=0)(k)$, 并且有核心对应
+$ pi_n (A) simeq H_n (U(A)) $
 
 == 同伦分次环
 
@@ -76,7 +76,7 @@ $ x y = (-1)^(p q) y x $
 == 截断与基础 Postnikov
 
 对于一个生象 $X$, 其称之为 *$n$-截断的*, 若对任意 $x$ 和 $i>n$ 有
-$ pi_i (X,x) tilde.eq 0 $
+$ pi_i (X,x) simeq 0 $
 等价地, 对任意空间 $Y$, $Map(Y,X)$ 都是 $n$-截断的空间. 可以得到全子范畴
 $ Ani_(<=n) arrow.hook Ani $
 这个包含函子具有左伴随 $tau_(<=n)$, 称之为*截断函子* (truncation). 容易验证这个函子保持有限乘积, 于是对
@@ -93,7 +93,7 @@ pi_i (tau_(<=n) A) = cases(
 )
 $
 
-特别地有 $tau_(<=0)A tilde.eq pi_0 A$, 右边看作离散生象环. $A->tau_(<=n)A$ 的态射由伴随函子 $tau_(<=n) tack.l i_n$ 立即得到. 而 $tau_(<=n)A -> tau_(<=n-1)A$ 的态射由于有 $A larr^(eta_(n-1)) tau_(<=n-1)A$, 由于目标是 $n$-截断的, 利用 $A larr^(eta_n) tau_(<=n)A$ 的泛性质唯一地分解为
+特别地有 $tau_(<=0)A simeq pi_0 A$, 右边看作离散生象环. $A->tau_(<=n)A$ 的态射由伴随函子 $tau_(<=n) tack.l i_n$ 立即得到. 而 $tau_(<=n)A -> tau_(<=n-1)A$ 的态射由于有 $A larr^(eta_(n-1)) tau_(<=n-1)A$, 由于目标是 $n$-截断的, 利用 $A larr^(eta_n) tau_(<=n)A$ 的泛性质唯一地分解为
 
 #web-diagram(diagram({
 	node((-1, 0), [$A$])
@@ -114,7 +114,7 @@ $
 正如我们所期待的那样, Postnikov 塔是收敛的, 即
 
 #theorem[
-  对于上述的 Postnikov 塔, 总有 $A tilde.eq varprojlim(n) tau_(<=n)A$.
+  对于上述的 Postnikov 塔, 总有 $A simeq varprojlim(n) tau_(<=n)A$.
 ]
 
 #proofsketch[
@@ -127,7 +127,7 @@ $
 $ U : Mod_A -> Sp $
 后, 拉回 $Sp$ 上的标准 $t$-结构, 得到新的 $t$-结构 $Mod_A^(<=0), Mod_A^(>=0)$.
 
-容易证明 $Mod^suit.heart_A tilde.eq Mod_(pi_0 A)$. 我们可以定义
+容易证明 $Mod^suit.heart_A simeq Mod_(pi_0 A)$. 我们可以定义
 $ pi_0 : Mod_A -> Mod^suit.heart_A $
 由 $tau_(<=0)tau_(>=0)$ 定义, 这样我们就能定义
 $ pi_n M := pi_0 (M[n]) $
@@ -170,7 +170,7 @@ $ pi_p A times.o_(pi_0 A) pi_q M -> pi_(p+q) M $
   在链复形 (导出模) 范畴中, 直和就是逐项直和. 例如当 $M,N$ 是普通模时,
   $ M[0] plus.o M[1] plus.o M[2] $
   就是在 $0,1,2$ 号位置互相无关地放 $M$, 并且直和会在同位上相加, 即
-  $ M[1] plus.o N[1] tilde.eq (M plus.o N)[1] $
+  $ M[1] plus.o N[1] simeq (M plus.o N)[1] $
 ]
 
 == 环的 Postnikov Step
@@ -178,7 +178,7 @@ $ pi_p A times.o_(pi_0 A) pi_q M -> pi_(p+q) M $
 对于 $A in AniCAlg_k$, 记 $A_n = trunl(n)$, 考虑 $A_n->A_(n-1)$, 其加入的唯一同伦群就是
 $ pi_n A $
 在线性 (遗忘到生象模) 意义下
-$ fib(A_n -> A_(n-1)) tilde.eq (pi_n A)[n] $
+$ fib(A_n -> A_(n-1)) simeq (pi_n A)[n] $
 也就是说, 第 $n$ 个 Postnikov 层在线性化后为 $(pi_n A)[n]$, 但是 $A_n$ 一般不会等价于
 $ A_(n-1) plus.o (pi_n A)[n] $
 而它真正如何粘贴上去, 由 *$k$-不变量*
@@ -191,15 +191,15 @@ $ LL_(A_(n-1)/k) -> (pi_n A)[n+1] $
 
 #theorem(title:[多项式代数的稠密性])[
   设 $A in AniCAlg_k$, 则
-  $ A tilde.eq colim_((P->A) in (Poly_k)_("/"A)) P $
+  $ A simeq colim_((P->A) in (Poly_k)_("/"A)) P $
 ]
 
 #proof[
   通过 Lawvere 观点将生象环视作预层
   $ A in Fun^times (Poly^opp_k, Ani) $
   由 Yoneda 稠密, 有
-  $ A tilde.eq colim_((P,x) in integral_(Poly_k) A) yo(P) $
-  又由 Yoneda, $A(P) tilde.eq Map_(AniCAlg_k)(P,A)$, 于是一个元素 $x in A(P)$ 恰好对应映射 $P->A$, 于是有典范等价
-  $ integral_(Poly_k) A tilde.eq Poly_k times_(AniCAlg_k) (AniCAlg_k)_("/"A) tilde.eq (Poly_k)_("/"A) $
-  又, 在 $A tilde.eq sInd(Poly_k)$ 的识别下, $yo(P)$ 就是多项式代数 $P$ 本身, 分别代入 Yoneda 稠密的陈述即证.
+  $ A simeq colim_((P,x) in integral_(Poly_k) A) yo(P) $
+  又由 Yoneda, $A(P) simeq Map_(AniCAlg_k)(P,A)$, 于是一个元素 $x in A(P)$ 恰好对应映射 $P->A$, 于是有典范等价
+  $ integral_(Poly_k) A simeq Poly_k times_(AniCAlg_k) (AniCAlg_k)_("/"A) simeq (Poly_k)_("/"A) $
+  又, 在 $A simeq sInd(Poly_k)$ 的识别下, $yo(P)$ 就是多项式代数 $P$ 本身, 分别代入 Yoneda 稠密的陈述即证.
 ]
