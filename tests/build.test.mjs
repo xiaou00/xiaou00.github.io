@@ -11,6 +11,7 @@ import { createNotebookFixture } from './fixtures.mjs';
 import { documentUrl } from '../scripts/geopedia.mjs';
 import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
+import './young.test.mjs';
 import './geopedia.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {

@@ -14,7 +14,7 @@
 #let dR = "dR"
 #let FH = $"F"_"H"$
 #let gr = "gr"
-
+#let Frob = "Frob"
 #let act = $arrow.half.cw$
 #let coev = "coev"
 #let wedge = $or$
@@ -64,6 +64,8 @@
 #let Nm = "Nm"
 #let Sym = "Sym"
 #let LSym = "LSym"
+#let LGamma = $"L"Gamma$
+#let LLambda = $"L"Lambda$
 #let Gr = "Gr"
 #let Wh = "Wh"
 #let Hilb = "Hilb"
@@ -91,8 +93,8 @@
 #let Env = $bold(sans("Env"))$
 #let Set = $bold(sans("Set"))$
 #let Open = $bold(sans("Open"))$
-#let PSh = $bold(sans("PSh"))$
-#let Sh = $bold(sans("Sh"))$
+#let PShv = $bold(sans("PShv"))$
+#let Shv = $bold(sans("Shv"))$
 #let LRep = $bold(sans("LRep"))$
 #let Ab = $bold(sans("Ab"))$
 #let Ring = $bold(sans("Ring"))$
@@ -153,10 +155,18 @@
 #let dRing = $bold(sans("dRing"))$
 #let dMod = $bold(sans("dMod"))$
 #let dSch = $bold(sans("dSch"))$
+#let Mnd = $bold(sans("Mnd"))$
+#let Mfd = $bold(sans("Mfd"))$
+#let DF = $bold(sans("DF"))$
+#let Euc = $bold(sans("Euc"))$ 
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
 #let simeq = $tilde.eq$
+#let brac = (
+  l:$bracket.l.stroked$,
+  r:$bracket.r.stroked$
+)
 
 #let simp(str) = $bold(sans("s"))str$
 #let cat(name) = $bold(sans(name))$
@@ -169,5 +179,4 @@
 #let leftarrow = $stretch(<-, size: #15pt)$
 #let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
 #let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
-
 

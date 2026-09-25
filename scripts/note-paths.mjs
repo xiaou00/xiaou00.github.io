@@ -12,8 +12,8 @@ export function noteIdentity(filename) {
 }
 
 export function validateNotePath(slug) {
-  if (typeof slug !== 'string' || !slug.split('/').every(part => /^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(part))) {
-    throw new Error('笔记路径请使用中文或英文字母, 数字, 空格, 点, 下划线或连字符, 用 / 分隔文件夹.');
+  if (typeof slug !== 'string' || !slug.split('/').every(part => /^[\p{L}\p{N},()][\p{L}\p{N} ._,()-]*$/u.test(part))) {
+    throw new Error('笔记路径请使用中文或英文字母, 数字, 空格, 点, 下划线, 连字符, 半角逗号或括号, 用 / 分隔文件夹.');
   }
   return slug;
 }

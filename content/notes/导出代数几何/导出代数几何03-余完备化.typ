@@ -13,13 +13,13 @@
 #remark[我们记 $C^suit.heart$, 以强调这是一个 $oo$-范畴构造的 1-范畴形态, 例如带 $t$-结构的稳定无穷范畴的心.]
 
 #definition(title:[预层])[
-  所谓*集合值的预层*就是反变函子 $F:C^opp->Set$, 构成范畴 $PSh(cal(C))^suit.heart := Fun(cal(C)^opp,Set)$.
+  所谓*集合值的预层*就是反变函子 $F:C^opp->Set$, 构成范畴 $PShv(cal(C))^suit.heart := Fun(cal(C)^opp,Set)$.
 ]
 
 通过 Yoneda 嵌入 $yo:cal(C)->Fun(cal(C)^opp,Set)$, 将对象 $Y in cal(C)$ 送到可表预层 $Hom(-,Y)$.
 
 #theorem(title:[1-Yoneda 稠密性])[
-  对任意 $X in PSh(cal(C))^suit.heart$, 有典范的等价
+  对任意 $X in PShv(cal(C))^suit.heart$, 有典范的等价
   $ X simeq colim_(yo(c) -> X) yo(c) $
   这里指标范畴是逗号范畴 $(yo arrow.b X)$.
 ]
@@ -28,7 +28,7 @@
   由余 Yoneda 引理, 有典范等价
   $ X simeq integral^(c in cal(C)) X(c) times.o yo(c) simeq colim_((c,x) in integral_(cal(C)) X) yo(c) $
   Yoneda 引理给出
-  $ X(c) simeq Map_(PSh(cal(C))) (yo(c),X) $
+  $ X(c) simeq Map_(PShv(cal(C))) (yo(c),X) $
   从而 Grothendieck 构造
   $ integral_cal(C) X $
   恰好是所有 $yo(c)->X$ 组成的指标范畴, 从而
@@ -40,29 +40,29 @@
 #lemma[
   设 $C$ 是一个小范畴, 那么:
 
-  + 预层范畴 $PSh(cal(C))^suit.heart$ 具有所有小极限.
+  + 预层范畴 $PShv(cal(C))^suit.heart$ 具有所有小极限.
   + 对任意余完备的范畴 $cal(D)$, 沿着 Yoneda 嵌入的限制诱导了一个等价
-    $ yo^* : Fun'(PSh(cal(C))^suit.heart,cal(D)) simeq Fun(cal(C),cal(D)) $
-    其中 $Fun'(PSh(cal(C)^suit.heart,cal(D)) subset Fun(PSh(cal(C))^suit.heart,cal(D))$ 是保持余极限函子的全子范畴. 
+    $ yo^* : Fun'(PShv(cal(C))^suit.heart,cal(D)) simeq Fun(cal(C),cal(D)) $
+    其中 $Fun'(PShv(cal(C)^suit.heart,cal(D)) subset Fun(PShv(cal(C))^suit.heart,cal(D))$ 是保持余极限函子的全子范畴. 
 ]
 
 #remark[
   这里沿着 Yoneda 嵌入限制是指: 对于一个保持余极限的函子
-  $ F : PSh(cal(C)) -> cal(D) $
+  $ F : PShv(cal(C)) -> cal(D) $
   沿着 $yo$ 限制就是取复合
   $ yo^* F := F compose yo : cal(C) -> cal(D) $
   从而得到等价 $yo^*$
 ]
 
 #proofsketch[
-  自然考虑 $Lan_yo tack.l yo^*$, 设 $F:PSh(cal(C))^suit.heart->cal(D)$ 保持所有余极限, Yoneda 稠密给出
+  自然考虑 $Lan_yo tack.l yo^*$, 设 $F:PShv(cal(C))^suit.heart->cal(D)$ 保持所有余极限, Yoneda 稠密给出
   $ F(X) simeq F(colim_(yo(c)->X) yo(c)) simeq colim_(yo(c)->X) F(yo(c)) = colim_(yo(c)->X) yo^* F(c) = Lan_yo (yo^* F)(X) $
   这就导出了互逆.
 ]
 
 #remark[
   若 $cal(D)$ 额外是可呈示的, 则由伴随函子定理有
-  $ Fun'(PSh(cal(C)),cal(D)) simeq Fun^"L" (PSh(cal(C)),cal(D)) $
+  $ Fun'(PShv(cal(C)),cal(D)) simeq Fun^"L" (PShv(cal(C)),cal(D)) $
   右边是全体存在右伴随的函子.
 ]
 
@@ -127,8 +127,8 @@
 #definition(title:[筛完备化 / ind-完备化])[
   设 $cal(C)$ 是一个小 1-范畴, 我们定义:
 
-  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C))^suit.heart subset PSh(cal(C))^suit.heart$ 是由保持有限积的 $cal(C)^opp->Set$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *1-筛完备化* (1-sifted completion).
-  + 若 $cal(C)$ 具有有限余极限, 令 $Ind(cal(C)) subset PSh(cal(C))^suit.heart$ 是由保持有限极限的 $cal(C)^opp->Set$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *ind-完备化* (ind-completion).
+  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C))^suit.heart subset PShv(cal(C))^suit.heart$ 是由保持有限积的 $cal(C)^opp->Set$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *1-筛完备化* (1-sifted completion).
+  + 若 $cal(C)$ 具有有限余极限, 令 $Ind(cal(C)) subset PShv(cal(C))^suit.heart$ 是由保持有限极限的 $cal(C)^opp->Set$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *ind-完备化* (ind-completion).
 ]
 
 #remark[
@@ -160,8 +160,8 @@
 #definition(title:[筛完备化 / ind-完备化])[
   设 $cal(C)$ 是一个小 $oo$-范畴, 我们定义:
 
-  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C)) subset PSh(cal(C))$ 是由保持有限积的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *筛完备化* (1-sifted completion).
-  + 若 $cal(C)$ 具有有限余极限, 令 $Ind(cal(C)) subset PSh(cal(C))$ 是由保持有限极限的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *ind-完备化* (ind-completion).
+  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C)) subset PShv(cal(C))$ 是由保持有限积的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *筛完备化* (1-sifted completion).
+  + 若 $cal(C)$ 具有有限余极限, 令 $Ind(cal(C)) subset PShv(cal(C))$ 是由保持有限极限的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *ind-完备化* (ind-completion).
 ]
 
 我们承认以下关于筛完备化和 Ind-完备化的结论, 具体证明可以参考 Lurie 的 Higher Topos Theory, 第5章:
@@ -176,9 +176,9 @@
 #proposition[
   设 $cal(C)$ 是一个小的 $oo$-范畴, 且 $cal(C)$ 具有有限的余积, 那么:
 
-  + 包含函子 $i: sInd(cal(C)) arrow.hook PSh(cal(C))$ 保持筛的余极限, 并且存在左伴随, 从而 $sInd(cal(C))$ 是可呈示的.
-  + Yoneda 函子 $yo : cal(C) -> PSh(cal(C))$ 落在 $sInd(cal(C))$ 中.
-  + 一个对象 $X in PSh(cal(C))$ 落在 $sInd(cal(C))$ 中当且仅当存在一个单纯对象 $X_bullet : Delta^opp->PSh(cal(C))$ 使得 $X simeq abs(X_bullet) = colim_([n] in Delta^opp) X_n$, 并且每个 $X_n$ 都是 $cal(C) subset PSh(cal(C))$ 中的滤过余极限.
+  + 包含函子 $i: sInd(cal(C)) arrow.hook PShv(cal(C))$ 保持筛的余极限, 并且存在左伴随, 从而 $sInd(cal(C))$ 是可呈示的.
+  + Yoneda 函子 $yo : cal(C) -> PShv(cal(C))$ 落在 $sInd(cal(C))$ 中.
+  + 一个对象 $X in PShv(cal(C))$ 落在 $sInd(cal(C))$ 中当且仅当存在一个单纯对象 $X_bullet : Delta^opp->PShv(cal(C))$ 使得 $X simeq abs(X_bullet) = colim_([n] in Delta^opp) X_n$, 并且每个 $X_n$ 都是 $cal(C) subset PShv(cal(C))$ 中的滤过余极限.
 ]
 
 #proposition[
@@ -195,9 +195,9 @@
 #proposition[
   设 $cal(C)$ 是一个小的 $oo$-范畴, 且 $cal(C)$ 具有有限的余极限, 那么:
 
-  + 包含函子 $i: Ind(cal(C)) arrow.hook PSh(cal(C))$ 保持滤过的余极限, 并且存在左伴随, 从而 $Ind(cal(C))$ 是可呈示的.
-  + Yoneda 函子 $yo : cal(C) -> PSh(cal(C))$ 落在 $Ind(cal(C))$ 中.
-  + 一个对象 $X in PSh(cal(C))$ 落在 $Ind(cal(C))$ 中当且仅当存在可表作子范畴 $yo:cal(C) arrow.hook PSh(cal(C))$ 中对象的滤过余极限.
+  + 包含函子 $i: Ind(cal(C)) arrow.hook PShv(cal(C))$ 保持滤过的余极限, 并且存在左伴随, 从而 $Ind(cal(C))$ 是可呈示的.
+  + Yoneda 函子 $yo : cal(C) -> PShv(cal(C))$ 落在 $Ind(cal(C))$ 中.
+  + 一个对象 $X in PShv(cal(C))$ 落在 $Ind(cal(C))$ 中当且仅当存在可表作子范畴 $yo:cal(C) arrow.hook PShv(cal(C))$ 中对象的滤过余极限.
 ]
 
 #proposition[
@@ -244,7 +244,7 @@ $ colim_(i in I) Map(X,Y_i) simeq Map(X,colim_(i in I) Y_i) $
 ]
 
 #definition(title:[任意序数的 Ind-完备化])[
-  设 $kappa$ 是正则序数, $cal(C)$ 是小 $oo$-范畴. 若 $cal(C)$ 具有有限余极限, 则令 $Ind_(kappa) (cal(C)) subset PSh(cal(C))$ 是由保持 $kappa$-小极限的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 也就是 $Fun^"lex" (cal(C)^opp,Ani)$. 称之为 $cal(C)$ 的 *$kappa$-小 Ind-完备化*.
+  设 $kappa$ 是正则序数, $cal(C)$ 是小 $oo$-范畴. 若 $cal(C)$ 具有有限余极限, 则令 $Ind_(kappa) (cal(C)) subset PShv(cal(C))$ 是由保持 $kappa$-小极限的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 也就是 $Fun^"lex" (cal(C)^opp,Ani)$. 称之为 $cal(C)$ 的 *$kappa$-小 Ind-完备化*.
 ]
 
 更一般的情况下, 不需要 $cal(C)$ 具有有限余极限的假设, 我们可以直接定义

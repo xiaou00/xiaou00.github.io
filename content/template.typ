@@ -187,4 +187,64 @@
 ))
 
 
+// Call in markup: #young(3, 2) or #young(3, 2, labels: (1, 2, 3, 4, 5)).
+// web-diagram exports an SVG and reuses the existing compiler/layout cache.
+#let young(labels: none, ..rows) = {
+  assert(rows.named().len() == 0, message: "young: 唯一的可选命名参数是 labels.")
+  let partition = rows.pos()
+  assert(partition.len() > 0, message: "young: 请指定各行格数, 例如 #young(3, 2).")
+  assert(partition.all(part => type(part) == int and part > 0),
+    message: "young: 各行格数必须是正整数, 请在正文中调用 #young(3, 2).")
+  for i in range(1, partition.len()) {
+    assert(partition.at(i - 1) >= partition.at(i),
+      message: "young: 各行格数必须从上到下不递增.")
+  }
+  let n = partition.sum()
+  if labels != none {
+    assert(type(labels) == array, message: "young: labels 必须是数组, 例如 (1, 2, 3, 4, 5).")
+    assert(labels.len() == n, message: "young: 标签数量必须等于格子总数 " + str(n) + ".")
+  }
+
+  web-diagram(context {
+    // Measure unbroken labels with the SVG fonts, then keep all cells square.
+    let labels = if labels == none { none } else { labels.map(value => box[#value]) }
+    let cell-size = 18pt
+    if labels != none {
+      for label in labels {
+        let size = measure(label)
+        cell-size = calc.max(cell-size, size.width + 4pt, size.height + 4pt)
+      }
+    }
+    let cell-stroke = 0.65pt + black
+    let cells = ()
+    let index = 0
+    for (row, length) in partition.enumerate() {
+      for column in range(length) {
+        cells.push(grid.cell(
+          x: column, y: row,
+          stroke: (
+            top: cell-stroke,
+            left: cell-stroke,
+            right: if column + 1 == length { cell-stroke } else { none },
+            bottom: if column >= partition.at(row + 1, default: 0) { cell-stroke } else { none },
+          ),
+          if labels == none { [] } else { labels.at(index) },
+        ))
+        index += 1
+      }
+    }
+    // Keep the outer stroke inside the SVG viewport.
+    pad(0.5pt, grid(
+      columns: (cell-size,) * partition.first(),
+      rows: (cell-size,) * partition.len(),
+      gutter: 0pt,
+      inset: 0pt,
+      align: center + horizon,
+      stroke: none,
+      fill: none,
+      ..cells,
+    ))
+  })
+}
+
 #import "abbrev.typ" : *

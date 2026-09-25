@@ -222,7 +222,7 @@ $ Dcat(R) simeq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat
   + $Dcat_(>=0)(A) := Mod_A (D_(>=0)(k))$, 即导出范畴上的 $A$-代数对象.
 ]
 #definition(title:[生象代数的一般导出模])[
-  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A$ 为下列两两等价的范畴之一:
+  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A$ 或 $dMod_A$ 为下列两两等价的范畴之一:
 
   + $Sp((AniCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
   + $Dcat(A) := Mod_A (D(k))$, 即导出范畴上的 $A$-代数对象.

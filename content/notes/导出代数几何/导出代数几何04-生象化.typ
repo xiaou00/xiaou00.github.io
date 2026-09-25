@@ -69,7 +69,7 @@ $ cal(C)^"abs" arrow.hook cal(C)^(omega"p") arrow.hook cal(C)^omega $
 ]
 
 #proposition[
-  设 $cal(C)$ 是小的 $oo$-范畴, 当其中对象通过 Yoneda 嵌入 $yo$ 视作 $PSh(cal(C))$ 中的对象时典范地是绝对对象.
+  设 $cal(C)$ 是小的 $oo$-范畴, 当其中对象通过 Yoneda 嵌入 $yo$ 视作 $PShv(cal(C))$ 中的对象时典范地是绝对对象.
 ]
 
 #proof[平凡.]
@@ -84,15 +84,15 @@ $ cal(C)^"abs" arrow.hook cal(C)^(omega"p") arrow.hook cal(C)^omega $
 
 == 三种生成
 
-由伴随函子定理, $cal(C)$ 是可呈示的, 从而是余完备的, 记 $i:cal(C)^"abs" arrow.hook cal(C)$ 是嵌入, 于是 $yo:cal(C)^"abs" arrow.hook PSh(cal(C)^"abs")$ 存在唯一的左 Kan 延拓
-$ L := Lan_yo (i) : PSh(cal(C)^"abs") -> cal(C) $
+由伴随函子定理, $cal(C)$ 是可呈示的, 从而是余完备的, 记 $i:cal(C)^"abs" arrow.hook cal(C)$ 是嵌入, 于是 $yo:cal(C)^"abs" arrow.hook PShv(cal(C)^"abs")$ 存在唯一的左 Kan 延拓
+$ L := Lan_yo (i) : PShv(cal(C)^"abs") -> cal(C) $
 更显示地可以写成
 $ L(F) simeq colim_(yo(c)->F) c $
 或者用余端的语言可作
 $ L(F) simeq integral^(c in cal(C)^"abs") F(c) times.o c $
 
 #definition(title:[绝对生成])[
-  设 $cal(C)$ 是可呈示的 $oo$-范畴, 那么我们称其为*绝对生成的*, 是指左伴随 $L:PSh(cal(C)^"abs")->cal(C)$ 是一个等价.
+  设 $cal(C)$ 是可呈示的 $oo$-范畴, 那么我们称其为*绝对生成的*, 是指左伴随 $L:PShv(cal(C)^"abs")->cal(C)$ 是一个等价.
 ]
 
 下面的左伴随也可以通过类似的论证典范地得到, 此处不再详细赘述.
