@@ -160,7 +160,7 @@
 #definition(title:[筛完备化 / ind-完备化])[
   设 $cal(C)$ 是一个小 $oo$-范畴, 我们定义:
 
-  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C)) subset PShv(cal(C))$ 是由保持有限积的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *筛完备化* (1-sifted completion).
+  + 若 $cal(C)$ 具有有限余极限, 令 $sInd(cal(C)) subset PShv(cal(C))$ 是由保持有限积的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *筛完备化* (sifted completion).
   + 若 $cal(C)$ 具有有限余极限, 令 $Ind(cal(C)) subset PShv(cal(C))$ 是由保持有限极限的 $cal(C)^opp->Ani$ 函子张成的全子范畴, 称之为 $cal(C)$ 的 *ind-完备化* (ind-completion).
 ]
 

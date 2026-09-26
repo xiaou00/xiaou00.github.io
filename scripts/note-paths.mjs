@@ -12,8 +12,11 @@ export function noteIdentity(filename) {
 }
 
 export function validateNotePath(slug) {
-  if (typeof slug !== 'string' || !slug.split('/').every(part => /^[\p{L}\p{N},()][\p{L}\p{N} ._,()-]*$/u.test(part))) {
-    throw new Error('笔记路径请使用中文或英文字母, 数字, 空格, 点, 下划线, 连字符, 半角逗号或括号, 用 / 分隔文件夹.');
+  // Titles may contain any Unicode scalar value except path separators and NUL.
+  // Keep path structure validation separate from the title's character set.
+  if (typeof slug !== 'string' || !slug.isWellFormed() || /[\\\0]/u.test(slug)
+    || slug.split('/').some(part => !part || part === '.' || part === '..')) {
+    throw new Error('笔记路径支持 Unicode 字符, 不能包含反斜杠、NUL 或无效 Unicode; 用 / 分隔文件夹, 各段不能为空或为 "."、"..".');
   }
   return slug;
 }

@@ -50,7 +50,6 @@
 #let SqExt = $"SqExt"$
 #let Map = "Map"
 #let Cov = "Cov"
-#let Desc = "Desc"
 #let Mul = "Mul"
 #let Der = "Der"
 #let Aut = "Aut"
@@ -148,6 +147,8 @@
 #let AniMod = $bold(sans("AniMod"))$
 #let AugAlg = $bold(sans("AugAlg"))$
 #let Poly = $bold(sans("Poly"))$
+#let Pr = $bold(sans("Pr"))$
+#let PrR = $bold(sans("Pr"))^"R"$
 #let PrL = $bold(sans("Pr"))^"L"$
 #let Cell = $bold(sans("Cell"))$
 #let Idem = $bold(sans("Idem"))$
@@ -159,6 +160,8 @@
 #let Mfd = $bold(sans("Mfd"))$
 #let DF = $bold(sans("DF"))$
 #let Euc = $bold(sans("Euc"))$ 
+#let Desc = $bold(sans("Desc"))$
+#let Topos = $bold(sans("Topos"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
@@ -179,4 +182,5 @@
 #let leftarrow = $stretch(<-, size: #15pt)$
 #let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
 #let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
+
 

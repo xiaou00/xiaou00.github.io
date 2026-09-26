@@ -177,6 +177,33 @@ test('nested note references resolve relative paths, distinguish equal filenames
   assert.throws(() => validateNotePath('../outside'), /笔记路径/);
 });
 
+test('Unicode titles preserve symbols and URL characters while rejecting invalid paths', () => {
+  const titles = ['∀α∈ℝ: |α|≤∞!', '👩🏽‍🔬🧮', 'e\u0301与λ\u0301', '？！「标题」', `#?% & "'<λ>`, '∕与＼', ' 空格 '];
+  for (const title of titles) {
+    const slug = `数学📚/${title}`;
+    assert.equal(validateNotePath(slug), slug);
+    assert.equal(resolveNotePath(`./${title}.typ`, '数学📚/入口'), slug);
+    assert.equal(noteIdentity(`${slug}.typ`).title, title);
+    const url = new URL(`https://example.test/notes/${encodeNotePath(slug)}/`);
+    assert.equal(decodeURIComponent(url.pathname), `/notes/${slug}/`);
+    assert.equal(url.search, '');
+    assert.equal(url.hash, '');
+  }
+  for (const invalid of [null, '', '/absolute', 'a/', 'a//b', '.', '..', 'a/./b', 'a/../b', 'a\\b', 'a/\0b', '\ud800', '\udc00']) {
+    assert.throws(() => validateNotePath(invalid), /笔记路径/);
+  }
+  const title = `#?% & "'<λ>👩🏽‍🔬`;
+  const notes = [
+    { slug: '入口', title: '入口', html: '<a data-note="#?% &amp; &quot;\'&lt;λ&gt;👩🏽‍🔬.typ" data-note-auto="true"></a>' },
+    { slug: title, title, html: '正文' },
+  ];
+  resolveNoteLinks(notes);
+  const { document } = parseHTML(`<html><body>${notes[0].html}</body></html>`);
+  assert.equal(document.querySelector('a').textContent, title);
+  assert.equal(document.querySelector('a').getAttribute('href'), `/notes/${encodeNotePath(title)}/`);
+  assert.equal(document.querySelector('λ'), null, 'title characters remain text');
+});
+
 test('mutual references, custom MathML link text, self-links and subdirectory deployments resolve', () => {
   const notes = [
     { slug: 'a', title: '笔记 A', html: '<h2 id="section">1 开始</h2><a data-note="b.typ" data-note-target="theorem" data-note-auto="true"></a><a data-note="b"><math><mi>x</mi></math></a><a data-note="a" data-note-auto="true"></a>' },
