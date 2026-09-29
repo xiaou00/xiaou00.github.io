@@ -12,28 +12,28 @@
 
 #definition(title:[生象交换 $k$-代数 / 生象环])[
   我们定义*生象交换 $k$-代数*的范畴为
-  $ AniCAlg_k := Ani(CAlg_k) $
+  $ aCAlg_k := Ani(CAlg_k) $
   *生象环* (animated ring) 定义为特例
-  $ AniRing := AniCAlg_ZZ $
+  $ aRing := aCAlg_ZZ $
 ]
 
 由上一节的讨论, 我们也可以定义
-$ AniCAlg_k simeq Fun^times (Poly_k^opp, Ani) $
-这个构造可以定义相当显然的 $pi_0:AniRing->CRing$, 只需预复合
+$ aCAlg_k simeq Fun^times (Poly_k^opp, Ani) $
+这个构造可以定义相当显然的 $pi_0:aRing->CRing$, 只需预复合
 $ pi_0 : Ani -> Set $
 即可.
 
 #remark[
-  当 $k in AniRing$ 时, 我们也可以定义 $AniCAlg_k$ 的对象就是全体生象环的态射
+  当 $k in aRing$ 时, 我们也可以定义 $aCAlg_k$ 的对象就是全体生象环的态射
   $ k -> A $
   这么定义是合理的, 也符合朴素的代数直觉.
 ]
 
 #definition(title:[自由生成生象交换代数])[
-  定义 $LSym_k:Ani(Mod_k) -> AniCAlg_k$ 为遗忘函子的左伴随, 将有限生成的投射 $k$-模 $P$ 送到交换的 $k$-代数 $Sym_k P$.
+  定义 $LSym_k:Ani(Mod_k) -> aCAlg_k$ 为遗忘函子的左伴随, 将有限生成的投射 $k$-模 $P$ 送到交换的 $k$-代数 $Sym_k P$.
 ]
 
-由于 $Ani(Mod_k) simeq Dcat_(>=0)(k)$, 我们也可以想象 $LSym_k : Dcat_(>=0) (k)->AniCAlg_k$.
+由于 $Ani(Mod_k) simeq Dcat_(>=0)(k)$, 我们也可以想象 $LSym_k : Dcat_(>=0) (k)->aCAlg_k$.
 
 == 导出张量积
 
@@ -42,16 +42,16 @@ $ k[x_1,...,x_n] times.o_k k[x_1,...,x_m] simeq k[x_1,...,x_(n+m)] $
 并且这里 $P times.o_k Q = P cop_k Q$ 正好是 $Poly_k$ 的余积.
 
 记
-$ yo : Poly_k arrow.hook sInd(Poly_k) = AniCAlg_k, quad P |-> Hom(-,P) $
+$ yo : Poly_k arrow.hook sInd(Poly_k) = aCAlg_k, quad P |-> Hom(-,P) $
 其中 $yo(P)(A) = Hom_(Poly_k) (A,P)$ 视作离散生象. 因此在可表对象上, 我们应该规定
 $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
 我们可以用自由性典范地延拓这一记号
 
 #proposition[
   双函子
-  $ - times.o_k - : Poly_k times Poly_k -> AniCAlg_k, quad (P,Q) |-> yo(P times.o_k Q) $
+  $ - times.o_k - : Poly_k times Poly_k -> aCAlg_k, quad (P,Q) |-> yo(P times.o_k Q) $
   存在唯一 (可缩意义下) 的双变量延拓
-  $ - dtens_k - : AniCAlg_k times AniCAlg_k -> AniCAlg_k $
+  $ - dtens_k - : aCAlg_k times aCAlg_k -> aCAlg_k $
   满足:
 
   + 在可表对象上满足 $yo(P) dtens_k yo(Q) = yo(P times.o_k Q)$.
@@ -59,7 +59,7 @@ $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
 ]
 
 #proof[
-  暂记 $cal(P) = Poly_k$, $cal(A) = AniCAlg_k = sInd(cal(P))$. 以及 Yoneda
+  暂记 $cal(P) = Poly_k$, $cal(A) = aCAlg_k = sInd(cal(P))$. 以及 Yoneda
   $ yo : cal(P) arrow.hook cal(A) $
   我们知道对任意有筛余极限的 $oo$-范畴 $cal(D)$ 限制都给出等价
   $ yo^* : Fun^Sigma (cal(A),cal(D)) -->^~ Fun(cal(P),cal(D)) quad (*) $
@@ -82,20 +82,20 @@ $ yo(P) dtens_k yo(Q) := yo(P tens_k Q) $
 ]
 
 #definition(title:[导出张量积])[
-  上述定义的 $- dtens_k -$ 就称之为 $AniCAlg_k$ 上的*导出张量积* (derieved tensor product).
+  上述定义的 $- dtens_k -$ 就称之为 $aCAlg_k$ 上的*导出张量积* (derieved tensor product).
 ]
 
 #proposition[
-  $dtens_k$ 恰好是 $AniCAlg_k$ 中的余积.
+  $dtens_k$ 恰好是 $aCAlg_k$ 中的余积.
 ]
 
-更一般地, 我们也可以定义 $AniCAlg_k$ 中的相对张量积 $A dtens_B C$, 这个构造其实可以直接通过将 $A,C$ 视作 $AniCAlg_B$ 中的元素来实现, 而这个操作也典范等价于推出.
+更一般地, 我们也可以定义 $aCAlg_k$ 中的相对张量积 $A dtens_B C$, 这个构造其实可以直接通过将 $A,C$ 视作 $aCAlg_B$ 中的元素来实现, 而这个操作也典范等价于推出.
 
 == 生象 $k$-代数的单纯模型
 
-#theorem(title:[$AniCAlg_k$ 的单纯模型])[
+#theorem(title:[$aCAlg_k$ 的单纯模型])[
   有 $oo$-范畴等价
-  $ simp(CAlg_k) [W^(-1)] simeq AniCAlg_k $
+  $ simp(CAlg_k) [W^(-1)] simeq aCAlg_k $
 ]
 
 #proofsketch[
@@ -119,34 +119,34 @@ $ pi_i (Phi(A)(k[x])) = pi_i ("oblv"(A_bullet)) = pi_i (A_bullet) $
 == 生象 $k$-代数的代数结构
 
 由于我们有自由-遗忘伴随
-$ LSym : AniMod_k arrows.lr AniCAlg_k : "oblv" $
-我们知道 $AniMod_k simeq Dcat_(>=0)(k) simeq Mod^(>=0)_(H k)$, 即 $k$-生象模等价于 $H k$-连通模谱, 他们共同刻画连通的导出范畴.
+$ LSym : aMod_k arrows.lr aCAlg_k : "oblv" $
+我们知道 $aMod_k simeq Dcat_(>=0)(k) simeq Mod^(>=0)_(H k)$, 即 $k$-生象模等价于 $H k$-连通模谱, 他们共同刻画连通的导出范畴.
 
 也就是说, 当我们还停留在讨论模的时候, 模谱构造和生象模构造是兼容的. 问题在于, 怎么在这些导出结构上加入乘法?
 
 #question[
-  $AniCAlg_k$ 和 $CAlg_(H k)^(>=0)$ 有什么本质区别? 又有什么关系?
+  $aCAlg_k$ 和 $CAlg_(H k)^(>=0)$ 有什么本质区别? 又有什么关系?
 ]
 
 事实上, 上面的两个情形分别对应于我们定义乘法结构的两种不同的路线.
 
 首先生象环本质上是先取交换代数后, 再生象化. 我们从普通的 1-范畴 $CAlg_k$ 开始, 取其中有限生成的自由对象 $Poly_k$, 然后作生象化
-$ AniCAlg_k = Fun^times (Poly^opp_k,Ani) $
+$ aCAlg_k = Fun^times (Poly^opp_k,Ani) $
 模型上等价于 $simp(CAlg_k)[W^(-1)]$.
 
 另一条路线则是先把 $Mod_k$ 导出化了, 得到
-$ AniMod_k simeq Mod^(>=0)_(H k) simeq Dcat_(>=0)(k) $
+$ aMod_k simeq Mod^(>=0)_(H k) simeq Dcat_(>=0)(k) $
 这是一个对称幺半的 $oo$-范畴, 张量积记作 $- dtens_k -$. 我们直接在里面取交换 ($EE_oo$) 代数对象, 就得到
-$ CAlg_(H k) := CAlg(Mod_(H k)) simeq CAlg(AniMod_k) simeq CAlg(Dcat_(>=0)(k)) $
+$ CAlg_(H k) := CAlg(Mod_(H k)) simeq CAlg(aMod_k) simeq CAlg(Dcat_(>=0)(k)) $
 
 整个过程可以画成
 
 #web-diagram(diagram({
 	node((0, 0), [$Mod_k$])
 	node((0, 1), [$CAlg_k$])
-	node((1, 0), [$AniMod_k$])
+	node((1, 0), [$aMod_k$])
 	node((1, 1), [$CAlg_(H k)$])
-	node((0, 2), [$AniCAlg_k$])
+	node((0, 2), [$aCAlg_k$])
 	edge((1, 0), (1, 1), [$CAlg$], label-side: left, "->")
 	edge((0, 0), (0, 1), [$"1-"CAlg$], label-side: right, "->")
 	edge((0, 1), (1, 1), [$H$], label-side: right, "->")
@@ -168,21 +168,21 @@ $ CAlg_(H k) := CAlg(Mod_(H k)) simeq CAlg(AniMod_k) simeq CAlg(Dcat_(>=0)(k)) $
   $ P |-> H P $
   而 $H P$ 又显然是一个 $E_oo$-$H k$-代数, 从而我们有
   $ H : Poly_k -> CAlg^(>=0)_(H k) $
-  那么利用 $AniCAlg_k simeq sInd(Poly_k)$, 这个可以唯一延拓到保持筛余极限的函子
-  $ Phi : AniCAlg_k -> CAlg^(>=0)_(H k) $
+  那么利用 $aCAlg_k simeq sInd(Poly_k)$, 这个可以唯一延拓到保持筛余极限的函子
+  $ Phi : aCAlg_k -> CAlg^(>=0)_(H k) $
 ]
 
 在单纯解消的语言下, 这个比较态射其实非常直观: 先取一个
-$ A in AniCAlg_k $
+$ A in aCAlg_k $
 取其一个多项式单纯解消, 也就是自由-遗忘伴随的杠解消
 $ P_bullet -> A, quad P_n in Poly_k^oo quad ("允许任何大小的生成集合") $
 有 $A simeq abs(P_bullet)$. 那么定义 $Phi(A)=abs(H P_bullet)$, 右边的几何实现在 $CAlg_(H k)$ 中计算, 这是非常适合实际计算的一个类比.
 
-实际上, 这两个范畴底层共有的导出模范畴还是一样的, 也就是 $Dcat_(>=0)(k)$. 毕竟 $Mod^(>=0)_(H k)$ 确实等价于 $AniMod_k$, 并且在遗忘函子识别之下这个等价仍然保持, 从而同伦群意义下有
+实际上, 这两个范畴底层共有的导出模范畴还是一样的, 也就是 $Dcat_(>=0)(k)$. 毕竟 $Mod^(>=0)_(H k)$ 确实等价于 $aMod_k$, 并且在遗忘函子识别之下这个等价仍然保持, 从而同伦群意义下有
 $ pi_i Phi(A) simeq pi_i A $
 恒成立.
 
-事实上, $AniCAlg_k$ 就是导出代数几何中最基础的环对象, 而 $CAlg_(H k)$ 就是*谱代数几何*中最基础的环对象. (笔者在写该笔记的时候还未正式接触谱代数几何, 若有谬误敬请谅解)
+事实上, $aCAlg_k$ 就是导出代数几何中最基础的环对象, 而 $CAlg_(H k)$ 就是*谱代数几何*中最基础的环对象. (笔者在写该笔记的时候还未正式接触谱代数几何, 若有谬误敬请谅解)
 
 == 生象环的例子
 
@@ -194,7 +194,7 @@ $ pi_i Phi(A) simeq pi_i A $
 
 #example(title:[自由生象环])[
   我们有自由-遗忘伴随
-  $ "Free" : Ani arrows.lr AniRing : "oblv" $
+  $ "Free" : Ani arrows.lr aRing : "oblv" $
   一个非离散的典型例子就是 $"Free"(S^1)$.
 ]
 
@@ -202,10 +202,10 @@ $ pi_i Phi(A) simeq pi_i A $
 
 == 生象环的导出范畴
 
-通过上述构造的比较态射, 我们可以典范地给每个生象环 $R in AniRing$ 都关联一个环谱 $R in CAlg_SS$. 我们使用同一个记号.
+通过上述构造的比较态射, 我们可以典范地给每个生象环 $R in aRing$ 都关联一个环谱 $R in CAlg_SS$. 我们使用同一个记号.
 
 通过这个角度, 我们可以对对称幺半的 $oo$-范畴 $cal(C)$ 定义 $Mod_R (cal(C))$. 我们可以定义连通导出范畴
-$ Dcat_(>=0)(R) := Mod_R (AniMod_ZZ) simeq Mod_R (Dcat_(>=0)(ZZ)) $
+$ Dcat_(>=0)(R) := Mod_R (aMod_ZZ) simeq Mod_R (Dcat_(>=0)(ZZ)) $
 我们知道通过在 $PrL$ 中形式逆转 $Sigma:M|->M[1]$ 可以得到一个稳定无穷范畴 $Dcat(R)$, 即定义为余极限
 $ colim(Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma Dcat_(>=0)(R) -->^Sigma ...) $
 当我们在 $PrL$ 中计算这个范畴时, 余极限可以改写作对应右伴随函子的极限
@@ -214,17 +214,17 @@ $ Dcat(R) simeq lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat
 == 生象环模的定义
 
 #definition(title:[生象代数的连通导出模])[
-  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 或 $AniMod_A$ 为下列两两等价的范畴之一:
+  对于 $A in aCAlg_k$, 我们定义范畴 $Mod_A^(>=0)$ 或 $aMod_A$ 为下列两两等价的范畴之一:
 
-  + $Ab((AniCAlg_k)_("/"A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
-  + $Sp((AniCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.
+  + $Ab((aCAlg_k)_("/"A))$ 即态射 $B->A$ 构成切片范畴中的 Abel 群对象范畴.
+  + $Sp((aCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化后的连通部分.
   + $simp(Mod_(A_bullet)) [W^(-1)]$, 其中 $simp(Mod_(A_bullet))$ 的对象是单纯 $k$-模带有相容的作用 $A_bullet times.o_k M_bullet -> M_bullet$, $A_bullet$ 是 $A$ 在 $simp(CAlg_k)[W^(-1)]$ 中的对应.
   + $Dcat_(>=0)(A) := Mod_A (D_(>=0)(k))$, 即导出范畴上的 $A$-代数对象.
 ]
 #definition(title:[生象代数的一般导出模])[
-  对于 $A in AniCAlg_k$, 我们定义范畴 $Mod_A$ 或 $dMod_A$ 为下列两两等价的范畴之一:
+  对于 $A in aCAlg_k$, 我们定义范畴 $Mod_A$ 或 $dMod_A$ 为下列两两等价的范畴之一:
 
-  + $Sp((AniCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
+  + $Sp((aCAlg_k)_("/"A))^(>=0)$ 即态射 $B->A$ 构成切片范畴的稳定化.
   + $Dcat(A) := Mod_A (D(k))$, 即导出范畴上的 $A$-代数对象.
   + 上述定义的 $ lim(... -> Dcat_(>=0)(R) -->^Omega Dcat_(>=0)(R)  -->^Omega Dcat_(>=0)(R) ) $
 ]

@@ -23,15 +23,15 @@
 == 自由代数法则
 
 #proposition(title:[自由代数法则])[
-  设 $M in AniMod_k$ 是 $k$-生象模, 则自由代数
+  设 $M in aMod_k$ 是 $k$-生象模, 则自由代数
   $ LL_(LSym_k (M) / k) simeq LSym_k (M) tens_k M $
 ]
 
 #proof[
   我们证明其表示同一个导子函子, 为此我们来计算自由代数上的导子, 下面记 $A = LSym_k (M)$, 利用纤维序列
-  $ Der_k (A,N) simeq fib_(id_A) (Map_(AniCAlg_k) (A,A plus.o N) -> Map_(AniCAlg_k) (A,A)) $
+  $ Der_k (A,N) simeq fib_(id_A) (Map_(aCAlg_k) (A,A plus.o N) -> Map_(aCAlg_k) (A,A)) $
   以及自由性
-  $ Map_(AniCAlg_k) (LSym_k (M),B) simeq Map_(AniMod_k) (M,U(B)) $
+  $ Map_(aCAlg_k) (LSym_k (M),B) simeq Map_(aMod_k) (M,U(B)) $
   得
   $ Der_k (A,N) simeq fib_eta (Map_k (M,U(A plus.o N)) -> Map_k (M,U(A))), quad eta:M->U(A) $
   而作为 $k$-模显然有
@@ -60,7 +60,7 @@ $ d_(P_n/k) (f) = sum_i frac(partial f,partial x_i) dif x_i $
 $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 
 #proposition(title:[传递三角])[
-  设 $A,B in AniCAlg_k$ 以及态射 $f:A->B$, 我们有典范的纤维序列
+  设 $A,B in aCAlg_k$ 以及态射 $f:A->B$, 我们有典范的纤维序列
   $ B tens_A LL_(A/k) ->^(f_*) LL_(B/k) -> LL_(B/A) $
 ]
 
@@ -104,7 +104,7 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 == 基变换法则
 
 #proposition(title:[基变换法则])[
-  对 $A in AniCAlg_k$ 和生象环 $k->k'$, 有
+  对 $A in aCAlg_k$ 和生象环 $k->k'$, 有
   $ LL_(A'/k') simeq A' tens_A L_(A/k), quad "其中" A' = A tens_k k' $
 ]
 
@@ -139,7 +139,7 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 == 商法则
 
 #lemma(title:[反向的自由代数规则])[
-  设 $M in AniMod$, 则 $0:LSym_k (M)->k$ 对应的余切复形为
+  设 $M in aMod$, 则 $0:LSym_k (M)->k$ 对应的余切复形为
   $ LL_(k/LSym_k (M)) simeq M[1] $
 ]
 
@@ -173,7 +173,7 @@ $ B tens_A (-) : Mod_A^(<=0) arrows.lr Mod_B^(<=0) : Res^B_A $
 
 
 #proposition(title:[导出商法则])[
-  设 $A in AniCAlg_k$, 记 $B = A/\/M$ 为导出商, 则
+  设 $A in aCAlg_k$, 记 $B = A/\/M$ 为导出商, 则
   $ LL_(B/A) simeq B times.o_k M[1] $
 ]
 

@@ -11,7 +11,7 @@
 == 单个元素的局部化
 
 #definition(title:[对单个元素的局部化])[
-  设 $A in AniCAlg_k$, $f in pi_0 (A)$, 那么我们可以定义
+  设 $A in aCAlg_k$, $f in pi_0 (A)$, 那么我们可以定义
   $ A[f^(-1)] := A dtens_(k[t]) k[t,t^(-1)] $
   其中 $k[t]->A, t |-> f$. 称之为*局部化* (localization).
 ]
@@ -80,7 +80,7 @@
 在生象环的语境下, 商的定义比较微妙.
 
 #definition(title:[导出商])[
-  给定 $A in AniCAlg_k$ 以及 $f in pi_0 A$, 我们定义*导出商* (derived quotient) 为
+  给定 $A in aCAlg_k$ 以及 $f in pi_0 A$, 我们定义*导出商* (derived quotient) 为
   $ A /\/ f  := A dtens_(k[t]) k $
   其中 $t|->f$, 而 $k[t]->k$ 将 $t$ 送到 $0$.
 ]
@@ -156,7 +156,7 @@ $ [A ->^(dot f) A] $
 这个复形非常具有研究价值, 也就是下面的定义
 
 #definition(title:[Koszul 复形])[
-  设 $A in AniCAlg_k$, $f in pi_0 A$, 那么 $f$ 给出乘法态射, 我们定义 *Koszul 复形* 为
+  设 $A in aCAlg_k$, $f in pi_0 A$, 那么 $f$ 给出乘法态射, 我们定义 *Koszul 复形* 为
   $ K_A (f) := cofib(A ->^(dot f) A) in Mod_A $
 ]
 
@@ -242,7 +242,7 @@ $ k dtens_A k simeq [A ->^x A] dtens_A k simeq [k ->^0 k] simeq k plus.o k[1] $
 == 一般导出商
 
 #definition(title:[导出商])[
-  设 $A in AniCAlg_k$, 给定一个导出 $k$-模和态射 $u:M->U(A)$, 自由交换代数的伴随诱导 $LSym_k (M)->A$, 零映射 $M->U(k)$ 诱导出 $LSym_k (M)->k$, 我们定义 $A$ 相对 $M$ 的*导出商*为
+  设 $A in aCAlg_k$, 给定一个导出 $k$-模和态射 $u:M->U(A)$, 自由交换代数的伴随诱导 $LSym_k (M)->A$, 零映射 $M->U(k)$ 诱导出 $LSym_k (M)->k$, 我们定义 $A$ 相对 $M$ 的*导出商*为
   $ A /\/ M := A dtens_(LSym_k (M)) k $
 ]
 

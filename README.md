@@ -140,9 +140,29 @@ content/notes/
 
 模板提供与参考文件相近的接口:
 
-`definition`,`theorem`,`lemma`,`proposition`,`corollary`,`axiom`,`example`,`remark`,`question`,`proof`,`proofsketch`,`answer`,`fold`.
+`definition`,`theorem`,`lemma`,`proposition`,`corollary`,`axiom`,`exercise`,`construction`,`claim`,`example`,`remark`,`question`,`proof`,`proofsketch`,`answer`,`fold`.
 
-前六种环境由 Typst 原生计数器编号, 可以使用 `<label>` 和 `@label` 交叉引用; 例, 注和问题不编号. 章节目录从编译后的 HTML 标题生成, 既保留原生引用锚点, 也为未被引用的标题补全链接.
+定义, 定理, 引理, 命题, 推论, 公理, 练习, 构造和断言各自独立编号, 可以使用 `<label>` 和 `@label` 交叉引用, 并用 `title: [...]` 添加可选标题. 例, 注和问题不编号; `answer` 显示为不编号的 "解答", 沿用证明样式. 章节目录从编译后的 HTML 标题生成, 既保留原生引用锚点, 也为未被引用的标题补全链接.
+
+```typst
+#exercise(title: [练习名称])[
+  练习正文.
+] <my-exercise>
+
+#answer[
+  解答正文, 可以引用 @my-exercise.
+]
+
+#construction(title: [构造名称])[
+  构造正文.
+] <my-construction>
+
+#claim(title: [断言名称])[
+  断言正文.
+] <my-claim>
+```
+
+这些环境也可用于 `print-template.typ` 的 PDF 排版.
 
 定义, 定理等环境的标题直接接首段正文, 例如 "定义 1 (链复形) 固定一个...". 后续段落, 行间公式和列表仍独立排版; 以公式或列表开头时, 标题单独成行.
 

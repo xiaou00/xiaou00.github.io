@@ -15,7 +15,7 @@ $ Der_k (A,M) simeq Hom_A (Omega^1_(k/A),M) $
 我们可以将这个想法自然地推进到导出层面
 
 #definition(title:[余切复形 / 泛性质定义])[
-  设 $A in AniCAlg_k$ 是生象交换 $k$-代数, 那么函子
+  设 $A in aCAlg_k$ 是生象交换 $k$-代数, 那么函子
   $ Der_k (A,-) : Mod^(>=0)_A -> Ani_* $
   可表, 也就是说存在可缩选择意义下唯一的 $LL_(A/k) in Mod_A^(>=0)$ 使得
   $ Map_A (LL_(A/k),-) simeq Der_k (A,-) $
@@ -23,14 +23,14 @@ $ Der_k (A,M) simeq Hom_A (Omega^1_(k/A),M) $
 ]
 
 #proof[
-  记 $cal(C)_A := AniCAlg_(k"//"A)$, 其中 $A$ 对应于对象 $k->A->^id A$. 有平凡平方零扩张函子
+  记 $cal(C)_A := aCAlg_(k"//"A)$, 其中 $A$ 对应于对象 $k->A->^id A$. 有平凡平方零扩张函子
   $ SqZ_A : Mod^(>=0)_A -> cal(C)_A $
   由定义
   $ Der_k (A,M) = Map_(cal(C)_A) (A,SqZ_A (M)) $
   由于
 
   - $Mod^(>=0)_A$ 是可呈示的 $oo$-范畴.
-  - $cal(C)_A = AniCAlg_(k"//"A)$ 也是可呈示的 $oo$-范畴.
+  - $cal(C)_A = aCAlg_(k"//"A)$ 也是可呈示的 $oo$-范畴.
   - $SqZ_A$ 可及.
   - $SqZ_A$ 保持极限.
 
@@ -51,27 +51,27 @@ $ P_n := k[x_1,...,x_n] $
 微分完全没有导出修正, 即
 $ LL_(P/k) simeq Omega^1_(P/k) [0] simeq P^(plus.o n)[0] $
 现在我们希望构造一个保持余极限的函子
-$ LL_(-/k) : AniCAlg_k -> AniMod $
-注意, 这里的 $AniMod$ 是总范畴. 那么我们本质上只需要构造函子
-$ AniCAlg^(omega"p")_k -> AniMod $
+$ LL_(-/k) : aCAlg_k -> aMod $
+注意, 这里的 $aMod$ 是总范畴. 那么我们本质上只需要构造函子
+$ aCAlg^(omega"p")_k -> aMod $
 即可, 而剩余部分可典范延拓. 现在, 固定生象 $k$-代数 $A$, 考虑所有指向 $A$ 的多项式代数
 $ (P -> A), quad P in Poly_k $
 因为 $Omega^1_(P/k)$ 本就是 $P$ 模, 为了将其放进同一个范畴比较, 自然想到要沿着 $P->A$ 作标量扩张
 $ Omega^1_(P/k) |-> A times.o_P Omega^1_(P/k) in Mod_A $
 我们将这些汇集起来, 定义
-$ LL_(A/k) = colim_((P->A) in Poly_k times_(AniCAlg_k) AniCAlg_(k"//"A)) (A times.o_P Omega^1_(P/k)) $
+$ LL_(A/k) = colim_((P->A) in Poly_k times_(aCAlg_k) aCAlg_(k"//"A)) (A times.o_P Omega^1_(P/k)) $
 指标范畴的意思是 "所有指向 $A$ 的多项式 $k$-代数". 这个余极限在 $Mod_A$ 这个范畴中取.
 
 #definition(title:[余切复形 / 左 Kan 延拓定义])[
   设 $A$ 是生象交换 $k$-代数, 余切复形 $LL_(A/k) in Mod^(>=0)_A$ 定义为 Kähler 微分
   $ P |-> Omega^1_(P/k) [0], quad P in Poly_k $
-  沿 $j:Poly_k arrow.hook AniCAlg_k$ 的左 Kan 延拓在 $A$ 处的值, 即
+  沿 $j:Poly_k arrow.hook aCAlg_k$ 的左 Kan 延拓在 $A$ 处的值, 即
   $ LL_(-/k) simeq Lan_j (Omega^1_(-/k)) $
   等价地有公式
   $ LL_(A/k) simeq colim_(P->A) A times.o_P Omega^1_(P/k) $
 ]
 
-这个观点可以给出余切复形很具体的计算公式, 例如设 $A in AniCAlg_k$, 我们可以取一个典范的多项式代数单纯解消
+这个观点可以给出余切复形很具体的计算公式, 例如设 $A in aCAlg_k$, 我们可以取一个典范的多项式代数单纯解消
 $ P_bullet -> A, quad abs(P_bullet) simeq A $
 其中每个 $P_n$ 都是多项式代数. 逐层计算 $Omega^1_(P_n/k)$ 后标量变换到 $A$ 得
 $ A times.o_(P_n) Omega^1_(P_n/k) $
@@ -97,7 +97,7 @@ $ LL_(A/k) simeq DK(A times.o_(P_bullet) Omega^1_(P_bullet/k)) $
   诱导的, 对于每个 $f:P->A$, $M$ 通过 $f$ 视作 $P$ 模. 由于 $P$ 是多项式代数, Kähler 微分的泛性质给出
   $ Map_(Mod_P) (Omega^1_(P/k),M) simeq Der_(k,f)(P,M) $
   右边的记号表示这是以 $P->^f A$ 为基点的导子空间. 也就是
-  $ Der_(k,f) (P,M) := Map_(AniCAlg_(k"//"A)) ((P->^f A),(A plus.o M->A)) $
+  $ Der_(k,f) (P,M) := Map_(aCAlg_(k"//"A)) ((P->^f A),(A plus.o M->A)) $
   从而
   $ Map_(Mod_A) (LL_(A/k),M) simeq lim_(P->^f A) Der_(k,f) (P,M) $
   剩下只需证明
@@ -141,7 +141,7 @@ $ Q_A : AugAlg_A -> Mod^(>=0)_A $
 于是我们可以定义
 
 #definition(title:[余切复形 / 对角线定义])[
-  设 $A in AniCAlg_k$ 是生象交换 $k$-代数, 我们可以定义
+  设 $A in aCAlg_k$ 是生象交换 $k$-代数, 我们可以定义
   $ LL_(A/k) := Q_A (A -->^(i_1) A dtens_k A -->^mu A) $
   称之为其对应的*余切复形*.
 ]
@@ -190,7 +190,7 @@ $ pi_i (LL_(A/k)) != 0, quad i>0 $
 == 万有导子
 
 #definition(title:[万有导子])[
-  对 $A in AniCAlg_k$, 我们总有典范的
+  对 $A in aCAlg_k$, 我们总有典范的
   $ d_(A/k) : A -> LL_(A/k), quad d_(A/k) in Der_k (A,LL_(A/k)) $
   作为 $k$-模的映射, 具体构造由泛性质
   $ Map_(Mod_A) (LL_(A/k),LL_(A/k)) simeq Der_k (A,LL_(A/k)), quad id_(LL_(A/k)) <-> d_(A/k) $

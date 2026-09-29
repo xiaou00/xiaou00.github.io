@@ -10,7 +10,7 @@
 
 == $pi_n$ 的定义
 
-上节提到过我们可以将 $A in AniCAlg_k$ 典范地视作一个交换环谱. 但我们还有另一种方法来解释生象环的 $pi_n$, 将在接下来的内容中介绍.
+上节提到过我们可以将 $A in aCAlg_k$ 典范地视作一个交换环谱. 但我们还有另一种方法来解释生象环的 $pi_n$, 将在接下来的内容中介绍.
 
 对于
 $ A : Poly^opp_k -> Ani $
@@ -53,8 +53,8 @@ $ pi_0 (abs(A)) $
 经典的遗忘函子
 $ U : CAlg_k -> Mod_k $
 保持筛余极限, 于是可以生象化为
-$ U : AniCAlg_k -> AniMod_k $
-而 $AniMod_k simeq Dcat_(>=0)(k)$, 从而对于 $A in AniCAlg_k$ 忘掉乘法后, 本质上就是一个连通的导出 $k$-模 (拟同构意义下唯一的链复形), 即 $U(A) in Dcat_(>=0)(k)$, 并且有核心对应
+$ U : aCAlg_k -> aMod_k $
+而 $aMod_k simeq Dcat_(>=0)(k)$, 从而对于 $A in aCAlg_k$ 忘掉乘法后, 本质上就是一个连通的导出 $k$-模 (拟同构意义下唯一的链复形), 即 $U(A) in Dcat_(>=0)(k)$, 并且有核心对应
 $ pi_n (A) simeq H_n (U(A)) $
 
 == 同伦分次环
@@ -84,7 +84,7 @@ $ A : Poly^opp_k -> Ani $
 我们可以逐点定义
 $ (tau_(<=n)A)(P) = tau_(<=n)(A(P)) $
 这仍然保持有限乘积, 因此
-$ tau_(<=n) A in AniCAlg_k $
+$ tau_(<=n) A in aCAlg_k $
 满足
 $
 pi_i (tau_(<=n) A) = cases(
@@ -175,7 +175,7 @@ $ pi_p A times.o_(pi_0 A) pi_q M -> pi_(p+q) M $
 
 == 环的 Postnikov Step
 
-对于 $A in AniCAlg_k$, 记 $A_n = trunl(n)$, 考虑 $A_n->A_(n-1)$, 其加入的唯一同伦群就是
+对于 $A in aCAlg_k$, 记 $A_n = trunl(n)$, 考虑 $A_n->A_(n-1)$, 其加入的唯一同伦群就是
 $ pi_n A $
 在线性 (遗忘到生象模) 意义下
 $ fib(A_n -> A_(n-1)) simeq (pi_n A)[n] $
@@ -190,7 +190,7 @@ $ LL_(A_(n-1)/k) -> (pi_n A)[n+1] $
 == 稠密性
 
 #theorem(title:[多项式代数的稠密性])[
-  设 $A in AniCAlg_k$, 则
+  设 $A in aCAlg_k$, 则
   $ A simeq colim_((P->A) in (Poly_k)_("/"A)) P $
 ]
 
@@ -199,7 +199,7 @@ $ LL_(A_(n-1)/k) -> (pi_n A)[n+1] $
   $ A in Fun^times (Poly^opp_k, Ani) $
   由 Yoneda 稠密, 有
   $ A simeq colim_((P,x) in integral_(Poly_k) A) yo(P) $
-  又由 Yoneda, $A(P) simeq Map_(AniCAlg_k)(P,A)$, 于是一个元素 $x in A(P)$ 恰好对应映射 $P->A$, 于是有典范等价
-  $ integral_(Poly_k) A simeq Poly_k times_(AniCAlg_k) (AniCAlg_k)_("/"A) simeq (Poly_k)_("/"A) $
+  又由 Yoneda, $A(P) simeq Map_(aCAlg_k)(P,A)$, 于是一个元素 $x in A(P)$ 恰好对应映射 $P->A$, 于是有典范等价
+  $ integral_(Poly_k) A simeq Poly_k times_(aCAlg_k) (aCAlg_k)_("/"A) simeq (Poly_k)_("/"A) $
   又, 在 $A simeq sInd(Poly_k)$ 的识别下, $yo(P)$ 就是多项式代数 $P$ 本身, 分别代入 Yoneda 稠密的陈述即证.
 ]

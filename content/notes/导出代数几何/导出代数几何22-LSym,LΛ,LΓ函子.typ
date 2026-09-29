@@ -71,7 +71,7 @@ $ Hom_k (Gamma^n_k (M),N) simeq "Pol"^n_k (M,N) $
 我们现在可以将上面的三个函子都导出, 即通过他们在
 $ Mod_k^(omega"p") $
 上的行为来延拓. 我们可以定义
-$ AniMod_k -> AniCAlg_k $
+$ aMod_k -> aCAlg_k $
 上的函子
 $ LSym, quad LLambda, quad LGamma $
 

@@ -122,7 +122,7 @@ $ Omega^1_(P_n/k) tilde.eq plus.o.big_(i=1)^n P d x_i $
   我们定义
   $ "L"Omega^bullet_(B/k) simeq colim_((P->B) in (Poly_k)_(\/B)) Omega^bullet_(P/k) $
   诱导函子
-  $ "L"Omega^bullet_(-/k) : AniCAlg_k -> CAlg(Dcat(k)) $
+  $ "L"Omega^bullet_(-/k) : aCAlg_k -> CAlg(Dcat(k)) $
   称之为*导出 de Rham 复形*.
 ]
 
@@ -135,7 +135,7 @@ $ Omega^1_(P_n/k) tilde.eq plus.o.big_(i=1)^n P d x_i $
 
 #proposition[
   函子
-  $ "L"Omega^bullet_(-/k) : AniCAlg_k -> CAlg(Dcat(k)) $
+  $ "L"Omega^bullet_(-/k) : aCAlg_k -> CAlg(Dcat(k)) $
   保持余极限.
 ]
 
@@ -147,7 +147,7 @@ $ Omega^1_(P_n/k) tilde.eq plus.o.big_(i=1)^n P d x_i $
 
 #remark[
   若 $k$ 是一个生象 $QQ$-代数, 则
-  $ "L"Omega_(-/k) : AniCAlg_k -> CAlg(Dcat(k)) $
+  $ "L"Omega_(-/k) : aCAlg_k -> CAlg(Dcat(k)) $
   是将 $R$ 送到 $k$ 的常函子.
 ]
 

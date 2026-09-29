@@ -7,12 +7,12 @@
 = Hodge 滤过的动机
 
 我们回顾之前构造的 de Rham 复形
-$ "L"Omega_(-/k) : AniCAlg_k -> CAlg(Dcat(k)) $
+$ "L"Omega_(-/k) : aCAlg_k -> CAlg(Dcat(k)) $
 最初我们其实有一个明确的次数信息
 $ Omega^1, Omega^2, Omega^3, ... $
 但是微分
 $ d: Omega^p -> Omega^(p+1) $
-将其连接起来, 我们不能再直接将其连接起来. Hodge 滤过本质上就是一个折衷的方案. 更重要地, 若 $k$ 是 $QQ$-代数, 那么不滤过的导出 de Rham 函子退化, 即对任何 $A in AniCAlg_k$ 都有
+将其连接起来, 我们不能再直接将其连接起来. Hodge 滤过本质上就是一个折衷的方案. 更重要地, 若 $k$ 是 $QQ$-代数, 那么不滤过的导出 de Rham 函子退化, 即对任何 $A in aCAlg_k$ 都有
 $ "L"Omega_(A/k) simeq k $
 我们需要一个合理的工具来帮我们截获更多的微分信息.
 
@@ -97,10 +97,10 @@ $ E_(r+1) = H(E_r,d_r) $
   $ FH^p Omega^bullet_(P/k) = Omega^(>=p)_(P/k) = [0->...->0->Omega^p_(P/k)->^d Omega^(p+1)_(P/k) -> ...] $
   于是有
   $ FH^0 supset FH^1 supset FH^2 supset ... $
-  对 $i:Poly_k -> AniCAlg_k$ 作左 Kan 延拓有
+  对 $i:Poly_k -> aCAlg_k$ 作左 Kan 延拓有
   $ FH^bullet "L"Omega_(-/k) := Lan_i (FH^bullet Omega^bullet_(-/k)) $
   称之为 *Hodge 滤过*, 其构成函子
-  $ FH^bullet "L"Omega_(-/k) : AniCAlg_k -> CAlg(DF(k)) $
+  $ FH^bullet "L"Omega_(-/k) : aCAlg_k -> CAlg(DF(k)) $
 ]
 
 #remark(title:[为什么具有乘法结构?])[
@@ -134,7 +134,7 @@ $ E_(r+1) = H(E_r,d_r) $
 ]
 
 #proposition[
-  设 $R in AniCAlg_k$, 那么分次片上有
+  设 $R in aCAlg_k$, 那么分次片上有
   $ gr^s_"H" "L"Omega_(R/k) simeq gr^s_"H" hat("L"Omega_(R/k)) simeq "L"Lambda^s LL_(R/k) [-s] $
 ]
 
@@ -149,7 +149,7 @@ $ E_(r+1) = H(E_r,d_r) $
   $
   而对于多项式代数总有 $LL_(P/k) simeq Omega^1_(P/k)$ 于是
   $ gr^s_"H" Omega^bullet_(P/k) simeq Lambda^s_P LL_(P/k) [-s] $
-  现沿着 $i:Poly_k -> AniCAlg_k$ 作 Kan 延拓. 因为有
+  现沿着 $i:Poly_k -> aCAlg_k$ 作 Kan 延拓. 因为有
   $ FH^bullet "L"Omega_(-/k) = Lan_i (FH^bullet Omega^bullet_(-/k)) $
   而
   $ gr^s_"H" : DF(k) -> Dcat(k), quad FH^bullet X |-> cofib (FH^(s+1)X -> FH^s X) $

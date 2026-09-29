@@ -46,19 +46,19 @@ $ (a,x,y,z) |-> (a,x+y) $
 我们知道一个生象 $A$-代数就是一个生象环 $B$ 连带一个生象环的映射
 $ eta:A->B $
 也就是说对象属于范畴
-$ AniRing_(A"/") $
+$ aRing_(A"/") $
 而增广代数则是这个想法的延伸:
 
 #definition(title:[增广生象代数])[
   一个*增广 $A$-代数*就是一个图
   $ A -->^eta B -->^epsilon A $
   满足 $epsilon compose eta simeq id_A$, 其中 $eta$ 将 $B$ 识别为 $A$-代数, 而 $eta:B->A$ 称为*增广映射*. 这也就是说 $A$ 是 $B$ 的一个收缩. 该范畴记作
-  $ AugAlg_A := (AniRing_(A"/"))_("/"id_A) $
+  $ AugAlg_A := (aRing_(A"/"))_("/"id_A) $
 ]
 
 可以将这个构造想成, 一个增广代数就是在代数 $B$ 的基础上选取一个合适的 $A$-值点.
 
-显然一个增广对象可以同时典范视作 $AniRing_(A"/")$ 的元素, 也可以典范视作 $AniRing_("/"A)$ 的元素.
+显然一个增广对象可以同时典范视作 $aRing_(A"/")$ 的元素, 也可以典范视作 $aRing_("/"A)$ 的元素.
 
 == 增广理想
 
@@ -86,31 +86,31 @@ $ B/I^n $
 $ B/I^2 simeq A plus.o (I/I^2) $
 对应一个平方零扩张.
 
-== 与范畴 $AniCAlg_(k"//"R)$
+== 与范畴 $aCAlg_(k"//"R)$
 
 #definition[
   设 $k->R$ 是生象环映射, 即 $R$ 是生象 $k$-代数, 定义范畴
-  $ AniCAlg_(k"//"R) := (AniCAlg_k)_("/"R) $
+  $ aCAlg_(k"//"R) := (aCAlg_k)_("/"R) $
   也就是全体分解
   $ k -> A -> R $
   构成的范畴.
 ]
 
 更精确地, 我们有
-$ Map_(AniCAlg_(k"//"R))(A,B) simeq Map_(AniCAlg_k)(A,B) times_(Map_(AniCAlg_k)(A,R)) {alpha:A->R} $
+$ Map_(aCAlg_(k"//"R))(A,B) simeq Map_(aCAlg_k)(A,B) times_(Map_(aCAlg_k)(A,R)) {alpha:A->R} $
 
-而所谓增广 $R$-代数, 本质上就是 $AniCAlg_(k"//"R)$ 中的带基点对象. 即
-$ AugAlg_R simeq (AniCAlg_(k"//"R))_* $
+而所谓增广 $R$-代数, 本质上就是 $aCAlg_(k"//"R)$ 中的带基点对象. 即
+$ AugAlg_R simeq (aCAlg_(k"//"R))_* $
 因为由定义我们有
-$ AugAlg_R simeq (AniCAlg_(k"//"R))_(R"/") $
+$ AugAlg_R simeq (aCAlg_(k"//"R))_(R"/") $
 而我们有结论佐证这一点
 
 #proposition[
-  生象交换 $k$-代数 $R$ 是范畴 $AniCAlg_(k"//"R)$ 的终对象. 
+  生象交换 $k$-代数 $R$ 是范畴 $aCAlg_(k"//"R)$ 的终对象. 
 ]
 
 也正是因此, 我们有典范的忘基点遗忘函子
-$ U : AugAlg_R -> AniCAlg_(k"//"R) $
+$ U : AugAlg_R -> aCAlg_(k"//"R) $
 
 = 平方零扩张与导子
 
@@ -151,16 +151,16 @@ $ A -> A plus.o M -> A $
   有些时候为了防止歧义, 我们将上述函子记作
   $ SqZ_A : Mod^(>=0)_A -> AugAlg_A $
   并且由于有遗忘函子, 我们还可以作
-  $ SqZ_A : Mod^(>=0)_A -> AniCAlg_(k"//"A) $
+  $ SqZ_A : Mod^(>=0)_A -> aCAlg_(k"//"A) $
 ]
 
 #proposition[
-  函子 $SqZ_A : Mod^(>=0)_A -> AniCAlg_(k"//"A)$ 保持筛余极限和极限.
+  函子 $SqZ_A : Mod^(>=0)_A -> aCAlg_(k"//"A)$ 保持筛余极限和极限.
 ]
 
 #proof[
-  下记 $cal(C)=AniCAlg_k$, $cal(C)_("/"A)=AniCAlg_(k"//"A)$. 并且设
-  $ U : AniCAlg_k -> Mod^(>=0)_k $
+  下记 $cal(C)=aCAlg_k$, $cal(C)_("/"A)=aCAlg_(k"//"A)$. 并且设
+  $ U : aCAlg_k -> Mod^(>=0)_k $
   是遗忘函子
   $ V : Mod^(>=0)_A -> Mod^(>=0)_k $
   是限制标量. 由生象环的 Lawvere 理论描述可以简单地证得
@@ -211,7 +211,7 @@ $ Der_k (A,M) simeq Hom_((CAlg_k)_("/"A))(A,A plus.o M) $
 
 #definition(title:[导子])[
   设 $A$ 是生象交换 $k$-代数, $M$ 是 $A$-导出模, 定义 $A$ 到 $M$ 的 $k$-导子为
-  $ Der_k (A,M) := Map_(AniCAlg_(k"//"A))(A,A plus.o M) $
+  $ Der_k (A,M) := Map_(aCAlg_(k"//"A))(A,A plus.o M) $
   这里左边的 $A$ 指切片中的对象 $A -->^id A$, $A plus.o M$ 指 $A plus.o M -->^epsilon A$.
 ]
 
@@ -274,8 +274,8 @@ $ s_0 : A -> A plus.o M, quad a |-> (a,0) $
 
 #proposition[
   有典范的纤维序列
-  $ Der_k (R,M) -> Map_(AniCAlg_k)(R, R plus.o M) larr^(epsilon_*:f
--> epsilon compose f) Map_(AniCAlg_k) (R,R) $
+  $ Der_k (R,M) -> Map_(aCAlg_k)(R, R plus.o M) larr^(epsilon_*:f
+-> epsilon compose f) Map_(aCAlg_k) (R,R) $
   第一个生象的基点是零导子, 第二个生象的基点是类似定义的 $s_0$ 截面, 第三个生象的基点是 $id_R$.
 ]
 
@@ -300,7 +300,7 @@ $ s_0 : A -> A plus.o M, quad a |-> (a,0) $
 
 而两边的 $R->R plus.o M[1]$ 都由平凡导子给出. 图中给出
 $ R plus.o M simeq Omega(R plus.o M[1]) $
-由于 $Der_k (R,-)$ 保持极限, 下记 $cal(C) = AniCAlg_(k"//"R)$, 有
+由于 $Der_k (R,-)$ 保持极限, 下记 $cal(C) = aCAlg_(k"//"R)$, 有
 $ Der_k (R,M) &simeq Map_cal(C)(R,R plus.o M) \
               &simeq Map_cal(C)(R,R times_(R plus.o M[1]) R) \
               &simeq Map(R,R) times_(Der_k (R,M[1])) Map(R,R) $
@@ -313,7 +313,7 @@ $ X_0, X_1, X_2, ... $
 回顾正题, 我们现在可以推广平方零扩张的定义到非分裂的情形
 
 #definition(title:[平方零扩张])[
-  设 $p:tilde(S)->S$ 是 $AniCAlg_k$ 的态射, 称其为 $S$ 关于 $M$ 的一个*平方零扩张* (square zero extension, SZE), 是指存在一个导子 $d in Der_k (S,M[1])$, 使得 $tilde(S)$ 可置入拉回方形
+  设 $p:tilde(S)->S$ 是 $aCAlg_k$ 的态射, 称其为 $S$ 关于 $M$ 的一个*平方零扩张* (square zero extension, SZE), 是指存在一个导子 $d in Der_k (S,M[1])$, 使得 $tilde(S)$ 可置入拉回方形
   #web-diagram(diagram({
       node((0, -1), [$tilde(S)$])
       node((1, -1), [$S$])

@@ -5,9 +5,9 @@
 #show: note
 
 在讨论 de Rham 理论之前, 我们先注意到一件事: 生象环一般都是连通的, 也就是说它们的非零同伦都出现在正次数. 而 de Rham 复形一般是余连通的, 其非零同伦都在负次数. 由于我们希望做的事情是通过
-$ Poly_k -> AniCAlg_k $
+$ Poly_k -> aCAlg_k $
 上的经典 de Rham $P^bullet |-> Omega^bullet_(P/k)$ 沿着嵌入作左 Kan 延拓, 天真的想法是得到一个
-$ dR : AniCAlg_k -> AniCAlg_k $
+$ dR : aCAlg_k -> aCAlg_k $
 但当我们输入 $P$ 的时候, 我们想要恢复 $Omega^bullet_(P/k)$, 然而他一般根本不是连通的, 这件事从一开始就不成立.
 
 于是我们自然需要一种能同时处理两种次数的环, 也就是导出环.
@@ -178,7 +178,7 @@ $ k -> A, quad Sym^2 (A) -> A, Sym^3 (A) -> A, ... $
 普通的自由交换代数单子导出可作
 $ LSym_k : Dcat_(>=0)(k) -> Dcat_(>=0)(k) $
 可以验证
-$ AniCAlg_k simeq Alg_(LSym_k) (Dcat_(>=0)(k)) $
+$ aCAlg_k simeq Alg_(LSym_k) (Dcat_(>=0)(k)) $
 所以一个生象交换代数本质上就是
 $ A in Dcat_(>=0) (k) $
 加上一个融贯的作用
@@ -189,7 +189,7 @@ $ LSym_k (A) -> A $
 == Bhatt--Mathew 的构造
 
 上面我们自然地将生象代数视作了
-$ AniCAlg_k simeq Alg_(LSym_k) (Dcat_(>=0)(k)) $
+$ aCAlg_k simeq Alg_(LSym_k) (Dcat_(>=0)(k)) $
 自然的想法就是将这个 $>=0$ 去掉, 也就是说, 我们要想办法将 $LSym_k$ 以合理的方式延拓到任意次数, 以得到 "合理的自由函子"
 $ Dcat(k) -> dCAlg_k $
 
@@ -225,7 +225,7 @@ $ LSym : Dcat(k) -> Dcat(k) $
 ]
 
 也就是说, 一个导出代数是一个 $M in Dcat(k)$ 配合一个融贯的作用 $LSym_k (M)->M$. 并且
-$ dCAlg_k^(>=0) simeq AniCAlg_k $
+$ dCAlg_k^(>=0) simeq aCAlg_k $
 
 == 一些可操作性
 

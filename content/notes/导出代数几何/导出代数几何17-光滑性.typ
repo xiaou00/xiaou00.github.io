@@ -48,14 +48,14 @@
 == 有限表示
 
 #definition(title:[有限表示])[
-  设 $f:A->B$ 是生象环的态射, 称 $f$ 是*有限表示* (of finite presentation, fp) 的, 是指通过该态射 $B in AniCAlg_A$ 是紧对象.
+  设 $f:A->B$ 是生象环的态射, 称 $f$ 是*有限表示* (of finite presentation, fp) 的, 是指通过该态射 $B in aCAlg_A$ 是紧对象.
 ]
 
 也就是说任何滤过余极限有等价
-$ varinjlim(i) Map_(AniCAlg_A) (B,C_i) simeq Map_(AniCAlg_A) (B,varinjlim(i)C_i) $
+$ varinjlim(i) Map_(aCAlg_A) (B,C_i) simeq Map_(aCAlg_A) (B,varinjlim(i)C_i) $
 
 我们知道
-$ AniCAlg_k^omega simeq Idem(chevron Poly_k chevron.r_"有限余极限") $
+$ aCAlg_k^omega simeq Idem(chevron Poly_k chevron.r_"有限余极限") $
 也就是多项式代数取有限余极限后收缩得到的对象. 离散情形下, 这个定义和一般的有限表示是兼容的, 这个定义等价于
 $ B simeq A[x_1,...,x_n]/(f_1,...,f_n) $
 是有限表示的 $A$-代数.
@@ -142,4 +142,16 @@ $ Amp(LL_(B/A)) subset [0,0] $
 
 #proposition[
   光滑, 平展, 拟光滑在复合下依然是光滑, 平展, 拟光滑的.
+]
+
+== 拟光滑嵌入引理
+
+下面的概念一般对 $i^or:Spec B->Spec A$ 定义, 不过我们还没定义导出概形, 先将就一下记号.
+
+#definition(title:[闭嵌入])[
+  若生象环映射 $i:A->B$ 满足 $pi_0 i:pi_0 A->>pi_0 B$ 是满射, 则称之为一个*闭嵌入*.
+]
+
+#definition(title:[拟光滑嵌入])[
+  若闭嵌入 $i:A->B$ 满足余切复形 $LL_(B/A)$ 是完美的且 Tor 振幅包含在 $[1,1]$ 中 (i.e. $NN^*_(B/A)=LL_(B/A)[-1]$ 是有限投射 $B$-模), 则称之为一个*拟光滑嵌入*.
 ]

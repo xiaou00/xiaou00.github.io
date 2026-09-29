@@ -13,7 +13,7 @@
 下面记 $Mod^[a,b]_R = Mod_R^(>=a) inter Mod_R^(<=b)$.
 
 #definition(title:[Tor 振幅])[
-  设 $A in AniCAlg_k$, 以及 $M in Mod_A$. 称 $M$ 的 *Tor振幅*包含于 $[a,b]$, 是指对任意离散 $pi_0 A$-模 $N$, 即 $N in Mod_A^suit.heart$ 有
+  设 $A in aCAlg_k$, 以及 $M in Mod_A$. 称 $M$ 的 *Tor振幅*包含于 $[a,b]$, 是指对任意离散 $pi_0 A$-模 $N$, 即 $N in Mod_A^suit.heart$ 有
   $ M times.o_A N in Mod^[a,b]_A $
   若其 Tor 振幅是某个整数组 $Amp(M)=[a,b]$, 则称之为有界的.
 ]

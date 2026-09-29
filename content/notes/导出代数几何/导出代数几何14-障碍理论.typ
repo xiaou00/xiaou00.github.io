@@ -150,12 +150,12 @@ $ o_p (f) in pi_0 Map_R (LL_(R/k),f^* M[1]) $
 == 形式光滑与形式平展
 
 #definition(title:[形式光滑 / 形式平展])[
-  设 $R in AniCAlg_k$ 是生象交换环的态射, 称 $R$ 是 *$k$-形式光滑* (formally smooth) 的, 是指对任意平方零扩张 $p:tilde(S)->S$ 和任意映射 $f:R->S$, $Lift_p (f)$ 都非空, 若其甚至是可缩的, 则称之为*形式平展* (formally étale).
+  设 $R in aCAlg_k$ 是生象交换环的态射, 称 $R$ 是 *$k$-形式光滑* (formally smooth) 的, 是指对任意平方零扩张 $p:tilde(S)->S$ 和任意映射 $f:R->S$, $Lift_p (f)$ 都非空, 若其甚至是可缩的, 则称之为*形式平展* (formally étale).
 ]
 
 #proposition(title:[形式光滑判据])[
-  $R in AniCAlg_k$ 是形式光滑的当且仅当对任意 $M in AniMod_R$, 都有
-  $ pi_0 Map_(AniMod_R) (LL_(R/k), M[1]) simeq 0 $
+  $R in aCAlg_k$ 是形式光滑的当且仅当对任意 $M in aMod_R$, 都有
+  $ pi_0 Map_(aMod_R) (LL_(R/k), M[1]) simeq 0 $
 ]
 
 #proof[
@@ -172,13 +172,13 @@ $ o_p (f) in pi_0 Map_R (LL_(R/k),f^* M[1]) $
 ]
 
 #proposition[
-  $R in AniCAlg_k$ 是形式光滑的当且仅当
+  $R in aCAlg_k$ 是形式光滑的当且仅当
   $ LL_(R/k) in Mod^"proj"_R $
   即存在集合 $N$ 使得 $LL_(R/k)$ 是 $R^(plus.o N)$ 的一个收缩.
 ]
 
 #proposition[
-  $R in AniCAlg_k$ 是形式平展的当且仅当 $LL_(R/k) simeq 0$.
+  $R in aCAlg_k$ 是形式平展的当且仅当 $LL_(R/k) simeq 0$.
 ]
 
 = Postnikov 塔中的障碍理论
@@ -245,14 +245,14 @@ $ o_(p_n)(f) = [(p_n)_f] in pi_0 Map_R (LL_(R/k), f^*pi_n A [n+1] ) $
 最自然地说, André--Quillen 理论, 就是余切复形 $LL_(A/k)$ 表示的同调和上同调理论.
 
 #definition(title:[André--Quillen 同调])[
-  设 $A in AniCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 同调*为
+  设 $A in aCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 同调*为
   $ D_n (A/k;M) := pi_n (LL_(A/k) times.o_A M) in Mod_(pi_0 A) $
 ]
 
 类似地, 可以定义上同调
 
 #definition(title:[André--Quillen 上同调])[
-  设 $A in AniCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 上同调*为
+  设 $A in aCAlg_k$, 对任意模 $M in Mod_A$, 定义其 *André--Quillen 上同调*为
   $ D^n (A/k;M) := pi_(-n) underline(Map)_A (LL_(A/k),M) in Mod_(pi_0 A) $
 ]
 
