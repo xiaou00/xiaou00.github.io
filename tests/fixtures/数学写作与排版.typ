@@ -121,6 +121,17 @@ $ R = {x in K | v(x) >= 0}, quad
   文本 #underline[下划线] 和 #overline[上划线].
 ]
 
+== 波浪线 <math-tildes-heading>
+
+#html.elem("div", attrs: (id: "math-tildes"))[
+  行内 $tilde(f)$ 与 $tilde(pi_i A)$.
+
+  $ tilde(pi_i A) $
+  $ tilde(A B) $
+  $ X_(tilde(pi_i A)) + tilde(tilde(A B)) $
+  $ tilde.eq + tilde $
+]
+
 == 写作约定 <conventions>
 
 - 首次出现的术语给出定义, 再在后文用交叉引用连接.
@@ -163,3 +174,27 @@ $ R = {x in K | v(x) >= 0}, quad
   #simplex2($x$, $y$, $z$, edge-stroke: 1.2pt) <simplex-filled>
   #simplex2hollow($bold(1) times.o X$, $X times.o X^or times.o X$, $X$, ab: $f$, bc: $g$, ac: $g compose f$) <simplex-hollow>
 ]
+
+== 函数图像 <function-plots>
+
+#function-plot(
+  (calc.sin, calc.cos),
+  x-range: (-calc.pi, calc.pi), y-range: (-1.5, 1.5),
+  labels: ($sin x$, $cos x$),
+  caption: [正弦与余弦], alt: "正弦与余弦函数在负 π 到 π 之间的图像",
+) <trigonometric-plot>
+
+如 @trigonometric-plot 所示, 两条曲线用红色与黑色区分.
+
+#function-plot(
+  x => 1 / x, breaks: (0,),
+  width: 240pt, height: 164pt,
+  caption: [反比例函数], alt: "反比例函数 y 等于 1 除以 x, 在零点断开",
+) <reciprocal-plot>
+
+#implicit-plot(
+  ((x, y) => x*x + y*y - 4, (x, y) => x*x / 4 + y*y - 1),
+  x-range: (-3, 3), y-range: (-3, 3),
+  labels: ($x^2 + y^2 = 4$, $frac(x^2, 4) + y^2 = 1$),
+  caption: [圆与椭圆], alt: "等比例坐标下的圆与椭圆",
+) <implicit-curves>

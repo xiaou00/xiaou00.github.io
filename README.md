@@ -247,6 +247,83 @@ Fletcher 交换图和 CeTZ 绘图使用 `#web-diagram(...)` 包裹. 它通过 Ty
 
 图内文字使用思源宋体, 数学公式使用 Libertinus Math, 与网页一致. 构建会自动将 `public/fonts/` 中已有的网页字体解压到 `.build/typst-fonts/` 供 Typst 使用, 无需另装系统字体, GitHub Pages 也使用同一套文件. 字体未变化时直接复用, 更换字体后会自动重新编译图形.
 
+### 函数图像
+
+导入模板后, 直接在正文中使用 `#function-plot(...)`, 不用另装绘图库或包裹 `web-diagram`. 传入 Typst 函数即可绘制:
+
+```typst
+#function-plot(
+  x => x * x,
+  x-range: (-3, 3), y-range: (-1, 9),
+  caption: [平方函数],
+) <square-function>
+
+如 @square-function 所示.
+```
+
+图像默认居中, 宽 `264pt`、高 `180pt` (网页约 352 × 240px, 不含图例和图注), 手机上保持比例缩小至正文宽度. 配色沿用主题的红、黑、灰, 使用黑色矩形外框, 四边带朝内的短刻度, 内部保留淡灰格点和细实线坐标轴. 不显示坐标数字或箭头, 默认也不标注 x、y. 格点与刻度的间距随坐标范围自动调整. 图例字体与正文一致. 图形通过 Typst 的 [`html.frame`](https://typst.app/docs/reference/html/frame/) 输出为清晰的内嵌 SVG, 共用现有编译缓存, 无需浏览器脚本. `print-template.typ` 也提供同一环境, 可直接输出 PDF 矢量图.
+
+多条曲线用函数数组, `labels` 按相同顺序填写图例, 可直接使用数学公式:
+
+```typst
+#function-plot(
+  (calc.sin, calc.cos),
+  x-range: (-calc.pi, calc.pi), y-range: (-1.5, 1.5),
+  labels: ($sin x$, $cos x$),
+  caption: [正弦与余弦],
+  alt: "正弦与余弦函数在负 π 到 π 之间的图像",
+)
+```
+
+常用参数:
+
+| 参数 | 默认值 | 说明 |
+| --- | --- | --- |
+| `x-range`, `y-range` | `(-5, 5)` | 横纵坐标的显示范围, 两个递增数值 |
+| `width`, `height` | `264pt`, `180pt` | 图像尺寸, 使用 `pt`、`cm` 等绝对长度; 最小 `160pt` × `120pt` |
+| `labels` | `none` | 图例数组, 数量与函数一致 |
+| `x-label`, `y-label` | `none` | 默认不标注坐标轴名称, 需要时可填写文字或公式 |
+| `grid` | `true` | 显示淡灰格点, `false` 隐藏 |
+| `equal` | `false` | 横纵轴每单位长度相同, 保持几何比例 |
+| `samples` | `400` | 采样段数, 可设为 16–10000 |
+| `breaks` | `()` | 指定间断点, 不计算这些点, 也不跨点连线 |
+| `colors` | 红、黑、灰 | 自定义颜色数组, 多条曲线循环使用 |
+| `caption`, `alt` | `none`, `"函数图像"` | 可引用的图注和供辅助阅读使用的文字说明 |
+
+有间断点时显式填写 `breaks`, 定义域外返回 `none`. 例如:
+
+```typst
+#function-plot(x => 1 / x, breaks: (0,), caption: [反比例函数])
+#function-plot(x => if x < 0 { none } else { calc.sqrt(x) })
+```
+
+这是数值采样绘图; 振荡较快时增加 `samples`, 已知的间断点应明确列出. 超出纵轴范围的部分会裁去. 完整示例见 [`content/function-plot-example.typ`](content/function-plot-example.typ).
+
+隐式方程使用 `implicit-plot`, 接受两个变量 `x, y`, 绘制 `F(x, y) = 0`. 将等号右边移到左边, 返回数值; 不要使用返回布尔值的 `==`:
+
+```typst
+// x² + y² = 4
+#implicit-plot(
+  (x, y) => x*x + y*y - 4,
+  x-range: (-3, 3), y-range: (-3, 3),
+  caption: [半径为 2 的圆],
+) <circle>
+
+// xy = 1
+#implicit-plot((x, y) => x*y - 1)
+
+// 多条隐式曲线
+#implicit-plot(
+  ((x, y) => x*x + y*y - 4, (x, y) => x*x / 4 + y*y - 1),
+  x-range: (-3, 3), y-range: (-3, 3),
+  labels: ($x^2 + y^2 = 4$, $frac(x^2, 4) + y^2 = 1$),
+)
+```
+
+`implicit-plot` 共用上述尺寸、配色、图例、图注与网格参数, 默认 `equal: true`, 保证圆不会因坐标比例不同而变成椭圆. `samples: 80` 表示每个方向划分 80 格, 可设为 16–200; 越大越精细, 编译时间也越长. 定义域外返回 `none`, 不使用 `breaks`.
+
+隐式图采用网格采样与零等值线插值, 适用于连续函数. 写未平方的方程残差, 例如 `x*x + y*y - 4`; `(x*x + y*y - 4)^2` 这类不变号的重根、孤立零点和小于网格尺度的细节可能无法检出. 有除法、对数等定义域限制时, 在函数中排除无定义区域, 避免将不连续处当作零等值线.
+
 ### Young 图与 Young 表
 
 `young` 已内置 SVG 渲染, 直接在正文中按从上到下的顺序写各行格数, 无需填写总格数、放入 `$...$` 或额外包裹 `web-diagram`:

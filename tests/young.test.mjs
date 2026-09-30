@@ -28,7 +28,7 @@ Original paragraph. $a + b$
 #young(2, 2)
 `;
   try {
-    for (const name of ['template.typ', 'abbrev.typ']) await copyFile(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
     const fontPath = await prepareTypstFonts(resolve('.'));
     const flags = ['--features', 'html', '--root', root, '--ignore-system-fonts', '--font-path', fontPath];
     await writeFile(shape, '#let partition = (3, 2)\n#let labels = (1, 2, 3, 4, 5)');

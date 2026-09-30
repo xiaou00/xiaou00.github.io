@@ -12,6 +12,7 @@ import { documentUrl } from '../scripts/geopedia.mjs';
 import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
 import './young.test.mjs';
+import './function-plot.test.mjs';
 import './geopedia.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
@@ -86,7 +87,7 @@ test('real Typst source builds a linked static site with native MathML and refer
     assert.ok(document.querySelector('.env-theorem figcaption').textContent.includes('定理'));
     assert.ok(document.querySelector('.env-remark figcaption').textContent.includes('注'));
     const diagrams = [...document.querySelectorAll('.note-diagram .diagram-scroll > svg')];
-    assert.equal(diagrams.length, 4, 'Fletcher diagrams and both simplex helpers are exported alongside native MathML');
+    assert.equal(diagrams.length, 7, 'Fletcher diagrams, simplex helpers and explicit/implicit plots are exported alongside native MathML');
     assert.equal(document.querySelector('math figure, math .diagram-scroll'), null, 'HTML diagrams remain outside MathML');
     assert.ok(document.querySelector('#simplex-filled svg path[stroke-width="1.2"]'), 'simplex edge width is configurable');
     for (const svg of diagrams) {

@@ -1,6 +1,7 @@
 // Liber 777 · 普通 Typst / PDF 模板
 // 用法见 print-example.typ。与网页共用数学缩写，不依赖 HTML 导出。
 #import "abbrev.typ": *
+#import "function-plot.typ": function-plot, implicit-plot
 
 #let palette = (
   paper: rgb("#ffffff"),

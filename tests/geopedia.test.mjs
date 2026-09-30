@@ -37,7 +37,7 @@ test('encyclopedia property tags and invariant pairs preserve content, reference
   const root = await mkdtemp(join(tmpdir(), 'geopedia-compile-'));
   const compiler = new TypstCompiler({ cwd: root });
   try {
-    for (const name of ['template.typ', 'abbrev.typ', 'geopedia-template.typ', 'geopedia-schema.json']) await cp(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ', 'geopedia-template.typ', 'geopedia-schema.json']) await cp(resolve('content', name), join(root, name));
     const flags = ['--features', 'html', '--root', root];
     const input = join(root, 'entry.typ');
     const source = `#import "geopedia-template.typ": *

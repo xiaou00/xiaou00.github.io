@@ -52,6 +52,7 @@
 #let trunr(args) = $tau_(>= args)$
 
 #let Hom = "Hom"
+#let Nat = "Nat"
 #let SqExt = $"SqExt"$
 #let Map = "Map"
 #let Cov = "Cov"
@@ -172,6 +173,8 @@
 #let dAff = $bold(sans("dAff"))$
 #let dPSt = $bold(sans("dPSt"))$
 #let dSt = $bold(sans("dSt"))$
+#let CooRing = $bold(sans("C"^oo"Ring"))$
+#let CooAlg = $bold(sans("C"^oo"Alg"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
@@ -192,5 +195,4 @@
 #let leftarrow = $stretch(<-, size: #15pt)$
 #let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
 #let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
-
-
+ 

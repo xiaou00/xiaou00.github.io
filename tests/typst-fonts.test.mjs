@@ -15,7 +15,7 @@ test('diagram fonts work without system fonts, are reused and invalidate on repl
     for (const name of ['math', 'serif-cn']) {
       await cp(resolve('public/fonts', `${name}.woff2`), join(root, 'public/fonts', `${name}.woff2`));
     }
-    for (const name of ['template.typ', 'abbrev.typ']) await cp(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ']) await cp(resolve('content', name), join(root, name));
     const fontPath = await prepareTypstFonts(root);
     const modified = (await stat(join(fontPath, 'serif-cn.otf'))).mtimeMs;
     assert.equal(await prepareTypstFonts(root), fontPath);

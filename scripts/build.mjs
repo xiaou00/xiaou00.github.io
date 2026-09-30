@@ -117,6 +117,15 @@ export function prepareDocument(source, { filename, object = false } = {}) {
       operator.setAttribute('largeop', 'false');
     }
   }
+  // Combining tilde is not a horizontal operator in browser dictionaries.
+  // Use its spacing equivalent so MathML can select a wide accent glyph.
+  for (const accent of document.querySelectorAll('math mover[accent="true"] > mo:last-child')) {
+    if (accent.textContent === '\u0303' && !accent.hasAttribute('stretchy')) {
+      accent.textContent = '\u02dc';
+      accent.setAttribute('form', 'postfix');
+      accent.setAttribute('stretchy', 'true');
+    }
+  }
   for (const element of document.querySelectorAll('math[display="block"], table')) {
     // Firefox can line-break between direct children of <math> when its
     // available width changes. Keep each equation in one explicit row;

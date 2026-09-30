@@ -1,0 +1,14 @@
+Tool: built-in image_gen (imagegen skill)
+Original: cover02.png
+Output: cover03.png
+Final editing prompt:
+
+Use case: style-transfer
+Asset type: cover03 flat-color cover demo.
+Input image: the supplied image is the edit target.
+Primary request: Keep the scene and composition exactly as shown, but make a decisive change to STRICTLY FLAT COLORS throughout. 极简实线平涂，纯色色块，没有任何渐变。Aim for clean vector-poster-like anime cel artwork.
+Change only the rendering and simplify detail. Every enclosed color region must be ONE perfectly uniform color, edge to edge. The large peach pig is one solid peach fill, its nose one solid pink fill, its ears one solid darker pink fill. The skin is one solid pale peach. The hair and white shirt are one solid off-white with very sparse single-tone light gray hard-edged accents. The sofa is one solid very light gray with a few flat gray cushion shadows only. The shorts are one solid charcoal. The background is plain white. No smooth tonal variation within any fill, even very subtle.
+Use bold clean continuous solid charcoal contour lines, consistent 3–4px apparent weight at 1536px canvas width. Remove secondary hair strands, tiny creases, and minor shading details. Keep only large flowing hair locks and a handful of necessary clothing folds. Keep character facial identity, gray and red eyes, expression, all objects, original pose, placement and 3:2 landscape crop unchanged.
+The result should read as a minimalist flat-color redraw, with large clear closed shapes, fully opaque solid ink outlines and solid fills.
+Avoid ALL gradients, ambient occlusion, blush gradients, paper grain, texture, soft highlights, airbrush, painterly rendering, feathered edges, fine sketch lines, halftone, text and watermarks. Do not add objects.
+

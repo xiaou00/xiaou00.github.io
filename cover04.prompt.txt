@@ -1,0 +1,17 @@
+Tool: built-in image_gen (imagegen skill)
+Original: cover.png
+Output: cover04.png
+Final editing prompt:
+
+Use case: style-transfer
+Asset type: cover04, a simplified flat-color illustration demo.
+Input image: /home/xiaou0/blog/cover.png is the edit target. Its background is transparent, NOT black.
+Primary request: 将原图改成简约、实线、平涂的画风，看上去自然。Make a beautiful natural-looking simplified anime redraw with clean solid ink lines and flat colors.
+
+Preserve: the full original scene and approximately 4:3 landscape composition, white-haired character lying on the pale sofa reading the open dark book, her relaxed face resting against the pillow, one gray eye and one red eye, loose white T-shirt, black shorts, both bent lower legs raised at the right, natural hands holding the book, small white ghost at upper left, floating red-and-black ring above her head, and draped fabric on the sofa's right. Retain the small crescent symbol on the book. Preserve recognizable facial identity, anatomy, proportions, original clothing coverage, pose and all major object placements. Keep the complete sofa, feet, ring and ghost within the canvas.
+
+Style: clean continuous SOLID dark charcoal outlines, medium-light weight with subtle organic taper at hair tips and folds; flowing, graceful, naturally drawn curves, no stiff heavy sticker borders. Clearly simplify the long hair into a handful of broad, softly flowing locks, simplify shirt folds and cushion wrinkles, keep hands anatomically natural and eyes expressive. All surfaces use uniform opaque flat base-color fills. Very sparse single-tone hard-edged cel shadows may clarify overlaps and sofa cushions; no gradient shading anywhere. Retain the original restrained off-white, light warm gray, pale skin, charcoal and red palette. Differentiate white hair, shirt and sofa with subtle differences in flat color. The flat style should look intentional, warm and relaxed, with natural volume conveyed by contours and a few carefully placed flat shadow shapes.
+
+Background: genuine transparent alpha around the complete illustrated cutout, including holes between raised legs and around the halo. No black, white, checkerboard or colored background; no added backdrop.
+Avoid: gradients, blush gradients, airbrush, soft highlights, grain, paper textures, sketch lines, broken or dotted outlines, excessive tiny hair strands, exaggerated chibi proportions, stiff geometry, mechanical tracing, heavy uniform outlines, 3D or photorealism, new objects, text and watermarks.
+

@@ -23,6 +23,7 @@
   set document(title: sys.inputs.at("note-title", default: ""), author: "xiaou0")
   set text(lang: "zh")
   set smartquote(enabled: false)
+  set quote(block: true)
   set math.frac(style: "horizontal")
   set heading(numbering: "1.1")
   // Keep explicit labels even when only another note references them.
@@ -250,4 +251,5 @@
   })
 }
 
+#import "function-plot.typ": function-plot, implicit-plot
 #import "abbrev.typ" : *

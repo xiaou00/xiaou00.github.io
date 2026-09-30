@@ -134,6 +134,55 @@ test('math overlines and underlines stretch with their content and preserve nest
   }
 });
 
+test('tilde accents stretch over compound bases in inline, display, nested and subscript math', async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(noteRoute(specimen));
+    await page.evaluate(() => document.fonts.ready);
+    const region = page.locator('#math-tildes');
+    const accents = region.locator('mover[accent="true"]');
+    await expect(accents).toHaveCount(7);
+    // MathML reports the un-stretched advance width of <mo>, even when its
+    // painted glyph is wide. Measure the visible accent with its base hidden.
+    const sizes = [];
+    for (const accent of await accents.all()) {
+      await expect(accent.locator(':scope > mo')).toHaveAttribute('stretchy', 'true');
+      const base = await accent.evaluate(node => {
+        const base = node.firstElementChild;
+        const width = base.getBoundingClientRect().width;
+        base.style.visibility = 'hidden';
+        return width;
+      });
+      const png = await accent.screenshot();
+      await accent.evaluate(node => node.firstElementChild.style.removeProperty('visibility'));
+      const ink = await page.evaluate(async png => {
+        const image = new Image();
+        image.src = `data:image/png;base64,${png}`;
+        await image.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0);
+        const { data } = context.getImageData(0, 0, image.width, image.height);
+        let left = image.width, right = -1;
+        for (let y = 0; y < image.height; y++) for (let x = 0; x < image.width; x++) {
+          if (data[(y * image.width + x) * 4] < 180) {
+            left = Math.min(left, x);
+            right = Math.max(right, x);
+          }
+        }
+        return Math.max(0, right - left + 1);
+      }, png.toString('base64'));
+      sizes.push({ base, ink });
+    }
+    for (const size of sizes.slice(1)) expect(size.ink).toBeGreaterThanOrEqual(size.base * .85);
+    expect(sizes[1].ink).toBeGreaterThan(sizes[0].ink * 1.5);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await region.screenshot({ path: `/tmp/ain-soph-math-tildes-${width}.png` });
+  }
+});
+
 test('environment titles lead into the first paragraph while display formulas stay separate', async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
@@ -171,7 +220,7 @@ test('Fletcher diagrams render at their natural size, center, scroll and retain 
   await page.goto(noteRoute(specimen));
   await page.evaluate(() => document.fonts.ready);
   const diagrams = page.locator('.note-diagram .diagram-scroll > svg');
-  await expect(diagrams).toHaveCount(4);
+  await expect(diagrams).toHaveCount(7);
   const sizes = await diagrams.evaluateAll(nodes => nodes.map(svg => ({
     namespace: svg.namespaceURI,
     width: svg.getBoundingClientRect().width,
@@ -209,6 +258,47 @@ test('Fletcher diagrams render at their natural size, center, scroll and retain 
   expect(await wide.evaluate(region => region.scrollLeft)).toBeGreaterThan(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await square.screenshot({ path: '/tmp/ain-soph-fletcher-mobile.png' });
+});
+
+test('function plots fit the reading column on desktop, mobile and print', async ({ page }) => {
+  await page.goto(noteRoute(specimen));
+  await page.evaluate(() => document.fonts.ready);
+  const plot = page.locator('#trigonometric-plot');
+  await expect(plot.locator('.function-plot')).toHaveAttribute('role', 'img');
+  await expect(plot.locator('.function-plot')).toHaveAttribute('aria-label', /正弦与余弦/);
+  await expect(plot.locator('figcaption')).toContainText('正弦与余弦');
+  for (const width of [1280, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const region of await page.locator('.function-plot').all()) {
+      const size = await region.evaluate(node => {
+        const svg = node.querySelector('svg');
+        const box = svg.getBoundingClientRect();
+        const outer = node.getBoundingClientRect();
+        return { width: box.width, height: box.height, available: outer.width,
+          ratio: svg.viewBox.baseVal.width / svg.viewBox.baseVal.height,
+          centered: Math.abs(box.left - outer.left - (outer.right - box.right)),
+          scroll: node.scrollWidth - node.clientWidth };
+      });
+      expect(size.width).toBeGreaterThan(230);
+      expect(size.width).toBeLessThanOrEqual(Math.min(354, size.available + 1));
+      expect(size.width / size.height).toBeCloseTo(size.ratio, 2);
+      expect(size.centered).toBeLessThan(2);
+      expect(size.scroll).toBeLessThanOrEqual(1);
+    }
+    await plot.screenshot({ path: `/tmp/liber-function-plot-${width}.png` });
+    const implicit = page.locator('#implicit-curves');
+    const circle = implicit.locator('path[stroke="#ff0000"][stroke-width="1.15"]').first();
+    const circleRatio = await circle.evaluate(path => {
+      const box = path.getBBox();
+      return box.width / box.height;
+    });
+    expect(circleRatio).toBeCloseTo(1, 2);
+    await implicit.screenshot({ path: `/tmp/liber-implicit-plot-${width}.png` });
+  }
+  await page.locator('a[href="#trigonometric-plot"]').click();
+  await expect(plot).toBeInViewport();
+  await page.emulateMedia({ media: 'print' });
+  await expect(plot.locator('svg')).toBeVisible();
 });
 
 test('desktop and mobile have no horizontal page overflow or missing assets', async ({ page }) => {
