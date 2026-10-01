@@ -3,6 +3,7 @@ if (directory) {
   document.querySelector('[data-directory-search]').hidden = false;
   const search = document.querySelector('#note-search');
   const files = [...directory.querySelectorAll('.file-node')];
+  const unit = directory.dataset.fileUnit || '篇笔记';
   const folders = [...directory.querySelectorAll('details[data-directory]')];
   let beforeSearch = null;
   const update = () => {
@@ -22,8 +23,8 @@ if (directory) {
     if (!terms.length) beforeSearch = null;
     const empty = directory.querySelector('.empty-state');
     if (empty) empty.hidden = count !== 0;
-    document.querySelector('[data-file-count]').textContent = terms.length ? `${count} / ${files.length} 篇笔记` : `${files.length} 篇笔记`;
-    document.querySelector('#search-status').textContent = `找到 ${count} 篇笔记`;
+    document.querySelector('[data-file-count]').textContent = terms.length ? `${count} / ${files.length} ${unit}` : `${files.length} ${unit}`;
+    document.querySelector('#search-status').textContent = `找到 ${count} ${unit}`;
   };
   search.addEventListener('input', update);
   document.querySelector('#clear-search')?.addEventListener('click', () => { search.value = ''; update(); search.focus(); });
@@ -45,7 +46,7 @@ if (article) {
   const printButton = document.querySelector('.print-button');
   printButton.hidden = false;
   printButton.addEventListener('click', () => window.print());
-  const links = [...document.querySelectorAll('.toc a')];
+  const links = [...document.querySelectorAll('.toc a[href^="#"]')];
   const headings = links.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter(Boolean);
   let ticking = false;
   const updateReading = () => {

@@ -18,6 +18,17 @@
 // Slash syntax follows the default style; explicit frac(...) stays stacked.
 #let frac = math.frac.with(style: "vertical")
 
+// The folder supplies the chapter; each section is compiled with prior counters.
+#let _chapter = sys.inputs.at("book-chapter", default: none)
+#let _section = sys.inputs.at("book-section", default: none)
+#let _book-counters = json(bytes(sys.inputs.at("book-counters", default: "{}")))
+#let _numbering(pattern) = if _chapter == none { pattern } else {
+  (..numbers) => numbering(pattern, int(_chapter), ..numbers.pos())
+}
+#let _heading-numbering = if _section == none { _numbering("1.1") } else {
+  (..numbers) => numbering("1.1", int(_chapter), int(_section), ..numbers.pos())
+}
+
 #let note(doc) = {
   // The build supplies the title from the filename.
   set document(title: sys.inputs.at("note-title", default: ""), author: "xiaou0")
@@ -25,7 +36,8 @@
   set smartquote(enabled: false)
   set quote(block: true)
   set math.frac(style: "horizontal")
-  set heading(numbering: "1.1")
+  set heading(numbering: _heading-numbering)
+  set figure(numbering: _numbering("1.1"))
   // Keep explicit labels even when only another note references them.
   show heading: _labelled
   show figure: _labelled
@@ -34,7 +46,23 @@
   [#metadata(none) <note>]
   // Validate the template from the HTML, without a second Typst evaluation.
   html.elem("span", attrs: ("data-note-template": "", hidden: ""), [])
+  if _chapter != none {
+    context {
+      for kind in query(figure).map(it => it.kind).dedup() {
+        counter(figure.where(kind: kind)).update(_book-counters.at(repr(kind), default: 0))
+      }
+    }
+  }
   doc
+  if _chapter != none {
+    context {
+      let counts = _book-counters
+      for kind in query(figure).map(it => it.kind).dedup() {
+        counts.insert(repr(kind), counter(figure.where(kind: kind)).get().first())
+      }
+      html.elem("div", attrs: ("data-book-counters": json.encode(counts), hidden: ""), [])
+    }
+  }
 }
 
 // Resolve after all notes compile, so mutual references never import each other.
@@ -47,6 +75,21 @@
     message: "target 必须是标签或字符串.")
   html.elem("a", attrs: (
     "data-note": file,
+    "data-note-target": if target == none { "" } else { str(target) },
+    "data-note-auto": if body == none { "true" } else { "false" },
+  ), if body == none { [] } else { body })
+}
+
+// Paths start at content/books/; ./ addresses the current chapter folder.
+#let book-ref(file, target: none, ..rest) = {
+  assert(rest.pos().len() <= 1 and rest.named().len() == 0,
+    message: "自定义链接文字请放在 book-ref(...)[文字] 中.")
+  assert(type(file) == str, message: "book-ref 的文件名必须是字符串.")
+  assert(target == none or type(target) in (str, label),
+    message: "target 必须是标签或字符串.")
+  let body = rest.pos().at(0, default: none)
+  html.elem("a", attrs: (
+    "data-book": file,
     "data-note-target": if target == none { "" } else { str(target) },
     "data-note-auto": if body == none { "true" } else { "false" },
   ), if body == none { [] } else { body })
@@ -74,7 +117,7 @@
   html.elem("div", attrs: (class: "env-body", "data-env": kind), body),
   kind: kind,
   supplement: name,
-  numbering: if numbered { "1" } else { none },
+  numbering: if numbered { _numbering("1.1") } else { none },
   caption: if numbered {
     if title == "" { [] } else { html.elem("span", attrs: (class: "env-title"), [(#title)]) }
   } else {

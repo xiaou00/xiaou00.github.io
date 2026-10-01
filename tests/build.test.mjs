@@ -13,6 +13,7 @@ import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
 import './young.test.mjs';
 import './function-plot.test.mjs';
+import './books.test.mjs';
 import './geopedia.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {

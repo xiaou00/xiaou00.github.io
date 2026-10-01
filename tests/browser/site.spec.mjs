@@ -284,6 +284,18 @@ test('function plots fit the reading column on desktop, mobile and print', async
       expect(size.width / size.height).toBeCloseTo(size.ratio, 2);
       expect(size.centered).toBeLessThan(2);
       expect(size.scroll).toBeLessThanOrEqual(1);
+      const spacing = await region.locator('path[fill="#bbbbbb"]').evaluateAll(dots => {
+        const centers = dots.map(dot => {
+          const box = dot.getBoundingClientRect();
+          return [box.x + box.width / 2, box.y + box.height / 2];
+        });
+        return [0, 1].map(axis => {
+          const values = [...new Set(centers.map(point => point[axis]))].sort((a, b) => a - b);
+          return values[1] - values[0];
+        });
+      });
+      expect(spacing[0]).toBeGreaterThan(0);
+      expect(spacing[0]).toBeCloseTo(spacing[1], 2);
     }
     await plot.screenshot({ path: `/tmp/liber-function-plot-${width}.png` });
     const implicit = page.locator('#implicit-curves');

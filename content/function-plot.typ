@@ -2,10 +2,14 @@
 // https://typst.app/docs/reference/visualize/curve/
 #let _finite(value) = type(value) in (int, float) and value == value and calc.abs(value) < calc.inf
 
-#let _ticks(limits) = {
-  let raw = (limits.last() - limits.first()) / 10
+#let _tick-step(span) = {
+  let raw = span / 10
   let power = calc.pow(10, calc.floor(calc.log(raw, base: 10)))
-  let step = (1, 2, 5, 10).find(n => n * power >= raw) * power
+  (1, 2, 5, 10).find(n => n * power >= raw) * power
+}
+
+#let _ticks(limits, step: none) = {
+  let step = if step == none { _tick-step(limits.last() - limits.first()) } else { step }
   let first = int(calc.ceil(limits.first() / step))
   let last = int(calc.floor(limits.last() / step))
   range(first, last + 1).map(i => i * step)
@@ -125,7 +129,7 @@
   labels: none, x-label: none, y-label: none,
   colors: (rgb("#ff0000"), rgb("#242424"), rgb("#777777")),
   grid: true, samples: 400, breaks: (),
-  implicit: false, equal: false,
+  implicit: false, equal: true,
   caption: none, alt: "函数图像",
 ) = {
   let fs = if type(functions) == function { (functions,) } else { functions }
@@ -176,8 +180,10 @@
     let py(y) = top-pad + (ymax - y) / (ymax - ymin) * h
     let x0 = px(calc.clamp(0, xmin, xmax))
     let y0 = py(calc.clamp(0, ymin, ymax))
-    let xticks = _ticks(x-range)
-    let yticks = _ticks(y-range)
+    // Equal axis units also need one shared tick step for square grid cells.
+    let step = if equal { _tick-step(calc.max(xmax - xmin, ymax - ymin)) } else { none }
+    let xticks = _ticks(x-range, step: step)
+    let yticks = _ticks(y-range, step: step)
     let axis-stroke = 0.55pt + rgb("#777777")
     let frame-stroke = 0.65pt + black
     let tick-stroke = 0.5pt + black
@@ -249,4 +255,3 @@
 
 // Express F(x, y) = 0 as a numeric function. Equal axis units preserve circles.
 #let implicit-plot = function-plot.with(implicit: true, equal: true, samples: 80, alt: "隐式方程图像")
-

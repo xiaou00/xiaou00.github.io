@@ -8,6 +8,7 @@ import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs'
 import { TypstCompiler } from './typst-compiler.mjs';
 import { prepareTypstFonts } from './typst-fonts.mjs';
 import { discoverObjectFiles, objectIdentity, objectMetadata, finishObject } from './geopedia.mjs';
+import { sectionIdentity, discoverBookFiles, groupBooks } from './books.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
@@ -50,6 +51,9 @@ function namespaceSvg(svg, prefix) {
 
 export function prepareDocument(source, { filename, object = false } = {}) {
   const { document } = parseHTML(source);
+  const counterMarker = document.querySelector('[data-book-counters]');
+  const bookCounters = counterMarker ? JSON.parse(counterMarker.getAttribute('data-book-counters')) : null;
+  counterMarker?.remove();
   const templates = [...document.querySelectorAll('[data-note-template]')];
   if (filename !== undefined && templates.length !== 1) throw new Error(`${filename}: 每篇文稿必须且只能调用一次 note 模板.`);
   if (filename !== undefined && !object && document.querySelector('[data-object-template]')) throw new Error(`${filename}: encyclopedia 文件请放在 content/geopedia/ 对应类别目录中.`);
@@ -144,7 +148,7 @@ export function prepareDocument(source, { filename, object = false } = {}) {
     wrapper.append(element);
   }
   const text = document.body.textContent.replace(/\s+/g, ' ').trim();
-  return { html: document.body.innerHTML, text, toc, styles };
+  return { html: document.body.innerHTML, text, toc, styles, bookCounters };
 }
 
 export async function build({ dev = false, compilerSession = null, fresh = false } = {}) {
@@ -161,12 +165,14 @@ async function buildSite({ dev, session, fresh }) {
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
   const site = { ...config };
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base 必须形如 / 或 /repository-name/.');
-  const { homePage, notePage, objectPage, geopediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
+  const { homePage, notePage, booksPage, bookPage, bookChapterPage, objectPage, geopediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
   const schema = JSON.parse(await readFile(join(contentRoot, 'geopedia-schema.json'), 'utf8'));
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
+  const bookFiles = await discoverBookFiles(join(contentRoot, 'books'));
   const objectFiles = await discoverObjectFiles(join(contentRoot, 'geopedia'));
   const fontPath = await prepareTypstFonts(ROOT);
   await session.retain([...filenames.map(filename => join(contentRoot, 'notes', filename)),
+    ...bookFiles.map(filename => join(contentRoot, 'books', filename)),
     ...objectFiles.map(filename => join(contentRoot, 'geopedia', filename))]);
   const notes = [];
   const compilation = { cached: 0, incremental: 0, cold: 0 };
@@ -179,6 +185,26 @@ async function buildSite({ dev, session, fresh }) {
     notes.push({ ...noteIdentity(filename), slug, ...prepareDocument(compiled.html, { filename }) });
   }
   notes.sort((a, b) => compareNames(a.slug, b.slug));
+  const sections = [];
+  let chapterSlug = null;
+  let counters = {};
+  for (const filename of bookFiles) {
+    const identity = sectionIdentity(filename);
+    if (identity.chapterSlug !== chapterSlug) {
+      chapterSlug = identity.chapterSlug;
+      counters = {};
+    }
+    const flags = ['--features', 'html', '--root', contentRoot, '--ignore-system-fonts', '--font-path', fontPath,
+      '--input', `note-title=${identity.title}`, '--input', `book-chapter=${identity.chapterNumber}`,
+      '--input', `book-section=${identity.sectionNumber}`, '--input', `book-counters=${JSON.stringify(counters)}`];
+    const compiled = await session.compile(join(contentRoot, 'books', filename), flags, { fresh });
+    compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
+    const document = prepareDocument(compiled.html, { filename });
+    if (!document.bookCounters) throw new Error(`${filename}: 缺少书籍计数信息, 请使用公共 note 模板.`);
+    counters = document.bookCounters;
+    sections.push({ ...identity, ...document });
+  }
+  const books = groupBooks(sections);
   const objects = [];
   for (const filename of objectFiles) {
     const identity = objectIdentity(filename);
@@ -190,7 +216,7 @@ async function buildSite({ dev, session, fresh }) {
   }
   const categories = Object.keys(schema.categories);
   objects.sort((a, b) => categories.indexOf(a.category) - categories.indexOf(b.category) || a.number - b.number);
-  resolveNoteLinks(notes, site, objects);
+  resolveNoteLinks(notes, site, objects, sections);
   objects.forEach(finishObject);
   const outputDir = join(ROOT, dev ? '.build/dev' : 'dist');
   const stage = join(ROOT, dev ? '.build/site-dev' : '.build/site');
@@ -201,13 +227,30 @@ async function buildSite({ dev, session, fresh }) {
   await cp(join(ROOT, 'src/style.css'), join(stage, 'style.css'));
   await cp(join(ROOT, 'src/client.js'), join(stage, 'client.js'));
   await cp(contentRoot, join(stage, 'sources'), { recursive: true, filter: source => !relative(contentRoot, source).split(/[\\/]/).some(part => part.startsWith('_') || part.startsWith('.')) });
-  await writeFile(join(stage, 'typst.css'), [...new Set([...notes, ...objects].flatMap(note => note.styles))].join('\n'));
+  await writeFile(join(stage, 'typst.css'), [...new Set([...notes, ...sections, ...objects].flatMap(note => note.styles))].join('\n'));
   await writeFile(join(stage, 'index.html'), homePage(site, notes, dev));
   await writeFile(join(stage, '404.html'), notFoundPage(site, dev));
   for (const note of notes) {
     const folder = join(stage, 'notes', note.slug);
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, 'index.html'), notePage(site, note, notes, dev));
+  }
+  await mkdir(join(stage, 'books'), { recursive: true });
+  await writeFile(join(stage, 'books/index.html'), booksPage(site, sections, dev));
+  for (const book of books) {
+    const folder = join(stage, 'books', book.title);
+    await mkdir(folder, { recursive: true });
+    await writeFile(join(folder, 'index.html'), bookPage(site, book, dev));
+    for (const chapter of book.chapters) {
+      const chapterFolder = join(stage, 'books', chapter.slug);
+      await mkdir(chapterFolder, { recursive: true });
+      await writeFile(join(chapterFolder, 'index.html'), bookChapterPage(site, book, chapter, dev));
+      for (const section of chapter.sections) {
+        const sectionFolder = join(stage, 'books', section.slug);
+        await mkdir(sectionFolder, { recursive: true });
+        await writeFile(join(sectionFolder, 'index.html'), notePage(site, section, book.sections, dev));
+      }
+    }
   }
   await mkdir(join(stage, 'geopedia'), { recursive: true });
   await writeFile(join(stage, 'geopedia/index.html'), geopediaPage(site, objects, schema, dev));
@@ -228,8 +271,8 @@ async function buildSite({ dev, session, fresh }) {
     throw error;
   }
   await rm(previous, { recursive: true, force: true });
-  console.log(`✓ ${notes.length} 篇文稿, ${objects.length} 个几何对象 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
-  return { site, notes, objects, outputDir, compilation, fingerprint };
+  console.log(`✓ ${notes.length} 篇文稿, ${books.length} 本书籍 / ${sections.length} 节, ${objects.length} 个几何对象 → HTML + MathML · 缓存 ${compilation.cached}, 增量 ${compilation.incremental}, 首次编译 ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
+  return { site, notes, books, sections, objects, outputDir, compilation, fingerprint };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

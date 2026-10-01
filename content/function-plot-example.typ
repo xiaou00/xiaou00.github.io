@@ -50,6 +50,18 @@
 
 @implicit-curves 默认采用等比例坐标, 保持图形原本的比例.
 
+函数列表也可以分行书写, 每一项分别绘制一条曲线:
+
+#implicit-plot(
+  (
+    (x, y) => x + y,
+    (x, y) => x - y,
+  ),
+  x-range: (-3, 3), y-range: (-3, 3),
+  labels: ($x + y = 0$, $x - y = 0$),
+  caption: [两条直线],
+)
+
 #implicit-plot(
   (x, y) => x*y - 1,
   x-range: (-3, 3), y-range: (-3, 3),

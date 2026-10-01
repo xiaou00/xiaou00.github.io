@@ -1,6 +1,7 @@
 import { posix } from 'node:path';
-import { compareNames, encodeNotePath, noteUrl } from '../scripts/note-paths.mjs';
+import { compareNames, encodeNotePath } from '../scripts/note-paths.mjs';
 import { documentTitle, documentUrl, objectGroups, objectUrl } from '../scripts/geopedia.mjs';
+import { bookUrl, chapterUrl, compareBookSections, groupBooks } from '../scripts/books.mjs';
 
 export function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -19,6 +20,7 @@ function header(site, section) {
     <nav aria-label="主导航">
       <a href="${href(site)}" ${section === 'home' ? 'aria-current="page"' : ''}>首页</a>
       <a href="${href(site)}#writings" ${section === 'notes' ? 'aria-current="page"' : ''}>文稿</a>
+      <a href="${href(site, 'books/')}" ${section === 'books' ? 'aria-current="page"' : ''}>书籍</a>
       <a href="${href(site, 'geopedia/')}" ${section === 'geopedia' ? 'aria-current="page"' : ''}>GeoPedia</a>
     </nav>
   </div></header>`;
@@ -56,7 +58,7 @@ function fileTree(site, notes) {
     }
     current.files.push(note);
   }
-  const render = directory => `<ul class="file-tree">${[...directory.directories.values()].sort((a, b) => compareNames(a.name, b.name)).map(child => `<li class="directory-node"><details data-directory="${e(child.path)}"><summary>${chevron}<span class="directory-name">${e(child.name)}</span></summary>${render(child)}</details></li>`).join('')}${directory.files.sort((a, b) => compareNames(a.title, b.title)).map(note => `<li class="file-node" data-file="${e(note.slug)}.typ" data-search="${e(`${note.slug}.typ ${note.text}`.toLocaleLowerCase())}"><a class="file-link" href="${noteUrl(site, note.slug)}"><span class="file-name">${e(note.title)}</span><span class="file-arrow">${arrow}</span></a></li>`).join('')}</ul>`;
+  const render = directory => `<ul class="file-tree">${[...directory.directories.values()].sort((a, b) => compareNames(a.name, b.name)).map(child => `<li class="directory-node"><details data-directory="${e(child.path)}"><summary>${chevron}<span class="directory-name">${e(child.name)}</span></summary>${render(child)}</details></li>`).join('')}${directory.files.sort((a, b) => compareNames(a.title, b.title)).map(note => `<li class="file-node" data-file="${e(note.slug)}.typ" data-search="${e(`${note.slug}.typ ${note.text}`.toLocaleLowerCase())}"><a class="file-link" href="${documentUrl(site, note)}"><span class="file-name">${e(note.title)}</span><span class="file-arrow">${arrow}</span></a></li>`).join('')}</ul>`;
   return render(root);
 }
 
@@ -79,41 +81,94 @@ export function homePage(site, notes, dev) {
   </main>` });
 }
 
+export function booksPage(site, sections, dev) {
+  return layout(site, { title: '书籍', section: 'books', path: 'books/', dev, body: `
+    <main id="main" class="books content-width">
+      <header class="books-heading"><h1>书籍</h1></header>
+      <div class="directory-browser" data-file-unit="节">
+        <div class="directory-toolbar"><h2>书籍目录</h2><label class="search-field" data-directory-search hidden>${searchIcon}<input type="search" id="note-search" placeholder="查找书籍或小节..." aria-label="搜索书籍与小节" autocomplete="off"><kbd>/</kbd></label></div>
+        <p id="search-status" class="sr-only" role="status" aria-live="polite"></p><nav aria-label="书籍文件目录">${fileTree(site, sections)}</nav>
+        ${sections.length ? `<div class="empty-state" hidden><h3>没有找到小节</h3><p>试试其他关键词, 或清除搜索.</p><button id="clear-search">查看全部小节 ${arrow}</button></div>` : '<div class="directory-empty">这里还没有书籍.</div>'}
+        <div class="directory-footer"><span data-file-count>${sections.length} 节</span><div class="directory-actions" hidden><button data-expand-all>全部展开</button><span aria-hidden="true">/</span><button data-collapse-all>全部折叠</button></div></div>
+      </div>
+    </main>` });
+}
+
+function sectionOutline(site, section) {
+  const url = documentUrl(site, section);
+  if (!section.toc.length) return `<li class="file-node"><a class="file-link" href="${url}"><span class="file-name">${e(section.title)}</span><span class="file-arrow">${arrow}</span></a></li>`;
+  return `<li class="file-node"><details class="section-outline chapter-outline">
+    <summary>${chevron}<a class="file-name" href="${url}">${e(section.title)}</a></summary>
+    <ol class="chapter-sections">${section.toc.map(item => `<li style="--section-level:${item.level - 1}"><a href="${url}#${encodeURIComponent(item.id)}">${e(item.text)}</a></li>`).join('')}</ol>
+  </details></li>`;
+}
+
+export function bookPage(site, book, dev) {
+  const chapters = book.chapters.map(chapter => `<li class="file-node"><details class="chapter-outline">
+    <summary>${chevron}<a class="file-name" href="${chapterUrl(site, chapter.slug)}">${e(chapter.title)}</a></summary>
+    <ol class="chapter-sections">${chapter.sections.map(section => `<li><a href="${documentUrl(site, section)}">${e(section.title)}</a></li>`).join('')}</ol>
+  </details></li>`).join('');
+  return layout(site, { title: book.title, section: 'books', path: `books/${encodeNotePath(book.title)}/`, dev, body: `
+    <main id="main" class="books content-width">
+      <div class="breadcrumb"><a href="${href(site, 'books/')}">书籍</a><span>/</span><span>${e(book.title)}</span></div>
+      <header class="books-heading"><h1>${e(book.title)}</h1></header>
+      <nav aria-label="全书章节"><ol class="file-tree">${chapters}</ol></nav>
+    </main>` });
+}
+
+export function bookChapterPage(site, book, chapter, dev) {
+  return layout(site, { title: `${chapter.title} - ${book.title}`, section: 'books', path: `books/${encodeNotePath(chapter.slug)}/`, dev, body: `
+    <main id="main" class="books content-width">
+      <div class="breadcrumb"><a href="${href(site, 'books/')}">书籍</a><span>/</span><a href="${bookUrl(site, book.title)}">${e(book.title)}</a><span>/</span><span>${e(chapter.title)}</span></div>
+      <header class="books-heading"><h1>${e(chapter.title)}</h1></header>
+      <nav aria-label="本章小节"><ol class="file-tree">${chapter.sections.map(section => sectionOutline(site, section)).join('')}</ol></nav>
+    </main>` });
+}
+
+function bookToc(site, sections, current) {
+  const book = groupBooks(sections).find(book => book.title === current.book);
+  return book.chapters.map(chapter => `<li><details class="book-toc-chapter" ${chapter.slug === current.chapterSlug ? 'open' : ''}>
+    <summary>${e(chapter.title)}</summary><ol>${chapter.sections.map(section => `<li><a href="${documentUrl(site, section)}" ${section === current ? 'class="active" aria-current="page"' : ''}>${e(section.title)}</a></li>`).join('')}</ol>
+  </details></li>`).join('');
+}
+
 export function notePage(site, note, notes, dev, schema = null) {
   const isObject = Boolean(note.objectId);
+  const isBook = Boolean(note.book);
   const folder = isObject ? note.category : posix.dirname(note.slug);
   const prefixes = isObject ? objectGroups(schema).find(group => group.prefixes.includes(folder)).prefixes : [];
   const siblings = isObject ? notes.filter(other => prefixes.includes(other.category))
     .sort((a, b) => prefixes.indexOf(a.category) - prefixes.indexOf(b.category) || a.number - b.number)
+    : isBook ? notes.filter(other => other.book === note.book).sort(compareBookSections)
     : notes.filter(other => posix.dirname(other.slug) === folder).sort((a, b) => compareNames(a.title, b.title));
   const index = siblings.indexOf(note);
   const previous = siblings[index - 1];
   const next = siblings[index + 1];
-  const returnUrl = isObject ? href(site, 'geopedia/') : `${href(site)}#writings`;
-  const returnTitle = isObject ? 'GeoPedia' : '笔记目录';
+  const returnUrl = isObject ? href(site, 'geopedia/') : isBook ? bookUrl(site, note.book) : `${href(site)}#writings`;
+  const returnTitle = isObject ? 'GeoPedia' : isBook ? '全书目录' : '笔记目录';
   const returnAttribute = isObject ? 'data-geopedia-return' : '';
   const paginationAttribute = isObject ? 'data-object-link' : '';
-  const path = isObject ? `geopedia/${note.objectId}/` : `notes/${encodeNotePath(note.slug)}/`;
-  const sourcePath = isObject ? `geopedia/${note.filename}` : `notes/${encodeNotePath(note.slug)}.typ`;
+  const path = isObject ? `geopedia/${note.objectId}/` : `${isBook ? 'books' : 'notes'}/${encodeNotePath(note.slug)}/`;
+  const sourcePath = isObject ? `geopedia/${note.filename}` : `${isBook ? 'books' : 'notes'}/${encodeNotePath(note.slug)}.typ`;
   const references = [
     { title: '本文引用', direction: 'outgoing', notes: note.outgoing },
     { title: '引用本文', direction: 'incoming', notes: note.incoming },
   ].filter(group => group.notes.length);
-  return layout(site, { title: documentTitle(note), note: true, section: isObject ? 'geopedia' : 'notes', dev, path, body: `
+  return layout(site, { title: documentTitle(note), note: true, section: isObject ? 'geopedia' : isBook ? 'books' : 'notes', dev, path, body: `
   <div class="reading-progress" aria-hidden="true"><span></span></div><main id="main" class="reading-main content-width">
-    <div class="breadcrumb"><a ${returnAttribute} href="${returnUrl}">${returnTitle}</a><span>/</span><span>${e(isObject ? `${schema.categories[note.category]} / ${note.objectId}` : note.slug.split('/').join(' / '))}</span></div>
-    <header class="article-header">${isObject ? `<div class="article-notebook object-id">${e(note.objectId)}</div>` : note.notebook ? `<div class="article-notebook">${folderIcon}<span>${e(note.notebook)}</span></div>` : ''}
+    <div class="breadcrumb">${isBook ? `<a href="${href(site, 'books/')}">书籍</a><span>/</span>` : ''}<a ${returnAttribute} href="${returnUrl}">${isBook ? e(note.book) : returnTitle}</a><span>/</span>${isBook ? `<a href="${chapterUrl(site, note.chapterSlug)}">${e(note.chapterTitle)}</a><span>/</span>` : ''}<span>${e(isObject ? `${schema.categories[note.category]} / ${note.objectId}` : isBook ? note.title : note.slug.split('/').join(' / '))}</span></div>
+    <header class="article-header">${isObject ? `<div class="article-notebook object-id">${e(note.objectId)}</div>` : note.notebook ? `<div class="article-notebook">${folderIcon}${isBook ? `<a href="${bookUrl(site, note.book)}">${e(note.book)}</a>` : `<span>${e(note.notebook)}</span>`}</div>` : ''}
       <h1 class="${isObject ? 'object-name' : ''}">${isObject ? note.nameHtml : e(note.title)}</h1>
       ${isObject && note.introductionHtml ? `<div class="object-introduction">${note.introductionHtml}</div>` : ''}
     </header>
-    <div class="reading-grid"><aside class="toc-aside"><details class="toc" open><summary>本篇目录</summary><nav aria-label="笔记目录"><ol>${note.toc.map(item => `<li class="toc-level-${item.level}"><a href="#${e(item.id)}">${e(item.text)}</a></li>`).join('')}</ol></nav></details>
+    <div class="reading-grid"><aside class="toc-aside">${isBook ? `<details class="toc book-toc" open><summary>全书目录</summary><nav aria-label="全书章节"><ol>${bookToc(site, siblings, note)}</ol></nav></details>` : ''}<details class="toc" open><summary>${isBook ? '本节目录' : '本篇目录'}</summary><nav aria-label="笔记目录"><ol>${note.toc.map(item => `<li class="toc-level-${item.level}"><a href="#${e(item.id)}">${e(item.text)}</a></li>`).join('')}</ol></nav></details>
       <a class="source-link" href="${href(site, `sources/${sourcePath}`)}" download><span>Typst 源文件</span><span aria-hidden="true">↓</span></a><button class="print-button" hidden>打印 / 保存 PDF <span aria-hidden="true">↗</span></button>
     </aside><div class="article-column"><article class="typst-content" aria-label="${e(note.title)}">${note.html}</article>
       <div class="article-bottom"><a ${returnAttribute} href="${returnUrl}">← 返回${returnTitle}</a></div>
       ${references.length ? `<section class="note-connections" aria-label="文稿与对象之间的引用">${references.map(group => `<div class="connection-group" data-direction="${group.direction}"><h2>${group.title}<span>${group.notes.length}</span></h2><ul>${group.notes.map(other => `<li><a href="${documentUrl(site, other)}"><span>${e(documentTitle(other))}</span>${arrow}</a></li>`).join('')}</ul></div>`).join('')}</section>` : ''}
-      ${previous || next ? `<nav class="note-pagination" aria-label="${isObject ? '同类的相邻对象' : '同一笔记本的相邻笔记'}">
-        ${previous ? `<a ${paginationAttribute} rel="prev" href="${documentUrl(site, previous)}"><span class="note-pagination-label">← 上一${isObject ? '个' : '篇'}</span><span>${e(documentTitle(previous))}</span></a>` : ''}
-        ${next ? `<a ${paginationAttribute} rel="next" href="${documentUrl(site, next)}"><span class="note-pagination-label">下一${isObject ? '个' : '篇'} →</span><span>${e(documentTitle(next))}</span></a>` : ''}
+      ${previous || next ? `<nav class="note-pagination" aria-label="${isObject ? '同类的相邻对象' : isBook ? '同一本书的相邻小节' : '同一笔记本的相邻笔记'}">
+        ${previous ? `<a ${paginationAttribute} rel="prev" href="${documentUrl(site, previous)}"><span class="note-pagination-label">← 上一${isObject ? '个' : isBook ? '节' : '篇'}</span><span>${e(documentTitle(previous))}</span></a>` : ''}
+        ${next ? `<a ${paginationAttribute} rel="next" href="${documentUrl(site, next)}"><span class="note-pagination-label">下一${isObject ? '个' : isBook ? '节' : '篇'} →</span><span>${e(documentTitle(next))}</span></a>` : ''}
       </nav>` : ''}
     </div></div>
   </main>` });

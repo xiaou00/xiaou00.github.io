@@ -144,3 +144,28 @@
 .typst-content p.object-unrecorded{font-size:12px;color:var(--muted);margin:14px 0 24px}
 @media(max-width:760px){.geopedia.content-width{padding-top:40px;padding-bottom:65px}.geopedia-heading{padding-bottom:28px}.geopedia-heading h1{font-size:30px}.object-category-nav{gap:12px 20px}.object-group{padding-top:28px}.object-group h2{font-size:18px;gap:10px}.object-group li>a{grid-template-columns:83px minmax(0,1fr) 16px;gap:10px;padding:18px 0}.object-group .object-name{font-size:17px}.object-id{font-size:11px}.object-introduction{font-size:16px}.typst-content .object-facts>div{grid-template-columns:minmax(70px,28%) minmax(0,1fr);gap:15px}.site-header nav{gap:18px}}
 @media(max-width:420px){.header-inner{gap:12px}.site-header nav{gap:14px}.wordmark{font-size:18px}.geopedia-heading h1{font-size:27px}}
+
+/* Books reuse the note directory and reading layout. */
+.books.content-width{width:min(760px,calc(100% - 48px));min-height:65vh;padding-top:48px;padding-bottom:80px}
+.books-heading{padding-bottom:28px}
+.books-heading h1{font:400 36px/1.5 var(--serif);overflow-wrap:anywhere}
+.books>.breadcrumb{margin:0 0 24px}
+.book-toc{margin-bottom:24px}
+.chapter-outline>summary{display:flex;align-items:center;gap:10px;min-height:50px;padding:12px 0;list-style:none;cursor:pointer}
+.chapter-outline>summary::-webkit-details-marker{display:none}
+.chapter-outline>summary .directory-chevron{width:10px;height:13px;flex-shrink:0;color:var(--muted);transition:transform .18s}
+.chapter-outline[open]>summary .directory-chevron{transform:rotate(90deg)}
+.chapter-outline>summary:hover .directory-chevron,.chapter-outline a:hover{color:var(--crimson)}
+.chapter-sections{list-style:none;margin:0 0 14px 5px;padding:0 0 0 19px;border-left:1px solid var(--line)}
+.chapter-sections li{padding-left:calc(var(--section-level,0)*1em)}
+.chapter-sections a{display:block;padding:7px 0;font-size:14px;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}
+.book-toc-chapter>summary{padding:9px 0;border:0;font-size:11px;letter-spacing:0;line-height:1.7;overflow-wrap:anywhere}
+.book-toc-chapter>summary::after{content:'+';font-size:13px;color:var(--muted);margin-left:auto}
+.book-toc-chapter[open]>summary::after{content:'−'}
+.book-toc>nav>ol,.book-toc-chapter>ol{display:block}
+.book-toc-chapter>ol{padding-top:0}
+.book-toc-chapter a{font-size:10px;padding-left:12px}
+.books .breadcrumb,.reading-page .breadcrumb{flex-wrap:wrap}
+.article-notebook>a:hover{color:var(--crimson)}
+@media(max-width:760px){.books.content-width{padding-top:36px;padding-bottom:56px}.books-heading h1{font-size:28px}.site-header nav{gap:12px}}
+@media(max-width:380px){.header-inner{width:calc(100% - 32px);gap:10px}.wordmark{font-size:18px}.site-header nav{gap:10px}}

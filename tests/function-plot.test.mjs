@@ -26,6 +26,14 @@ See @circle.
 #implicit-plot((x, y) => x*y - 1, x-range: (-3, 3), y-range: (-3, 3))
 #implicit-plot((x, y) => x*y, x-range: (-3, 3), y-range: (-3, 3))
 #implicit-plot((x, y) => if x < 0 { none } else { x*x + y*y - 4 }, x-range: (-3, 3), y-range: (-3, 3))
+#implicit-plot(
+  (
+    (x, y) => x + y,
+    (x, y) => x - y,
+  ),
+  x-range: (-3, 3), y-range: (-3, 3),
+  labels: ($x + y = 0$, $x - y = 0$),
+)
 `;
   const curves = svg => [...svg.querySelectorAll('path[stroke-width="1.15"]')].filter(path => /[ML]/.test(path.getAttribute('d')));
   try {
@@ -38,7 +46,7 @@ See @circle.
     const first = await compiler.compile(input, flags);
     const { document } = parseHTML(first.html);
     const svgs = [...document.querySelectorAll('.function-plot > svg')];
-    assert.equal(svgs.length, 10);
+    assert.equal(svgs.length, 11);
     assert.equal(svgs[0].getAttribute('viewBox'), '0 0 264 180');
     assert.ok(document.querySelector('a[href="#parabola"]'), 'figure labels resolve');
     assert.ok(document.querySelector('math'), 'surrounding math stays native');
@@ -52,13 +60,13 @@ See @circle.
     assert.equal((reciprocal.match(/m/g) || []).length, 2, 'a pole has two separate branches');
     const domain = curves(svgs[3])[0].getAttribute('d');
     assert.equal((domain.match(/m/g) || []).length, 1, 'undefined values leave a gap');
-    assert.match(domain, /m 108 72/, 'sqrt starts at the origin, halfway along the plot');
+    assert.match(domain, /m 72 72/, 'sqrt starts at the origin in the default equal-scale plot');
     assert.equal(curves(svgs[4]).length, 0, 'non-finite results never become SVG coordinates');
     assert.ok(!svgs.some(svg => /NaN|Infinity/.test(svg.outerHTML)));
     assert.ok(document.querySelector('a[href="#circle"]'));
-    assert.equal(document.querySelectorAll('.implicit-plot').length, 4);
+    assert.equal(document.querySelectorAll('.implicit-plot').length, 5);
     // Decode the emitted line segments, then test their mathematical geometry.
-    const segments = svg => curves(svg).flatMap(path => {
+    const segments = paths => paths.flatMap(path => {
       const values = path.getAttribute('d').match(/[MLHVmlhv]|[-+]?(?:\d*\.)?\d+(?:e[-+]?\d+)?/g);
       const output = [];
       let p = [0, 0];
@@ -79,24 +87,33 @@ See @circle.
       }
       return output.map(line => line.map(([x, y]) => [x / 144 * 6 - 3, 3 - y / 144 * 6]));
     });
-    const circle = segments(svgs[6]);
+    const circle = segments(curves(svgs[6]));
     assert.ok(circle.length > 100, 'implicit curves contain real vector segments');
     for (const [x, y] of circle.flat()) assert.ok(Math.abs(x*x + y*y - 4) < 0.01, 'circle roots retain equal axis units');
-    const hyperbola = segments(svgs[7]);
+    const hyperbola = segments(curves(svgs[7]));
     assert.ok(hyperbola.length > 50);
     for (const [a, b] of hyperbola) {
       assert.ok(a[0] * b[0] >= 0 && a[1] * b[1] >= 0, 'hyperbola branches never cross an asymptote');
       for (const [x, y] of [a, b]) assert.ok(Math.abs(x*y - 1) < 0.01);
     }
-    const crossing = segments(svgs[8]);
+    const crossing = segments(curves(svgs[8]));
     assert.ok(crossing.some(line => line.every(([x]) => Math.abs(x) < 0.001)));
     assert.ok(crossing.some(line => line.every(([, y]) => Math.abs(y) < 0.001)));
     for (const line of crossing) {
       assert.ok(line.every(([x]) => Math.abs(x) < 0.001) || line.every(([, y]) => Math.abs(y) < 0.001), 'xy = 0 has no false diagonal at the intersection');
     }
-    const halfCircle = segments(svgs[9]);
+    const halfCircle = segments(curves(svgs[9]));
     assert.ok(halfCircle.length > 20);
     for (const [x] of halfCircle.flat()) assert.ok(x >= -0.001, 'undefined cells are omitted');
+    const lines = curves(svgs[10]).filter(path => path.getAttribute('d').length > 100);
+    assert.deepEqual(lines.map(path => path.getAttribute('stroke')), ['#ff0000', '#242424']);
+    for (const [i, path] of lines.entries()) {
+      const line = segments([path]);
+      assert.ok(line.length > 50, 'each equation produces a separate curve');
+      for (const [x, y] of line.flat()) {
+        assert.ok(Math.abs(i === 0 ? x + y : x - y) < 0.001, 'each curve follows its own equation');
+      }
+    }
     assert.equal((await compiler.compile(input, flags)).cached, true);
     await writeFile(input, source.replace('x => x * x', 'x => x * x / 2'));
     assert.notEqual((await compiler.compile(input, flags)).html, first.html, 'editing a function invalidates the cached image');
@@ -115,7 +132,7 @@ See @circle.
       await writeFile(input, `#import "template.typ": *\n#show: note\n${call}`);
       await assert.rejects(compiler.compile(input, flags), message);
     }
-    await writeFile(input, '#import "print-template.typ": function-plot, implicit-plot\n#set text(font: "Source Han Serif")\n#function-plot(calc.sin, labels: ($sin x$,), caption: [正弦函数])\n#implicit-plot((x, y) => x*x + y*y - 4, caption: [圆])');
+    await writeFile(input, '#import "print-template.typ": function-plot, implicit-plot\n#set text(font: "Source Han Serif")\n#function-plot((calc.sin, calc.cos), labels: ($sin x$, $cos x$), caption: [正弦与余弦])\n#implicit-plot(((x, y) => x + y, (x, y) => x - y), labels: ($x + y = 0$, $x - y = 0$), caption: [两条直线])');
     const pdf = join(root, 'plot.pdf');
     await compiler.run(['compile', '--root', root, '--ignore-system-fonts', '--font-path', fontPath, input, pdf]);
     assert.equal((await readFile(pdf)).subarray(0, 4).toString(), '%PDF');

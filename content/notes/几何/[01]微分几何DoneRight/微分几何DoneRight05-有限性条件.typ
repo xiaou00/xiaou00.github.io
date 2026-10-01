@@ -158,4 +158,22 @@ $ p^*:A -> RR $
     保留了一个无穷小的信息.
 ]
 
+== 一个非多项式的例子
+
+#construction[
+    考虑
+    $ A = C^oo (RR) / (sin x) $
+    几何上, $sin x$ 的零点集是
+    $ Z(sin x) = pi ZZ = {n pi : n in ZZ} $
+    容易证明
+    $ C^oo (RR) / (sin x) simeq C^oo (pi ZZ) simeq product_(n in ZZ) RR $
+    若考虑
+    $ B = C^oo (RR^2) / (sin x-y) $
+    几何上这降了一维, 得到的就是下图中的函数图像 $Gamma_sin$
+    #function-plot(
+        (x) => calc.sin(x),
+    )
+    不难猜想并验证
+    $ C^oo (RR^2)/(sin x-y) simeq C^oo (RR) $
+]
 

@@ -1,5 +1,6 @@
 import { parseHTML } from 'linkedom';
 import { discoverNoteFiles, noteUrl } from './note-paths.mjs';
+import { chapterUrl } from './books.mjs';
 
 export function objectIdentity(filename) {
   const match = /^(Schm|Stck|Drvd|Spct|Ring)\/((Schm|Stck|Drvd|Spct|Ring)(\d{4}))\.typ$/.exec(filename);
@@ -33,7 +34,7 @@ export function objectGroups({ categories }) {
 }
 
 export const objectUrl = (site, id) => `${site.base}geopedia/${id}/`;
-export const documentUrl = (site, entry) => entry.objectId ? objectUrl(site, entry.objectId) : noteUrl(site, entry.slug);
+export const documentUrl = (site, entry) => entry.objectId ? objectUrl(site, entry.objectId) : entry.book ? chapterUrl(site, entry.slug) : noteUrl(site, entry.slug);
 export const documentTitle = entry => entry.objectId ? `${entry.objectId} ${entry.title}` : entry.title;
 
 // Parse compiled metadata, without evaluating Typst a second time.
