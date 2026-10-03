@@ -54,6 +54,7 @@
 
 #let Hom = "Hom"
 #let Nat = "Nat"
+#let Mater = "Mat"
 #let SqExt = $"SqExt"$
 #let Map = "Map"
 #let Cov = "Cov"
@@ -145,6 +146,7 @@
 #let LMod = $bold(sans("LMod"))$
 #let dga = $bold(sans("dgAlg"))$
 #let Ind = $bold(sans("Ind"))$
+#let Pro = $bold(sans("Pro"))$
 #let sInd = $bold(sans("sInd"))$
 #let cdga = $bold(sans("cdgAlg"))$
 #let scdga = $bold(sans("scdgAlg"))$
@@ -174,8 +176,13 @@
 #let dAff = $bold(sans("dAff"))$
 #let dPSt = $bold(sans("dPSt"))$
 #let dSt = $bold(sans("dSt"))$
+#let Word = $bold(sans("Word"))$
+#let Mat = $bold(sans("Mat"))$
 #let CooRing = $bold(sans("C"^oo"Ring"))$
 #let CooAlg = $bold(sans("C"^oo"Alg"))$
+#let ProFin = $bold(sans("ProFin"))$
+#let ProFinGrp = $bold(sans("ProFinGrp"))$
+#let ProFinAni = $bold(sans("ProFinAni"))$
 
 #let ideal = $lt.closed$
 #let ad = $"ad"$
@@ -196,4 +203,5 @@
 #let leftarrow = $stretch(<-, size: #15pt)$
 #let projlim = $display(limits(lim_(movebase(#(-1.9pt),leftarrow))))$
 #let varprojlim(subscript) = $projlim_movebase(#(-2.8pt), subscript)$
- 
+
+#let quot(content) = $op(#h(0pt)''content#h(0pt)'')$

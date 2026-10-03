@@ -82,6 +82,8 @@
 
 @media(max-width:760px){.directory-toolbar{padding-bottom:14px;gap:13px}.directory-toolbar h2{font-size:18px}.directory-browser .search-field{width:145px}.directory-node>details>summary{gap:8px}.directory-name{font-size:15px}.directory-node .file-tree{padding-left:15px}.file-link{min-height:48px;gap:10px}.file-name{font-size:14px}.directory-footer{padding:14px 0;font-size:11px}.directory-actions{gap:9px}.directory-actions button{font-size:11px}.article-notebook{font-size:11px}.article-notebook>svg{width:13px;height:15px}}
 
+.typst-content .note-sticker{margin:24px 0;break-inside:avoid}
+.typst-content .note-sticker>img{display:block;max-width:100%;height:auto;margin-inline:auto}
 .typst-content .note-diagram{min-width:0;margin:28px 0}
 .diagram-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 3px;scrollbar-width:thin;scrollbar-color:#bbbbbb transparent}
 .typst-content .diagram-scroll>svg{max-width:none;margin-inline:auto}

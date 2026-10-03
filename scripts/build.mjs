@@ -9,6 +9,7 @@ import { TypstCompiler } from './typst-compiler.mjs';
 import { prepareTypstFonts } from './typst-fonts.mjs';
 import { discoverObjectFiles, objectIdentity, objectMetadata, finishObject } from './geopedia.mjs';
 import { sectionIdentity, discoverBookFiles, groupBooks } from './books.mjs';
+import { discoverStickers, resolveStickers } from './stickers.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
@@ -217,12 +218,17 @@ async function buildSite({ dev, session, fresh }) {
   const categories = Object.keys(schema.categories);
   objects.sort((a, b) => categories.indexOf(a.category) - categories.indexOf(b.category) || a.number - b.number);
   resolveNoteLinks(notes, site, objects, sections);
+  const stickers = resolveStickers([...notes, ...sections, ...objects], site, await discoverStickers(ROOT));
   objects.forEach(finishObject);
   const outputDir = join(ROOT, dev ? '.build/dev' : 'dist');
   const stage = join(ROOT, dev ? '.build/site-dev' : '.build/site');
   await rm(stage, { recursive: true, force: true });
   await mkdir(stage, { recursive: true });
   await cp(join(ROOT, 'public'), stage, { recursive: true });
+  for (const sticker of stickers) {
+    await mkdir(dirname(join(stage, sticker.path)), { recursive: true });
+    await cp(sticker.source, join(stage, sticker.path));
+  }
   await cp(join(ROOT, 'cover.png'), join(stage, 'cover.png'));
   await cp(join(ROOT, 'src/style.css'), join(stage, 'style.css'));
   await cp(join(ROOT, 'src/client.js'), join(stage, 'client.js'));

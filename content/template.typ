@@ -153,6 +153,20 @@
   #html.elem("div", attrs: (class: "note-fold-body"), body)
 ])
 
+// Resolve names during the site build, outside Typst's content/ root.
+#let sticker(name, width: 120pt, alt: none) = {
+  assert(type(name) == str and name != "", message: "sticker: 请填写图片名称.")
+  assert(type(width) == length and width > 0pt,
+    message: "sticker: width 须为正的绝对长度, 例如 120pt.")
+  assert(alt == none or type(alt) == str, message: "sticker: alt 须为文字说明.")
+  html.elem("div", attrs: (class: "note-sticker"), html.elem("img", attrs: (
+    "data-sticker": name,
+    alt: if alt == none { name } else { alt },
+    style: "width: " + str(width / 1pt) + "pt",
+    loading: "lazy", decoding: "async",
+  )))
+}
+
 // Keep a distinct name so importing Fletcher's diagram never shadows this.
 // Only the drawing becomes SVG; surrounding equations remain native MathML.
 #let web-diagram(body, caption: none) = figure(

@@ -4,6 +4,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, join, resolve, sep } from 'node:path';
 import { build, ROOT } from './build.mjs';
 import { TypstCompiler } from './typst-compiler.mjs';
+import { stickerFolders } from './stickers.mjs';
 
 const dev = process.argv.includes('--watch');
 const arg = key => {
@@ -40,7 +41,7 @@ const publish = () => {
   const message = `data: ${JSON.stringify({ revision, error: latestError })}\n\n`;
   for (const client of clients) client.write(message);
 };
-const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.woff': 'font/woff', '.woff2': 'font/woff2', '.json': 'application/json; charset=utf-8', '.typ': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.bib': 'text/plain; charset=utf-8', '.pdf': 'application/pdf' };
+const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.gif': 'image/gif', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.avif': 'image/avif', '.woff': 'font/woff', '.woff2': 'font/woff2', '.json': 'application/json; charset=utf-8', '.typ': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.bib': 'text/plain; charset=utf-8', '.pdf': 'application/pdf' };
 const devClient = () => `(() => {
   let revision;
   const events = new EventSource(${JSON.stringify(`${base}__dev/events`)});
@@ -93,7 +94,7 @@ const server = createServer(async (request, response) => {
       await stat(file);
     } catch { status = 404; file = join(output, '404.html'); }
     const bytes = await readFile(file);
-    response.writeHead(status, { 'Content-Type': mime[extname(file)] || 'application/octet-stream', 'Content-Length': bytes.byteLength, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
+    response.writeHead(status, { 'Content-Type': mime[extname(file).toLowerCase()] || 'application/octet-stream', 'Content-Length': bytes.byteLength, 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
     response.end(request.method === 'HEAD' ? undefined : bytes);
   } catch (error) {
     console.error(error.message);
@@ -105,6 +106,7 @@ server.on('error', async error => { console.error(`无法启动预览: ${error.m
 server.listen(port, host, () => console.log(`\n  Liber 777\n  http://${host}:${port}${base}\n  ${dev ? '监听笔记, 引用, 模板与页面文件; 保存后自动编译.' : '静态站点预览'}\n`));
 
 const watchers = [];
+const stickerWatchers = new Map();
 let timer;
 let building = false;
 let pending = false;
@@ -131,9 +133,20 @@ async function rebuild() {
 }
 if (dev) {
   for (const folder of ['content', 'src', 'public']) watchers.push(watch(join(ROOT, folder), { recursive: true }, () => { clearTimeout(timer); timer = setTimeout(rebuild, 120); }));
+  const watchStickers = () => {
+    for (const folder of stickerFolders) {
+      stickerWatchers.get(folder)?.close();
+      stickerWatchers.delete(folder);
+      try {
+        stickerWatchers.set(folder, watch(join(ROOT, folder), { recursive: true }, () => { clearTimeout(timer); timer = setTimeout(rebuild, 120); }));
+      } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    }
+  };
+  watchStickers();
   // Watch the directory so atomic-save editors can replace these files safely.
   watchers.push(watch(ROOT, (_, filename) => {
-    if (['cover.png', 'site.config.mjs'].includes(filename)) { clearTimeout(timer); timer = setTimeout(rebuild, 120); }
+    if (stickerFolders.includes(filename)) watchStickers();
+    if (['cover.png', 'site.config.mjs', ...stickerFolders].includes(filename)) { clearTimeout(timer); timer = setTimeout(rebuild, 120); }
   }));
 }
 ready = true;
@@ -141,6 +154,7 @@ async function shutdown() {
   closing = true;
   clearTimeout(timer);
   for (const watcher of watchers) watcher.close();
+  for (const watcher of stickerWatchers.values()) watcher.close();
   for (const client of clients) client.end();
   server.close();
   await compilerSession.close();

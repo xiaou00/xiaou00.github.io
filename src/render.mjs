@@ -53,7 +53,7 @@ function fileTree(site, notes) {
     let path = '';
     for (const part of parts) {
       path = path ? `${path}/${part}` : part;
-      if (!current.directories.has(part)) current.directories.set(part, { name: part, path, directories: new Map(), files: [] });
+      if (!current.directories.has(part)) current.directories.set(part, { name: path === note.chapterSlug ? note.chapterTitle : part, path, directories: new Map(), files: [] });
       current = current.directories.get(part);
     }
     current.files.push(note);

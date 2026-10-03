@@ -11,9 +11,9 @@ export function sectionIdentity(filename) {
     throw new Error(`${filename}: 书籍小节应放在 "书名/01 章节名/01.1 小节名.typ", 章和节的编号从 1 开始.`);
   }
   if (Number(match[5]) !== chapterNumber) throw new Error(`${filename}: 小节编号的章号须与所在章节文件夹一致.`);
-  return { book: match[1], chapterNumber, chapterTitle: `${match[3]} ${match[4].trim()}`,
+  return { book: match[1], chapterNumber, chapterTitle: `${chapterNumber} ${match[4].trim()}`,
     chapterSlug: `${match[1]}/${match[2]}`, sectionNumber, sectionTitle: match[7].trim(),
-    title: `${match[5]}.${match[6]} ${match[7].trim()}`, notebook: match[1],
+    title: `${chapterNumber}.${sectionNumber} ${match[7].trim()}`, notebook: match[1],
     slug: filename.slice(0, -4), filename };
 }
 

@@ -29,13 +29,13 @@ test.beforeAll(async ({ request }) => {
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, text, { flag: 'wx' });
   }
-  await expect.poll(async () => (await (await request.get('/books/')).text()).includes('01.10 补充'), { timeout: 25000 }).toBe(true);
+  await expect.poll(async () => (await (await request.get('/books/')).text()).includes('>1.10 补充<'), { timeout: 25000 }).toBe(true);
 });
 
 test.afterAll(async ({ request }) => {
   for (const folder of [book, other]) await rm(resolve('content/books', folder), { recursive: true, force: true });
   await rm(resolve('content/notes/books-reference.typ'), { force: true });
-  await expect.poll(async () => (await (await request.get('/books/')).text()).includes('01.10 补充'), { timeout: 15000 }).toBe(false);
+  await expect.poll(async () => (await (await request.get('/books/')).text()).includes('>1.10 补充<'), { timeout: 15000 }).toBe(false);
 });
 
 test('books browse a collapsed book/chapter/section tree with natural ordering and search', async ({ page }) => {
@@ -56,8 +56,8 @@ test('books browse a collapsed book/chapter/section tree with natural ordering a
   await expect(page.locator('details[data-directory][open]')).toHaveCount(0);
   await page.locator('summary').filter({ hasText: book }).click();
   await expect(page.locator('.file-link:visible')).toHaveCount(0);
-  await page.locator('summary').filter({ hasText: chapter }).click();
-  await expect(page.locator('.file-link:visible .file-name')).toHaveText(['01.1 群', '01.2 进一步讨论', '01.10 补充']);
+  await page.locator('summary').filter({ hasText: '1 基本概念' }).click();
+  await expect(page.locator('.file-link:visible .file-name')).toHaveText(['1.1 群', '1.2 进一步讨论', '1.10 补充']);
   await page.locator('.file-link:visible').first().click();
   await expect(page.locator('.env-theorem figcaption')).toHaveText('定理 1.1');
 });
@@ -66,8 +66,8 @@ test('sections share chapter counters, link across files and navigate across cha
   await page.goto(route(b));
   await expect(page.locator('.env-definition figcaption')).toHaveText('定义 1.2');
   await expect(page.locator('.env-theorem figcaption')).toHaveText('定理 1.2');
-  await expect(page.locator('.book-toc [aria-current="page"]')).toHaveText('01.2 进一步讨论');
-  await expect(page.locator('.book-toc a')).toHaveText(['01.1 群', '01.2 进一步讨论', '01.10 补充', '02.1 例子']);
+  await expect(page.locator('.book-toc [aria-current="page"]')).toHaveText('1.2 进一步讨论');
+  await expect(page.locator('.book-toc a')).toHaveText(['1.1 群', '1.2 进一步讨论', '1.10 补充', '2.1 例子']);
   await expect(page.locator('.typst-content .note-reference').first()).toContainText('定理 1.1');
   await expect(page.locator('.note-connections [data-direction="incoming"]')).toContainText('books-reference');
   const download = await request.get(await page.locator('.source-link').getAttribute('href'));
@@ -80,11 +80,11 @@ test('sections share chapter counters, link across files and navigate across cha
   await page.locator('.article-bottom a').click();
   await expect(page).toHaveURL(route());
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(book);
-  await expect(page.locator('.chapter-outline > summary .file-name')).toHaveText(['01 基本概念', '02 应用']);
+  await expect(page.locator('.chapter-outline > summary .file-name')).toHaveText(['1 基本概念', '2 应用']);
   await page.goto('/notes/books-reference/');
   await expect(page.locator('.env-theorem figcaption')).toHaveText('定理 1');
   await page.locator('.typst-content .note-reference').click();
-  await expect(page.locator('.article-header h1')).toHaveText('01.2 进一步讨论');
+  await expect(page.locator('.article-header h1')).toHaveText('1.2 进一步讨论');
 });
 
 test('chapter and section outlines expand on mobile and work without JavaScript', async ({ page, browser, baseURL }, testInfo) => {
@@ -95,7 +95,7 @@ test('chapter and section outlines expand on mobile and work without JavaScript'
     await expect(outline).not.toHaveAttribute('open');
     await outline.locator('summary').focus();
     await page.keyboard.press('Enter');
-    await expect(outline.locator('.chapter-sections a')).toHaveText(['01.1 群', '01.2 进一步讨论', '01.10 补充']);
+    await expect(outline.locator('.chapter-sections a')).toHaveText(['1.1 群', '1.2 进一步讨论', '1.10 补充']);
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: testInfo.outputPath(`book-${width}.png`), fullPage: true });
     await outline.locator('summary a').click();

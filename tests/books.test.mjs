@@ -121,10 +121,11 @@ test('book counters continue across sections, reset per chapter, and keep links 
     const book = groupBooks(sections)[0];
     assert.ok(booksPage(site, sections).includes('4 节'));
     const landing = bookPage(site, book);
-    assert.ok(landing.indexOf('01 基础') < landing.indexOf('02 应用'));
-    assert.ok(bookChapterPage(site, book, book.chapters[0]).includes('01.10 补充'));
+    const { document: contents } = parseHTML(landing);
+    assert.deepEqual([...contents.querySelectorAll('.chapter-outline > summary .file-name')].map(node => node.textContent), ['1 基础', '2 应用']);
+    assert.ok(bookChapterPage(site, book, book.chapters[0]).includes('>1.10 补充<'));
     const { document } = parseHTML(notePage(site, c, sections));
-    assert.equal(document.querySelector('.book-toc [aria-current="page"]').textContent, '01.10 补充');
+    assert.equal(document.querySelector('.book-toc [aria-current="page"]').textContent, '1.10 补充');
     assert.match(document.querySelector('.source-link').getAttribute('href'), /^\/math\/sources\/books\//);
     assert.ok(document.querySelector('.note-pagination [rel="next"]').getAttribute('href').includes(encodeURIComponent('02 应用')));
     resolveNoteLinks([], site, [], [{ ...b, html: '<a data-book="./01.1 群" data-note-auto="true"></a>' }]);
