@@ -157,7 +157,15 @@ Fonts are served locally. The build prepares the bundled fonts for Typst in `.bu
 
 Run `npm run build` and deploy `dist/` to a static host that serves directory `index.html` files. Use `404.html` as the error page. Set `base` in `site.config.mjs` to `/repository-name/` for subdirectory hosting and set `url` to the public origin for canonical URLs. Public Typst content and helpers are copied to `dist/sources/`; draft files and hidden folders are excluded.
 
-The existing `.github/workflows/pages.yml` builds with Node.js 22 and Typst 0.15.1 and deploys to GitHub Pages from the repository's default branch. Select **GitHub Actions** as the Pages build source. Local edits update the local preview; commit and push when you want to publish them.
+The `.github/workflows/pages.yml` workflow builds with Node.js 22 and Typst 0.15.1, then deploys `dist/` to GitHub Pages on pushes to `master`. It can also be started from the Actions tab with **Run workflow**.
+
+For the `xiaou00/xiaou00.github.io` repository:
+
+1. Open **Settings → Pages → Build and deployment**, and set **Source** to **GitHub Actions**.
+2. Commit the project, including `.github/workflows/pages.yml`, and push to `master`.
+3. Wait for **Actions → Deploy GitHub Pages** to succeed, then visit <https://xiaou00.github.io/>.
+
+The current `url: 'https://xiaou00.github.io'` and `base: '/'` settings already match this repository. Future pushes to `master` update the site automatically. If you rename the publishing branch, update the workflow's `branches` setting as well. Build output and dependencies stay ignored; only source files need to be pushed.
 
 ## Verification
 
