@@ -181,6 +181,10 @@ async function buildSite({ dev, session, fresh }) {
   await rm(stage, { recursive: true, force: true });
   await mkdir(stage, { recursive: true });
   await cp(join(ROOT, 'public'), stage, { recursive: true });
+  // Changing the URL when the icon changes avoids reusing an old browser favicon.
+  const favicon = await readFile(join(stage, 'favicon.svg'));
+  site.favicon = `favicon.${createHash('sha256').update(favicon).digest('hex').slice(0, 12)}.svg`;
+  await writeFile(join(stage, site.favicon), favicon);
   for (const image of images) {
     await mkdir(dirname(join(stage, image.path)), { recursive: true });
     await cp(image.source, join(stage, image.path));

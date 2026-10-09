@@ -35,7 +35,7 @@ function layout(site, { title, body, note = false, section = note ? 'notes' : 'h
 <title>${e(title ? `${title} - ${site.title}` : `${site.title} · Personal website`)}</title>
 <meta name="description" content="${e(site.description)}"><meta name="theme-color" content="#ffffff">
 <meta property="og:title" content="${e(title || site.title)}"><meta property="og:description" content="${e(site.description)}"><meta property="og:type" content="${note ? 'article' : 'website'}">
-${canonical}<link rel="icon" type="image/svg+xml" href="${href(site, 'favicon.svg')}">
+${canonical}<link rel="icon" type="image/svg+xml" href="${e(href(site, site.favicon || 'favicon.svg'))}">
 <link rel="preload" href="${href(site, 'fonts/serif.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${href(site, 'typst.css')}"><link rel="stylesheet" href="${href(site, 'style.css')}"><script src="${href(site, 'client.js')}" defer></script>
 </head><body id="top" class="${note ? 'reading-page' : 'home-page'}"><a class="skip-link" href="#main">Skip to content</a>
