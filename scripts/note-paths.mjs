@@ -1,0 +1,54 @@
+import { readdir } from 'node:fs/promises';
+import { join, posix } from 'node:path';
+
+export const compareNames = new Intl.Collator('en', { numeric: true }).compare;
+
+export function noteIdentity(filename) {
+  const parent = posix.dirname(filename);
+  return {
+    title: posix.basename(filename, '.typ'),
+    notebook: parent === '.' ? '' : posix.basename(parent),
+  };
+}
+
+export function validateNotePath(slug) {
+  // Titles may contain any Unicode scalar value except path separators and NUL.
+  // Keep path structure validation separate from the title's character set.
+  if (typeof slug !== 'string' || !slug.isWellFormed() || /[\\\0]/u.test(slug)
+    || slug.split('/').some(part => !part || part === '.' || part === '..')) {
+    throw new Error('Note paths support Unicode, but not backslashes, NUL, or invalid Unicode. Separate folders with /; segments cannot be empty, ".", or "..".');
+  }
+  return slug;
+}
+
+export function encodeNotePath(path) {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+export function noteUrl(site, slug) {
+  return `${site.base}notes/${encodeNotePath(slug)}/`;
+}
+
+export function resolveNotePath(file, from) {
+  const path = file.replace(/\.typ$/, '');
+  const relative = path.startsWith('./') || path.startsWith('../');
+  const normalized = posix.normalize(relative ? posix.join(posix.dirname(from), path) : path.replace(/^\//, ''));
+  return validateNotePath(normalized);
+}
+
+export async function discoverNoteFiles(root, prefix = '') {
+  const files = [];
+  let entries;
+  try { entries = await readdir(join(root, prefix), { withFileTypes: true }); }
+  catch (error) { if (error.code === 'ENOENT') return files; throw error; }
+  for (const entry of entries.sort((a, b) => compareNames(a.name, b.name))) {
+    if (entry.name.startsWith('_') || entry.name.startsWith('.')) continue;
+    const path = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) files.push(...await discoverNoteFiles(root, path));
+    else if (entry.isFile() && entry.name.endsWith('.typ')) {
+      validateNotePath(path.slice(0, -4));
+      files.push(path);
+    }
+  }
+  return files;
+}
