@@ -12,7 +12,7 @@ test('SLATE chapter counters, equation numbers, heading anchors and native refer
   const root = await mkdtemp(join(tmpdir(), 'slate-test-'));
   const compiler = new TypstCompiler({ cwd: root });
   try {
-    for (const name of ['template.typ', 'print-template.typ', 'abbrev.typ', 'function-plot.typ']) {
+    for (const name of ['template.typ', 'print-template.typ', 'abbrev.typ', 'refs.typ', 'function-plot.typ']) {
       await cp(resolve('content', name), join(root, name));
     }
     const specimen = await readFile(new URL('./fixtures/Slate.typ', import.meta.url), 'utf8');
@@ -41,6 +41,18 @@ test('SLATE chapter counters, equation numbers, heading anchors and native refer
     assert.ok(prepared.toc.some(item => item.id === 'foundations'));
     assert.ok(text('a').includes('Equation (2.1)'));
     assert.ok(text('a').includes('Section 1'));
+    assert.deepEqual([...document.querySelectorAll('a[href^="https://"]')].map(link => [
+      link.textContent, link.getAttribute('href'),
+    ]), [
+      ['[Stacks, Tag 0385]', 'https://stacks.math.columbia.edu/tag/0385'],
+      ['[Stacks, Tag 01IQ]', 'https://stacks.math.columbia.edu/tag/01IQ'],
+      ['[HA, Corollary 1.1.3.4]', 'https://www.math.ias.edu/~lurie/papers/HA.pdf'],
+      ['[HA]', 'https://www.math.ias.edu/~lurie/papers/HA.pdf'],
+      ['[HTT]', 'https://www.math.ias.edu/~lurie/papers/HTT.pdf'],
+      ['[HTT, Theorem 6.1.0.6]', 'https://www.math.ias.edu/~lurie/papers/HTT.pdf'],
+      ['[Kerodon, Tag 0003]', 'https://kerodon.net/tag/0003'],
+    ]);
+    assert.equal(document.querySelector('a[href$="HTT.pdf"] em').textContent, 'Theorem', 'reference locators preserve rich content');
     // The same authoring content must also compile using the actual print
     // template, including labels, all statement kinds and `to:` references.
     await writeFile(input, specimen.replace('"/template.typ"', '"/print-template.typ"'));

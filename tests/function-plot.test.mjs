@@ -37,7 +37,7 @@ See @circle.
 `;
   const curves = svg => [...svg.querySelectorAll('path[stroke-width="1.15"]')].filter(path => /[ML]/.test(path.getAttribute('d')));
   try {
-    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ', 'print-template.typ']) {
+    for (const name of ['template.typ', 'abbrev.typ', 'refs.typ', 'function-plot.typ', 'print-template.typ']) {
       await copyFile(resolve('content', name), join(root, name));
     }
     const fontPath = await prepareTypstFonts(resolve('.'));

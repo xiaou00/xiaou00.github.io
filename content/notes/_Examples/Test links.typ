@@ -6,9 +6,9 @@ This example checks links between notes and encyclopedia entries.
 
 = References <references>
 
-- Open #note-ref("./Test note").
-- Jump to #note-ref("./Test note", target: <even-sum>).
-- Read #geopedia("Test entry", target: <example>)[the encyclopedia example].
+- Open #note-ref[Test note].
+- Jump to #note-ref("Test note", <even-sum>).
+- Read #pedia("Test entry", target: <example>)[the encyclopedia example].
 
 = A short calculation
 

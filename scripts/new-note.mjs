@@ -2,17 +2,18 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateNotePath } from './note-paths.mjs';
-import { discoverObjectFiles, objectIdentity } from './geopedia.mjs';
+import { discoverObjectFiles, objectIdentity, objectTitleKey } from './pedia.mjs';
 
 export async function createNote(root, input, collection = 'notes') {
   const slug = validateNotePath(input.replace(/\.typ$/, ''));
   if (slug.split('/').some(part => part.startsWith('_') || part.startsWith('.'))) {
     throw new Error('New files and directories cannot start with _ or .; these names are reserved for unpublished drafts.');
   }
-  if (collection === 'geopedia') {
+  if (collection === 'pedia') {
     const { title } = objectIdentity(`${slug}.typ`);
-    const files = await discoverObjectFiles(join(root, 'content/geopedia'));
-    const existing = files.find(filename => objectIdentity(filename).title === title);
+    const key = objectTitleKey(title);
+    const files = await discoverObjectFiles(join(root, 'content/pedia'));
+    const existing = files.find(filename => objectTitleKey(objectIdentity(filename).title) === key);
     if (existing) throw new Error(`Duplicate encyclopedia title "${title}": ${existing}. The existing file was not overwritten.`);
   }
   const template = `${'../'.repeat(slug.split('/').length)}template.typ`;

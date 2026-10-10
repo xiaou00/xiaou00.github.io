@@ -37,13 +37,17 @@ function unsafeUnicodeEdit(before, after) {
 // A persistent CLI process keeps Typst's own memoized function/layout results,
 // including Fletcher/CeTZ frames. File dependencies come from Typst, not regexes.
 export class TypstCompiler {
-  constructor({ cwd, cacheDir = join(cwd, '.build/typst-cache'), watch = false, onChange = () => {} }) {
+  constructor({ cwd, cacheDir = join(cwd, '.build/typst-cache'), watch = false, maxWorkers = 4, onChange = () => {} }) {
+    if (!Number.isInteger(maxWorkers) || maxWorkers < 1) throw new Error('maxWorkers must be a positive integer.');
     this.cwd = cwd;
     this.cacheDir = cacheDir;
     this.watch = watch;
+    this.maxWorkers = maxWorkers;
     this.onChange = onChange;
     this.binary = process.env.TYPST_BIN || 'typst';
     this.workers = new Map();
+    this.records = new Map();
+    this.cacheKeys = new Map();
     this.tempDir = join(cwd, '.build/typst-workers', randomUUID());
   }
 
@@ -61,6 +65,20 @@ export class TypstCompiler {
 
   version() { return this.versionPromise ??= this.run(['--version']); }
 
+  beginBuild() { this.validation = new Map(); }
+  endBuild() { this.validation = null; }
+
+  async validateDependencies(files) {
+    if (!this.validation) return snapshot(files);
+    // Shared templates and packages are read once per build, even if hundreds
+    // of cached notes import them. Compilation itself still checks fresh bytes.
+    const validation = this.validation;
+    return Object.fromEntries(await Promise.all(files.map(async file => {
+      if (!validation.has(file)) validation.set(file, snapshot([file]).then(values => values[file]));
+      return [file, await validation.get(file)];
+    })));
+  }
+
   async key(input, flags) {
     return digest(JSON.stringify([
       2, this.binary, await this.version(), this.cwd, input, flags,
@@ -77,10 +95,11 @@ export class TypstCompiler {
 
   async cached(key) {
     try {
-      const record = JSON.parse(await readFile(join(this.cacheDir, `${key}.json`), 'utf8'));
+      const record = this.records.get(key) || JSON.parse(await readFile(join(this.cacheDir, `${key}.json`), 'utf8'));
       if (record.key !== key || typeof record.html !== 'string' || !record.dependencies || !Object.keys(record.dependencies).length) return null;
       if (Object.values(record.dependencies).some(hash => typeof hash !== 'string')) return null;
-      return unchanged(record.dependencies, await snapshot(Object.keys(record.dependencies))) ? record : null;
+      if (this.watch) this.records.set(key, record);
+      return unchanged(record.dependencies, await this.validateDependencies(Object.keys(record.dependencies))) ? record : null;
     } catch (error) {
       if (error.code === 'ENOENT' || error instanceof SyntaxError) return null;
       throw error;
@@ -92,18 +111,28 @@ export class TypstCompiler {
     await mkdir(this.cacheDir, { recursive: true });
     const file = join(this.cacheDir, `${key}.json`);
     const temporary = `${file}.${randomUUID()}.tmp`;
-    await writeFile(temporary, JSON.stringify({ key, html, dependencies }));
+    const record = { key, html, dependencies };
+    await writeFile(temporary, JSON.stringify(record));
     await rename(temporary, file);
+    if (this.watch) this.records.set(key, record);
   }
 
   async compile(input, flags, { fresh = false } = {}) {
     input = resolve(input);
     const key = await this.key(input, flags);
-    if (this.watch) return this.compileWatching(input, flags, key);
+    const previousKey = this.cacheKeys.get(input);
+    if (previousKey !== key) this.records.delete(previousKey);
+    this.cacheKeys.set(input, key);
+    if (this.watch && this.workers.has(input)) {
+      if (!fresh) return this.compileWatching(input, flags, key);
+      await this.workers.get(input).stop();
+      this.workers.delete(input);
+    }
     if (!fresh) {
       const cached = await this.cached(key);
       if (cached) return { html: cached.html, cached: true, incremental: false };
     }
+    if (this.watch) return this.compileWatching(input, flags, key);
     await mkdir(this.tempDir, { recursive: true });
     const depsPath = join(this.tempDir, `${key}.deps.json`);
     // Check known dependencies on both sides, so edits during a compile cannot
@@ -130,6 +159,13 @@ export class TypstCompiler {
       worker = null;
     }
     if (!worker) {
+      // Idle notes keep their disk/memory cache, not a permanent Typst process.
+      // Builds request documents serially, so an evicted worker has no caller.
+      while (this.workers.size >= this.maxWorkers) {
+        const [oldest, idle] = this.workers.entries().next().value;
+        await idle.stop();
+        this.workers.delete(oldest);
+      }
       await mkdir(this.tempDir, { recursive: true });
       worker = this.startWorker(input, flags, key);
       this.workers.set(input, worker);
@@ -147,6 +183,10 @@ export class TypstCompiler {
         if (result.error) throw result.error;
         const cached = worker.consumed === revision;
         worker.consumed = revision;
+        if (!cached) {
+          this.workers.delete(input);
+          this.workers.set(input, worker);
+        }
         return { html: result.html, cached, incremental: !cached && revision > 1, milliseconds: result.milliseconds };
       }
       if (worker.closed) throw new Error(`Typst compiler process exited: ${input}`);
@@ -263,6 +303,10 @@ export class TypstCompiler {
 
   async retain(inputs) {
     const active = new Set(inputs.map(input => resolve(input)));
+    for (const [input, key] of this.cacheKeys) if (!active.has(input)) {
+      this.records.delete(key);
+      this.cacheKeys.delete(input);
+    }
     for (const [input, worker] of this.workers) if (!active.has(input)) {
       await worker.stop();
       this.workers.delete(input);
@@ -272,6 +316,8 @@ export class TypstCompiler {
   async close() {
     await Promise.all([...this.workers.values()].map(worker => worker.stop()));
     this.workers.clear();
+    this.records.clear();
+    this.cacheKeys.clear();
     await rm(this.tempDir, { recursive: true, force: true });
   }
 }

@@ -2,7 +2,7 @@
 
 `print-template.typ` adopts the layout in `style/book.typ`: 170 × 240 mm pages, 11pt Libertinus Serif, Libertinus Math, Noto Sans headings, Liberation Mono code, and the original SLATE gray-blue palette. Chapter titles, statement spacing, running headers, folios, title page, and contents follow the supplied reference. `print-example.pdf` is a generated preview.
 
-The reference imports `refs.typ`, which was not supplied. That import is omitted; the `HTT`, `HA`, `Kerodon`, and `Stacks` bibliography shortcuts are therefore unavailable. The supplied `style/abbrev.typ` is copied to `content/abbrev.typ` for both web and print.
+The supplied `style/abbrev.typ` is copied to `content/abbrev.typ` for both web and print. `content/refs.typ` supplies shared literature shortcuts: `#Stack("0385")`, `#HA[Corollary 1.1.3.4]`, `#HTT[]`, and `#Kerodon("0003")`. Stacks and Kerodon use four-character tags and link to the corresponding entry; HA and HTT link to the official PDFs with an optional display locator inside the brackets.
 
 ## Usage
 
@@ -33,7 +33,7 @@ $ a^2 + b^2 = c^2 $ <equation>
 Refer to @definition and @equation.
 ```
 
-`note` is an alias of the reference template's `book` function. Adjust the relative import when writing from another folder. Keep `abbrev.typ` and `function-plot.typ` alongside the template if you move it to another project.
+`note` is an alias of the reference template's `book` function. Adjust the relative import when writing from another folder. Keep `abbrev.typ`, `refs.typ`, and `function-plot.typ` alongside the template if you move it to another project.
 
 ## Options
 
@@ -53,9 +53,9 @@ These replace the previous `contents`, `running-title`, `size`, `date`, and `cha
 
 Theorem, lemma, proposition, and corollary share a counter. Each other statement type has its own counter; `axiom` is a compatibility helper sharing the definition counter. All statements, including examples, remarks, questions, and answers, use chapter-prefixed numbering. Counters reset at numbered level-one headings. Remarks, constructions, and examples omit the left rule. Proofs are unnumbered, with an italic label and an end-of-proof square.
 
-Statements accept `title`, `italic`, `style`, `ruled`, and `to`, matching the reference. For example, `#answer(to: <question>)[A response.]` links to a labeled question. Only labeled display equations are numbered; unlabeled equations do not consume a number. Fractions use native Typst typesetting. Use an escaped slash (`$A \/ B$`) for a literal quotient slash.
+Statements accept `title`, `italic`, `style`, `ruled`, and `to`, matching the reference. For example, `#answer(to: <question>)[A response.]` links to a labeled question. Only labeled display equations are numbered; unlabeled equations do not consume a number. In inline and display math, `/` stays on the baseline and preserves grouping parentheses. Use `$frac(a, b)$` for a stacked fraction. Ordinary delimiters stay at text size, as in `$(frac(a, b))$`; explicitly write `$lr((frac(a, b)))$` to scale them with their contents, just as on the website.
 
-Folded content is shown in full on paper; diagrams and function plots remain vector graphics. Use `@label` within the document and `#link("https://example.com")[Link text]` for external links. The website's `note-ref` and `geopedia` resolution is not available in a standalone PDF.
+Folded content is shown in full on paper; diagrams and function plots remain vector graphics. Use `@label` within the document and `#link("https://example.com")[Link text]` for external links. The website's `note-ref` and `pedia` resolution is not available in a standalone PDF.
 
 ## Compile
 

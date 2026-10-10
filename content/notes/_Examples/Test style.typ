@@ -37,7 +37,7 @@ $ (a + b)^2 = a^2 + 2 a b + b^2 $ <square>
 
 $ (a - b)^2 = a^2 - 2 a b + b^2 $
 
-Refer to @addition, @negative, and @square. Inline fractions such as $a/b$ use the same native mathematical typesetting as the print template.
+Refer to @addition, @negative, and @square. A quotient such as $a/b$ uses a slash; write $frac(a, b)$ for a stacked fraction. The print template uses the same convention.
 
 #question[Is the sum of two odd integers even?] <question>
 #answer(to: <question>)[Yes. Write them as $2 m + 1$ and $2 n + 1$.]

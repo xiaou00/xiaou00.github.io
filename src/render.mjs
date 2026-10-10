@@ -1,6 +1,6 @@
 import { posix } from 'node:path';
 import { compareNames, encodeNotePath } from '../scripts/note-paths.mjs';
-import { documentUrl } from '../scripts/geopedia.mjs';
+import { documentUrl } from '../scripts/pedia.mjs';
 
 export function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -19,7 +19,8 @@ function header(site, section) {
     <nav aria-label="Main navigation">
       <a href="${href(site)}" ${section === 'home' ? 'aria-current="page"' : ''}>Home</a>
       <a href="${href(site, 'notes/')}" ${section === 'notes' ? 'aria-current="page"' : ''}>Notes</a>
-      <a href="${href(site, 'geopedia/')}" ${section === 'geopedia' ? 'aria-current="page"' : ''}>Encyclopedia</a>
+      <a href="${href(site, 'pedia/')}" ${section === 'pedia' ? 'aria-current="page"' : ''}>Encyclopedia</a>
+      <a href="${href(site, 'graph/')}" ${section === 'graph' ? 'aria-current="page"' : ''}>Graph</a>
     </nav>
   </div></header>`;
 }
@@ -28,7 +29,7 @@ function footer(site) {
   return `<footer class="site-footer"><span>© ${new Date().getFullYear()} ${e(site.author)}</span><a href="#top" class="back-top">Back to top ↑</a></footer>`;
 }
 
-function layout(site, { title, body, note = false, section = note ? 'notes' : 'home', path = '', dev = false }) {
+function layout(site, { title, body, note = false, section = note ? 'notes' : 'home', path = '', dev = false, script }) {
   const canonical = site.url ? `<link rel="canonical" href="${e(new URL(href(site, path), site.url))}">` : '';
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,6 +39,7 @@ function layout(site, { title, body, note = false, section = note ? 'notes' : 'h
 ${canonical}<link rel="icon" type="image/svg+xml" href="${e(href(site, site.favicon || 'favicon.svg'))}">
 <link rel="preload" href="${href(site, 'fonts/serif.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${href(site, 'typst.css')}"><link rel="stylesheet" href="${href(site, 'style.css')}"><script src="${href(site, 'client.js')}" defer></script>
+${script ? `<script src="${href(site, script)}" defer></script>` : ''}
 </head><body id="top" class="${note ? 'reading-page' : 'home-page'}"><a class="skip-link" href="#main">Skip to content</a>
 ${header(site, section)}${body}${footer(site)}${dev ? `<script src="${href(site, '__dev/client.js')}" defer></script>` : ''}</body></html>`;
 }
@@ -85,7 +87,8 @@ export function homePage(site, dev) {
     ${profile.interests?.length ? `<section class="profile-section" aria-labelledby="interests-title"><h2 id="interests-title">Interests</h2><ul class="profile-interests">${profile.interests.map(interest => `<li>${e(interest)}</li>`).join('')}</ul></section>` : ''}
     <section class="profile-section" aria-labelledby="explore-title"><h2 id="explore-title">Explore</h2><div class="profile-explore">
       <a href="${href(site, 'notes/')}"><h3>Notes</h3>${arrow}</a>
-      <a href="${href(site, 'geopedia/')}"><h3>Encyclopedia</h3>${arrow}</a>
+      <a href="${href(site, 'pedia/')}"><h3>Encyclopedia</h3>${arrow}</a>
+      <a href="${href(site, 'graph/')}"><h3>Graph</h3>${arrow}</a>
     </div></section>
     ${profile.links?.length ? `<section class="profile-section" aria-labelledby="links-title"><h2 id="links-title">Elsewhere</h2><ul class="profile-links">${profile.links.map(link => `<li><a href="${e(link.url)}">${e(link.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></section>` : ''}
   </main>` });
@@ -99,23 +102,25 @@ export function notesPage(site, notes, dev) {
     </main>` });
 }
 
-export function notePage(site, note, notes, dev) {
-  const isObject = note.collection === 'geopedia';
+export function notePage(site, note, notes, dev, adjacency) {
+  const isObject = note.collection === 'pedia';
   const folder = posix.dirname(note.slug);
-  const siblings = notes.filter(other => isObject || posix.dirname(other.slug) === folder)
-    .sort((a, b) => compareNames(a.title, b.title));
-  const index = siblings.indexOf(note);
-  const previous = siblings[index - 1];
-  const next = siblings[index + 1];
-  const returnUrl = isObject ? href(site, 'geopedia/') : href(site, 'notes/');
+  if (!adjacency) {
+    const siblings = notes.filter(other => isObject || posix.dirname(other.slug) === folder)
+      .sort((a, b) => compareNames(a.title, b.title));
+    const index = siblings.indexOf(note);
+    adjacency = { previous: siblings[index - 1], next: siblings[index + 1] };
+  }
+  const { previous, next } = adjacency;
+  const returnUrl = isObject ? href(site, 'pedia/') : href(site, 'notes/');
   const returnTitle = isObject ? 'encyclopedia' : 'notes';
-  const path = isObject ? `geopedia/${encodeURIComponent(note.title)}/` : `notes/${encodeNotePath(note.slug)}/`;
-  const sourcePath = `${isObject ? 'geopedia' : 'notes'}/${encodeNotePath(note.slug)}.typ`;
+  const path = isObject ? `pedia/${encodeURIComponent(note.title)}/` : `notes/${encodeNotePath(note.slug)}/`;
+  const sourcePath = `${isObject ? 'pedia' : 'notes'}/${encodeNotePath(note.slug)}.typ`;
   const references = [
     { title: 'References', direction: 'outgoing', notes: note.outgoing },
     { title: 'Referenced by', direction: 'incoming', notes: note.incoming },
   ].filter(group => group.notes.length);
-  return layout(site, { title: note.title, note: true, section: isObject ? 'geopedia' : 'notes', dev, path, body: `
+  return layout(site, { title: note.title, note: true, section: isObject ? 'pedia' : 'notes', dev, path, body: `
   <div class="reading-progress" aria-hidden="true"><span></span></div><main id="main" class="reading-main content-width">
     <div class="breadcrumb"><a href="${returnUrl}">${returnTitle}</a><span>/</span><span>${e(isObject ? note.title : note.slug.split('/').join(' / '))}</span></div>
     <header class="article-header">${note.notebook ? `<div class="article-notebook">${folderIcon}<span>${e(note.notebook)}</span></div>` : ''}
@@ -134,11 +139,53 @@ export function notePage(site, note, notes, dev) {
   </main>` });
 }
 
-export function geopediaPage(site, objects, dev) {
-  return layout(site, { title: 'Encyclopedia', section: 'geopedia', path: 'geopedia/', dev, body: `
+export function pediaPage(site, objects, dev) {
+  return layout(site, { title: 'Encyclopedia', section: 'pedia', path: 'pedia/', dev, body: `
     <main id="main" class="collection content-width">
       <header class="collection-heading"><h1>Encyclopedia</h1></header>
       ${directoryBrowser(site, objects, { encyclopedia: true })}
+    </main>` });
+}
+
+export function graphData(site, entries) {
+  const indices = new Map(entries.map((entry, index) => [documentUrl(site, entry), index]));
+  const nodes = entries.map(entry => ({
+    url: documentUrl(site, entry), title: entry.title,
+    collection: entry.collection === 'pedia' ? 'pedia' : 'notes',
+    path: entry.slug,
+  }));
+  const links = [];
+  const seen = new Set();
+  entries.forEach((entry, source) => {
+    for (const destination of entry.outgoing || []) {
+      const target = indices.get(documentUrl(site, destination));
+      if (target === undefined || source === target) continue;
+      const pair = [Math.min(source, target), Math.max(source, target)];
+      const key = pair.join(':');
+      if (!seen.has(key)) { seen.add(key); links.push({ source: pair[0], target: pair[1] }); }
+    }
+  });
+  return { nodes, links };
+}
+
+export function graphPage(site, entries, dev) {
+  const data = graphData(site, entries);
+  // JSON lives in a script element: titles must never terminate that element.
+  const json = JSON.stringify(data).replace(/</g, '\\u003c');
+  return layout(site, { title: 'Graph', section: 'graph', path: 'graph/', dev, script: 'graph.js', body: `
+    <main id="main" class="graph-page content-width">
+      <header class="collection-heading"><h1>Graph</h1><p>Connections between notes and encyclopedia entries.</p></header>
+      <div class="graph-toolbar" hidden>
+        <label class="search-field">${searchIcon}<input id="graph-search" type="search" placeholder="Find a page..." aria-label="Find a page" autocomplete="off"></label>
+        <div class="graph-controls"><button type="button" data-graph-zoom="in" aria-label="Zoom in">+</button><button type="button" data-graph-zoom="out" aria-label="Zoom out">−</button><button type="button" data-graph-fit>Fit view</button></div>
+      </div>
+      <div class="graph-stage" hidden><svg class="graph-canvas" role="group" aria-label="Page connections" aria-describedby="graph-help" tabindex="0"></svg></div>
+      ${data.nodes.length ? '<noscript><p>Enable JavaScript to explore the graph, or browse the pages below.</p></noscript>' : '<p class="graph-empty">No notes or encyclopedia entries yet.</p>'}
+      <div class="graph-footer"><div class="graph-legend"><span class="graph-legend-notes">Notes</span><span class="graph-legend-pedia">Encyclopedia</span></div><p>${data.nodes.length} ${data.nodes.length === 1 ? 'page' : 'pages'} · ${data.links.length} ${data.links.length === 1 ? 'connection' : 'connections'}</p></div>
+      <p id="graph-help" class="graph-help" hidden>Drag nodes to arrange, or the background to pan. Scroll or pinch to zoom. Click a node to open its page.</p>
+      <p class="sr-only" data-graph-status role="status" aria-live="polite"></p>
+      <details class="graph-directory" open><summary>All pages (${data.nodes.length})</summary><ul>${data.nodes.map(node => `<li><a href="${e(node.url)}">${e(node.title)}</a><span>${node.collection === 'pedia' ? 'Encyclopedia' : 'Note'}${node.collection === 'notes' && node.path.includes('/') ? ` · ${e(posix.dirname(node.path))}` : ''}</span></li>`).join('')}</ul><p data-graph-no-results hidden>No matching pages.</p></details>
+      <script type="application/json" id="graph-data">${json}</script>
     </main>` });
 }
 

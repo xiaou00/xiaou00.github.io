@@ -95,6 +95,24 @@ $ R = {x in K | v(x) >= 0}, quad
   显式分式 $frac(a, b)$.
 
   $ frac(a/b, c/d) $
+
+  $ op("Ell")(S) = { E in op("Grp")(op("Sch")/S) } $
+  $ frac(frac(a, b), frac(c, d)) $
+]
+
+== Delimiter sizing <math-delimiters-heading>
+
+#html.elem("div", attrs: (id: "math-delimiters"))[
+  Inline $(frac(a, frac(b, c)))$ and $lr((frac(a, frac(b, c))))$.
+
+  $ (frac(a, b)) $
+  $ lr((frac(a, b))) $
+  $ [frac(a, b)] + {frac(a, b)} + abs(frac(a, b)) $
+  $ lr([frac(a, b)]) + lr({frac(a, b)}) + lr(|frac(a, b)|) $
+  $ lr((frac(a, b) + [frac(c, d)])) $
+  $ X_([frac(a, b)]) + X_(lr([frac(a, b)])) $
+  $ lr((frac(a, b)), size: #2em) $
+  $ (x) + [x] + {x} + abs(x) $
 ]
 
 == 大运算符与多行公式 <math-operators-heading>

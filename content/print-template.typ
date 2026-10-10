@@ -155,6 +155,8 @@
   set heading(numbering: "1.1", supplement: [Section])
   show heading.where(level: 1): set heading(supplement: [Chapter])
   show math.equation: set text(font: fonts.math)
+  set math.frac(style: "horizontal")
+  set math.lr(size: 1em)
   set math.equation(
     numbering: none,
     supplement: [Equation],
@@ -266,14 +268,15 @@
 }
 
 #import "abbrev.typ" : *
-// style/refs.typ was not supplied; bibliography shortcuts are not imported.
+#import "refs.typ": Stack, HA, HTT, Kerodon
 #import "function-plot.typ": function-plot, implicit-plot
 
 // The website uses the name `note`; the SLATE options are unchanged.
 #let note = book
 #let axiom = statement.with("slate-definition", [Axiom])
 #let proofsketch = proof.with(title: [Proof sketch])
-#let frac = math.frac
+#let frac = math.frac.with(style: "vertical")
+#let lr = math.lr.with(size: 100%)
 #let fold(body, title: "Show details") = block(above: 1.15em, below: 1.05em)[
   #text(font: fonts.sans, size: 0.83em, weight: "semibold", fill: slate.muted, title)
   #parbreak()

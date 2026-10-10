@@ -6,6 +6,7 @@
 #let res = $op("res")$
 #let char = $"char"$
 #let Eq = $op("Eq")$
+#let Jac = $"Jac"$
 #let Deck = "Deck"
 #let tr = "tr"
 #let rk = "rk"
@@ -203,6 +204,7 @@
 #let Corr = $sans("Corr")$
 #let FF3 = $sans("3FF")$
 #let FF6 = $sans("6FF")$
+#let Ell = $sans("Ell")$
 
 #let ideal = $op(lt.closed)$
 #let ad = $"ad"$

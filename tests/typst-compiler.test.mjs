@@ -6,6 +6,51 @@ import { join } from 'node:path';
 import { parseHTML } from 'linkedom';
 import { TypstCompiler } from '../scripts/typst-compiler.mjs';
 
+test('development restarts reuse disk output and keep only a bounded set of edited compilers', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'typst-many-notes-'));
+  const inputs = Array.from({ length: 7 }, (_, i) => join(root, `note-${i}.typ`));
+  const shared = join(root, 'shared.typ');
+  const flags = ['--features', 'html', '--root', root];
+  let compiler = new TypstCompiler({ cwd: root });
+  try {
+    await writeFile(shared, 'Shared original.');
+    for (const input of inputs) {
+      await writeFile(input, '#include "shared.typ"\nOriginal paragraph.');
+      await compiler.compile(input, flags);
+    }
+    await compiler.close();
+    compiler = new TypstCompiler({ cwd: root, watch: true, maxWorkers: 2 });
+    for (const input of inputs) assert.equal((await compiler.compile(input, flags)).cached, true);
+    assert.equal(compiler.workers.size, 0, 'cached startup needs no persistent processes');
+    for (const input of inputs.slice(0, 3)) {
+      await writeFile(input, '#include "shared.typ"\nFirst edit.');
+      assert.ok((await compiler.compile(input, flags)).html.includes('First edit.'));
+      assert.ok(compiler.workers.size <= 2);
+    }
+    assert.equal(compiler.workers.has(inputs[0]), false, 'the oldest editor releases its process');
+    assert.equal((await compiler.compile(inputs[0], flags)).cached, true, 'eviction preserves compiled output');
+    assert.equal(compiler.workers.has(inputs[0]), false, 'reading a cached note does not restart a worker');
+    await writeFile(inputs[2], '#include "shared.typ"\nSecond edit.');
+    assert.equal((await compiler.compile(inputs[2], flags)).incremental, true);
+    await writeFile(shared, 'Shared updated.');
+    compiler.beginBuild();
+    try {
+      for (const input of inputs) {
+        assert.ok((await compiler.compile(input, flags)).html.includes('Shared updated.'), 'imports invalidate active and evicted notes');
+        assert.ok(compiler.workers.size <= 2);
+      }
+    } finally { compiler.endBuild(); }
+    await compiler.close();
+    compiler = new TypstCompiler({ cwd: root, watch: true, maxWorkers: 2 });
+    for (const input of inputs) assert.equal((await compiler.compile(input, flags)).cached, true);
+    assert.equal(compiler.workers.size, 0);
+    assert.equal((await compiler.compile(inputs[0], flags, { fresh: true })).cached, false);
+  } finally {
+    await compiler.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('disk cache follows real dependencies, survives restarts and rejects stale or corrupt entries', async () => {
   const root = await mkdtemp(join(tmpdir(), 'typst-cache-test-'));
   const input = join(root, 'note.typ');

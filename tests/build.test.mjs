@@ -8,16 +8,20 @@ import { build, prepareDocument, ROOT } from '../scripts/build.mjs';
 import { resolveNoteLinks } from '../scripts/note-links.mjs';
 import { discoverNoteFiles, encodeNotePath, noteIdentity, resolveNotePath, validateNotePath } from '../scripts/note-paths.mjs';
 import { createNotebookFixture } from './fixtures.mjs';
-import { documentUrl } from '../scripts/geopedia.mjs';
+import { documentUrl } from '../scripts/pedia.mjs';
 import './typst-compiler.test.mjs';
 import './typst-fonts.test.mjs';
 import './young.test.mjs';
 import './function-plot.test.mjs';
 import './stickers.test.mjs';
 import './assets-image.test.mjs';
-import './geopedia.test.mjs';
+import './pedia.test.mjs';
+import './note-links.test.mjs';
 import './pages.test.mjs';
+import './graph.test.mjs';
 import './slate.test.mjs';
+import './site-output.test.mjs';
+import './incremental-build.test.mjs';
 
 test('heading anchors preserve references and remain unique for duplicate headings', () => {
   const document = prepareDocument('<html><head></head><body><h2 id="native">1 定理</h2><h2>2 重复</h2><h2>3 重复</h2><a href="#native">定理</a></body></html>');
@@ -68,6 +72,12 @@ test('real Typst source builds a linked static site with native MathML and refer
   const fixture = await createNotebookFixture();
   try {
     const { notes, objects, site } = await build();
+    const graphPage = parseHTML(await readFile(join(ROOT, 'dist/graph/index.html'), 'utf8')).document;
+    const graph = JSON.parse(graphPage.getElementById('graph-data').textContent);
+    assert.equal(graph.nodes.length, notes.length + objects.length);
+    assert.deepEqual(new Set(graph.nodes.map(node => node.url)), new Set([...notes, ...objects].map(entry => documentUrl(site, entry))));
+    assert.ok(graph.links.length > 0);
+    assert.ok((await readFile(join(ROOT, 'dist/graph.js'), 'utf8')).includes('graph-data'));
     assert.equal(notes.length >= 2, true);
     const specimen = notes.find(note => note.slug === fixture.specimen);
     assert.ok(specimen);
@@ -75,11 +85,24 @@ test('real Typst source builds a linked static site with native MathML and refer
     assert.ok(document.querySelectorAll('math').length > 40, 'real formulas were compiled');
     assert.equal(document.querySelector('math code'), null, 'no unevaluated math functions');
     const slashes = [...document.querySelectorAll('#math-slashes math')];
-    assert.deepEqual(slashes.map(math => math.querySelectorAll('mfrac').length), [1, 0, 1, 1, 1, 1, 3], 'slash syntax follows native Typst fractions, as in the reference template');
-    assert.deepEqual(slashes.map(math => [...math.querySelectorAll('mi, mo')].filter(node => node.textContent === '/').length), [0, 1, 0, 0, 0, 0, 0], 'an escaped slash stays literal; fractions use native MathML');
-    assert.equal(slashes[2].textContent, '𝑎+𝑏𝑐', 'stacked fractions group the numerator structurally');
-    assert.equal(slashes[3].querySelector('msub, msubsup').children[1].textContent, '𝐴𝑘');
-    assert.equal(slashes[4].textContent, 'ℤ𝑝ℤ');
+    assert.deepEqual(slashes.map(math => math.querySelectorAll('mfrac').length), [0, 0, 0, 0, 0, 1, 1, 0, 3], 'only explicit frac(...) creates stacked fractions, including nested fractions');
+    assert.deepEqual(slashes.map(math => [...math.querySelectorAll('mi, mo')].filter(node => node.textContent === '/').length), [1, 1, 1, 1, 1, 0, 2, 1, 0], 'slashes stay literal in inline, display, subscript and nested math');
+    assert.equal(slashes[2].textContent, '(𝑎+𝑏)/𝑐', 'grouping parentheses survive slash notation');
+    assert.equal(slashes[3].querySelector('msub, msubsup').children[1].textContent, '𝐴/𝑘');
+    assert.equal(slashes[4].textContent, 'ℤ/𝑝ℤ');
+    assert.equal(slashes[7].textContent, 'Ell(𝑆)={𝐸∈Grp(Sch/𝑆)}', 'category quotients remain inside their original parentheses');
+    const delimiters = [...document.querySelectorAll('#math-delimiters math')];
+    const fences = math => [...math.querySelectorAll('mo')].filter(node => '()[]{}|'.includes(node.textContent));
+    for (const index of [0, 2, 4]) {
+      assert.ok(fences(delimiters[index]).length >= 2);
+      assert.ok(fences(delimiters[index]).every(node => node.getAttribute('maxsize') === '1em'), 'ordinary delimiters have a fixed size');
+    }
+    for (const index of [1, 3, 5]) {
+      assert.ok(fences(delimiters[index]).every(node => !node.hasAttribute('maxsize')), 'explicit lr opts into automatic sizing');
+    }
+    assert.deepEqual(fences(delimiters[6]).map(node => node.getAttribute('maxsize')), [null, '1em', '1em', null], 'only the explicitly wrapped outer pair scales');
+    assert.deepEqual(fences(delimiters[7]).map(node => node.getAttribute('maxsize')), ['1em', '1em', null, null], 'subscripts preserve the same sizing convention');
+    assert.deepEqual(fences(delimiters[8]).map(node => node.getAttribute('maxsize')), ['2em', '2em'], 'explicit fixed sizes remain supported');
     const lines = document.querySelector('#math-lines');
     assert.equal(lines.querySelectorAll('mrow.math-underline').length, 8, 'underlines survive in inline, display, nested and subscript math');
     assert.equal(lines.querySelectorAll('mrow.math-overline').length, 7, 'overlines survive in inline, display and nested math');
@@ -120,7 +143,7 @@ test('real Typst source builds a linked static site with native MathML and refer
     const pages = new Map();
     for (const note of notes) pages.set(note.slug, parseHTML(await readFile(join(ROOT, `dist/notes/${note.slug}/index.html`), 'utf8')).document);
     const linkedPages = new Map(notes.map(note => [documentUrl(site, note), { entry: note, page: pages.get(note.slug) }]));
-    for (const object of objects) linkedPages.set(documentUrl(site, object), { entry: object, page: parseHTML(await readFile(join(ROOT, `dist/geopedia/${object.title}/index.html`), 'utf8')).document });
+    for (const object of objects) linkedPages.set(documentUrl(site, object), { entry: object, page: parseHTML(await readFile(join(ROOT, `dist/pedia/${object.title}/index.html`), 'utf8')).document });
     assert.ok(pages.has(fixture.ideals), 'each file has its own note page');
     assert.equal(pages.get(fixture.index).querySelector('#dvr-dedekind'), null, 'the index does not embed another note');
     assert.ok(document.getElementById('theorems'), 'unreferenced labels remain valid external targets');

@@ -60,6 +60,12 @@ test('MathML, TOC, theorem links, source downloads and 404 work', async ({ page,
   const math = await page.locator('.typst-content math').evaluateAll(nodes => nodes.map(node => ({ namespace: node.namespaceURI, width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height })));
   expect(math.length).toBeGreaterThan(40);
   expect(math.every(node => node.namespace === 'http://www.w3.org/1998/Math/MathML' && node.width > 0 && node.height > 0)).toBe(true);
+  const quotient = page.locator('#math-slashes math').nth(7);
+  await expect(quotient).toHaveText('Ell(𝑆)={𝐸∈Grp(Sch/𝑆)}');
+  await expect(quotient.locator('mfrac')).toHaveCount(0);
+  await expect(page.locator('#math-slashes math').nth(5).locator('mfrac')).toHaveCount(1);
+  await page.evaluate(() => document.fonts.ready);
+  await quotient.screenshot({ path: test.info().outputPath('slash-quotient.png') });
   await page.locator('.toc a').filter({ hasText: '定理与证明' }).click();
   await expect(page.locator('.toc a.active')).toContainText('定理与证明');
   await page.locator('.typst-content a[href="#prop-factorization"]').click();
@@ -70,6 +76,30 @@ test('MathML, TOC, theorem links, source downloads and 404 work', async ({ page,
   const missing = await request.get('/notes/does-not-exist/');
   expect(missing.status()).toBe(404);
   expect(await missing.text()).toContain('This page has not been written yet.');
+});
+
+test('delimiters stay fixed unless explicitly wrapped in lr', async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(noteRoute(specimen));
+    await page.evaluate(() => document.fonts.ready);
+    const region = page.locator('#math-delimiters');
+    const sizes = await region.locator('math').evaluateAll(nodes => nodes.map(math =>
+      [...math.querySelectorAll('mo')].filter(node => '()[]{}|'.includes(node.textContent)).map(node => node.getBoundingClientRect().height),
+    ));
+    for (const [index, offset] of [[0, 0], [2, 0], [4, 2]]) {
+      for (let i = 0; i < sizes[index].length; i++) expect(sizes[index][i]).toBeCloseTo(sizes[9][offset + i], 0);
+    }
+    for (const [fixed, scaled] of [[0, 1], [2, 3], [4, 5]]) {
+      expect(sizes[scaled]).toHaveLength(sizes[fixed].length);
+      for (let i = 0; i < sizes[fixed].length; i++) expect(sizes[scaled][i]).toBeGreaterThan(sizes[fixed][i] * 1.15);
+    }
+    expect(sizes[6][0]).toBeGreaterThan(sizes[6][1] * 1.5);
+    expect(sizes[7][2]).toBeGreaterThan(sizes[7][0] * 1.15);
+    expect(sizes[8][0]).toBeGreaterThan(sizes[2][0] * 1.5);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await region.screenshot({ path: test.info().outputPath(`delimiters-${width}.png`) });
+  }
 });
 
 test('display operators stay on one line, wide formulas scroll and explicit lines remain', async ({ page }) => {

@@ -1,36 +1,20 @@
 import { createHash } from 'node:crypto';
-import { cp, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
-import { dirname, join, relative, resolve } from 'node:path';
+import { mkdir, readFile, rename, rm } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseHTML } from 'linkedom';
 import { resolveNoteLinks } from './note-links.mjs';
 import { compareNames, discoverNoteFiles, noteIdentity } from './note-paths.mjs';
 import { TypstCompiler } from './typst-compiler.mjs';
 import { prepareTypstFonts } from './typst-fonts.mjs';
-import { discoverObjectFiles, objectIdentity } from './geopedia.mjs';
+import { discoverObjectFiles, objectIdentity } from './pedia.mjs';
 import { discoverStickers, discoverAssetsImages, resolveStickers, resolveAssetsImages } from './images.mjs';
+import { SiteOutput } from './site-output.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const contentRoot = join(ROOT, 'content');
 
-async function outputFingerprint(root) {
-  const hash = createHash('sha256');
-  async function visit(folder) {
-    const entries = await readdir(join(root, folder), { withFileTypes: true });
-    entries.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
-    for (const entry of entries) {
-      const path = join(folder, entry.name);
-      if (entry.isDirectory()) await visit(path);
-      else {
-        const bytes = await readFile(join(root, path));
-        hash.update(JSON.stringify([path, bytes.length]));
-        hash.update(bytes);
-      }
-    }
-  }
-  await visit('');
-  return hash.digest('hex');
-}
+const buildStates = new WeakMap();
 
 function namespaceSvg(svg, prefix) {
   const ids = new Map([...svg.querySelectorAll('[id]')].map(element => [element.id, `${prefix}${element.id}`]));
@@ -98,6 +82,12 @@ export function prepareDocument(source, { filename } = {}) {
     for (const svg of diagram.querySelectorAll(':scope > svg')) namespaceSvg(svg, `diagram-svg-${++diagramIndex}-`);
   }
   for (const operator of document.querySelectorAll('math mo')) {
+    // Typst exports fixed lr sizes as minsize alone. Also cap absolute sizes
+    // so browsers cannot stretch these delimiters with surrounding content.
+    const size = operator.getAttribute('minsize');
+    if (/^(?:\d+(?:\.\d+)?|\.\d+)(?:em|pt|px)$/.test(size || '') && !operator.hasAttribute('maxsize')) {
+      operator.setAttribute('maxsize', size);
+    }
     // Firefox can apply its legacy large-operator form to circled binary
     // operators in display math. Keep them at their natural size, while
     // preserving explicit large operators and n-ary ⨂ / ⨁ / ⨀.
@@ -137,24 +127,28 @@ export function prepareDocument(source, { filename } = {}) {
 
 export async function build({ dev = false, compilerSession = null, fresh = false } = {}) {
   const session = compilerSession || new TypstCompiler({ cwd: ROOT });
+  session.beginBuild();
   try { return await buildSite({ dev, session, fresh }); }
-  finally { if (!compilerSession) await session.close(); }
+  finally { session.endBuild(); if (!compilerSession) await session.close(); }
 }
 
 async function buildSite({ dev, session, fresh }) {
   const start = performance.now();
+  if (!buildStates.has(session)) buildStates.set(session, { documents: new Map(), links: new Map(), outputs: new Map() });
+  const state = buildStates.get(session);
+  const activeDocuments = new Set();
   const version = await session.version();
   const match = version.match(/typst (\d+)\.(\d+)\.(\d+)/);
   if (!match || (Number(match[1]) === 0 && Number(match[2]) < 15)) throw new Error('Native MathML requires Typst >= 0.15.0; 0.15.1 is recommended.');
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
   const site = { ...config };
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base must be / or /repository-name/.');
-  const { homePage, notesPage, notePage, geopediaPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
+  const { homePage, notesPage, notePage, pediaPage, graphPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
-  const objectFiles = await discoverObjectFiles(join(contentRoot, 'geopedia'));
+  const objectFiles = await discoverObjectFiles(join(contentRoot, 'pedia'));
   const fontPath = await prepareTypstFonts(ROOT);
   await session.retain([...filenames.map(filename => join(contentRoot, 'notes', filename)),
-    ...objectFiles.map(filename => join(contentRoot, 'geopedia', filename))]);
+    ...objectFiles.map(filename => join(contentRoot, 'pedia', filename))]);
   const compilation = { cached: 0, incremental: 0, cold: 0 };
   async function compileCollection(collection, files, identity) {
     const entries = [];
@@ -164,15 +158,21 @@ async function buildSite({ dev, session, fresh }) {
         '--input', `note-title=${metadata.title}`];
       const compiled = await session.compile(join(contentRoot, collection, filename), flags, { fresh });
       compilation[compiled.cached ? 'cached' : compiled.incremental ? 'incremental' : 'cold']++;
-      entries.push({ collection, filename, slug: filename.slice(0, -4), ...metadata, ...prepareDocument(compiled.html, { filename }) });
+      const key = `${collection}/${filename}`;
+      activeDocuments.add(key);
+      if (state.documents.get(key)?.source !== compiled.html) {
+        state.documents.set(key, { source: compiled.html, prepared: prepareDocument(compiled.html, { filename }) });
+      }
+      entries.push({ collection, filename, slug: filename.slice(0, -4), ...metadata, ...state.documents.get(key).prepared });
     }
     return entries;
   }
   const notes = await compileCollection('notes', filenames, noteIdentity);
   notes.sort((a, b) => compareNames(a.slug, b.slug));
-  const objects = await compileCollection('geopedia', objectFiles, objectIdentity);
+  const objects = await compileCollection('pedia', objectFiles, objectIdentity);
   objects.sort((a, b) => compareNames(a.title, b.title));
-  resolveNoteLinks(notes, site, objects);
+  for (const key of state.documents.keys()) if (!activeDocuments.has(key)) state.documents.delete(key);
+  resolveNoteLinks(notes, site, objects, state.links);
   const entries = [...notes, ...objects];
   const [stickerFiles, assetFiles] = await Promise.all([discoverStickers(ROOT), discoverAssetsImages(ROOT)]);
   const images = [...resolveStickers(entries, site, stickerFiles), ...resolveAssetsImages(entries, site, assetFiles)];
@@ -180,34 +180,42 @@ async function buildSite({ dev, session, fresh }) {
   const stage = join(ROOT, dev ? '.build/site-dev' : '.build/site');
   await rm(stage, { recursive: true, force: true });
   await mkdir(stage, { recursive: true });
-  await cp(join(ROOT, 'public'), stage, { recursive: true });
+  const output = new SiteOutput(stage, outputDir, state.outputs.get(outputDir));
+  await output.tree(join(ROOT, 'public'));
   // Changing the URL when the icon changes avoids reusing an old browser favicon.
   const favicon = await readFile(join(stage, 'favicon.svg'));
   site.favicon = `favicon.${createHash('sha256').update(favicon).digest('hex').slice(0, 12)}.svg`;
-  await writeFile(join(stage, site.favicon), favicon);
-  for (const image of images) {
-    await mkdir(dirname(join(stage, image.path)), { recursive: true });
-    await cp(image.source, join(stage, image.path));
-  }
-  await cp(join(ROOT, 'src/style.css'), join(stage, 'style.css'));
-  await cp(join(ROOT, 'src/client.js'), join(stage, 'client.js'));
-  await cp(contentRoot, join(stage, 'sources'), { recursive: true, filter: source => !relative(contentRoot, source).split(/[\\/]/).some(part => part.startsWith('_') || part.startsWith('.')) });
-  await writeFile(join(stage, 'typst.css'), [...new Set(entries.flatMap(note => note.styles))].join('\n'));
-  await writeFile(join(stage, 'index.html'), homePage(site, dev));
-  await writeFile(join(stage, '404.html'), notFoundPage(site, dev));
-  await mkdir(join(stage, 'notes'), { recursive: true });
-  await writeFile(join(stage, 'notes/index.html'), notesPage(site, notes, dev));
-  await mkdir(join(stage, 'geopedia'), { recursive: true });
-  await writeFile(join(stage, 'geopedia/index.html'), geopediaPage(site, objects, dev));
+  await output.write(site.favicon, favicon);
+  for (const image of images) await output.copy(image.source, image.path);
+  await output.copy(join(ROOT, 'src/style.css'), 'style.css');
+  await output.copy(join(ROOT, 'src/client.js'), 'client.js');
+  await output.copy(join(ROOT, 'src/graph.js'), 'graph.js');
+  await output.tree(contentRoot, 'sources', { filter: name => !/^[_.]/.test(name) });
+  await output.write('typst.css', [...new Set(entries.flatMap(note => note.styles))].join('\n'));
+  await output.write('index.html', homePage(site, dev));
+  await output.write('404.html', notFoundPage(site, dev));
+  await output.write('notes/index.html', notesPage(site, notes, dev));
+  await output.write('pedia/index.html', pediaPage(site, objects, dev));
+  await output.write('graph/index.html', graphPage(site, entries, dev));
+  const neighbors = new Map();
   for (const entry of entries) {
-    const isObject = entry.collection === 'geopedia';
-    const folder = join(stage, entry.collection, isObject ? entry.title : entry.slug);
-    await mkdir(folder, { recursive: true });
-    await writeFile(join(folder, 'index.html'), notePage(site, entry, isObject ? objects : notes, dev));
+    const group = entry.collection === 'pedia' ? 'pedia' : `notes/${dirname(entry.slug)}`;
+    if (!neighbors.has(group)) neighbors.set(group, []);
+    neighbors.get(group).push(entry);
+  }
+  const adjacency = new Map();
+  for (const group of neighbors.values()) {
+    group.sort((a, b) => compareNames(a.title, b.title));
+    group.forEach((entry, index) => adjacency.set(entry, { previous: group[index - 1], next: group[index + 1] }));
+  }
+  for (const entry of entries) {
+    const isObject = entry.collection === 'pedia';
+    const path = join(entry.collection, isObject ? entry.title : entry.slug, 'index.html');
+    await output.write(path, notePage(site, entry, isObject ? objects : notes, dev, adjacency.get(entry)));
   }
   // File watchers and Typst can both report the same save. Compare output
   // bytes, including assets and downloads, rather than rebuilding timestamps.
-  const fingerprint = dev ? await outputFingerprint(stage) : null;
+  const fingerprint = dev ? output.fingerprint() : null;
   // Only replace the last working site after every note has compiled successfully.
   const previous = join(ROOT, dev ? '.build/previous-dev' : '.build/previous');
   await rm(previous, { recursive: true, force: true });
@@ -217,8 +225,9 @@ async function buildSite({ dev, session, fresh }) {
     throw error;
   }
   await rm(previous, { recursive: true, force: true });
+  state.outputs.set(outputDir, output.snapshot());
   console.log(`✓ Notes: ${notes.length}, encyclopedia entries: ${objects.length} → HTML + MathML · cached ${compilation.cached}, incremental ${compilation.incremental}, cold ${compilation.cold} · ${(performance.now() - start).toFixed(0)} ms`);
-  return { site, notes, objects, outputDir, compilation, fingerprint };
+  return { site, notes, objects, outputDir, compilation, fingerprint, output: output.stats };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

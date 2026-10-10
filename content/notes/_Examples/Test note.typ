@@ -20,7 +20,7 @@ This is an example file for testing the writing template. Replace or delete it w
 
 == Further reading
 
-Try the links in #note-ref("./Test links") or open #geopedia("Test entry").
+Try the links in #note-ref[Test links] or open #pedia("Test entry").
 
 #fold(title: "Show an exercise")[
   #exercise[Prove that the product of an even integer and any integer is even.]

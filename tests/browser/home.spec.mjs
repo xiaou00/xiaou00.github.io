@@ -9,7 +9,7 @@ test('personal home, independent directories, English navigation, and no cover d
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('h1')).toHaveText('xiaou0');
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link')).toHaveText(['Home', 'Notes', 'Encyclopedia']);
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link')).toHaveText(['Home', 'Notes', 'Encyclopedia', 'Graph']);
   await expect(page.locator('.profile-section h2')).toHaveText(['About', 'Interests', 'Explore', 'Elsewhere']);
   await expect(page.locator('img, .directory-browser')).toHaveCount(0);
   expect((await request.get('/cover.png')).status()).toBe(404);
@@ -20,10 +20,10 @@ test('personal home, independent directories, English navigation, and no cover d
   await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Home', exact: true }).click();
   await expect(page.locator('h1')).toHaveText('xiaou0');
   await page.locator('.profile-explore').getByRole('link', { name: /^Encyclopedia/ }).click();
-  await expect(page).toHaveURL(/\/geopedia\/$/);
+  await expect(page).toHaveURL(/\/pedia\/$/);
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ['/', '/notes/', '/geopedia/']) {
+    for (const route of ['/', '/notes/', '/pedia/', '/graph/']) {
       await page.goto(route);
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${route} at ${width}px`).toBe(true);

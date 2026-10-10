@@ -14,7 +14,7 @@ test('sticker names resolve from both folders, respect the site base and survive
   const input = join(root, 'note.typ');
   const image = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="red"/></svg>';
   try {
-    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'refs.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
     assert.deepEqual(await discoverStickers(root), []);
     await mkdir(join(root, 'stickers'));
     await writeFile(join(root, 'stickers/xiaou0_idle.svg'), image);

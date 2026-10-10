@@ -24,7 +24,10 @@
   "slate-example",
 )
 #let chapter-number(n) = numbering("1.1", counter(heading).get().first(), n)
-#let frac = math.frac
+// Slash syntax stays inline; explicit frac(...) keeps a stacked fraction.
+#let frac = math.frac.with(style: "vertical")
+// Only an explicit lr(...) opts into content-sized delimiters.
+#let lr = math.lr.with(size: 100%)
 
 #let note(doc) = {
   set document(title: sys.inputs.at("note-title", default: ""), author: "xiaou0")
@@ -32,6 +35,8 @@
   set par(justify: true, leading: 0.65em, spacing: 0.7em, first-line-indent: 0pt)
   set heading(numbering: "1.1", supplement: [Section])
   set math.equation(numbering: none, supplement: [Equation])
+  set math.frac(style: "horizontal")
+  set math.lr(size: 1em)
   show math.equation: set text(font: (fonts.math, "Source Han Serif"))
   show: content => context {
     let tagged = query(math.equation.where(block: true)).filter(eq => eq.has("label"))
@@ -77,35 +82,36 @@
   doc
 }
 
-// Resolve after all notes compile, so mutual references never import each other.
-#let note-ref(file, target: none, ..rest) = {
-  assert(rest.pos().len() <= 1 and rest.named().len() == 0,
-    message: "Write custom link text as note-ref(...)[text].")
-  let body = rest.pos().at(0, default: none)
-  assert(type(file) == str, message: "note-ref expects a filename string.")
+// Resolve after compilation, so mutual references never import each other.
+#let page-ref(kind, title, target: none, ..rest) = {
+  let name = if kind == "note" { "note-ref" } else { "pedia" }
+  // A plain content block permits note-ref[Title] and pedia[Title].
+  if type(title) == content {
+    assert(title == [] or title.has("text"), message: name + "[Title] expects a plain title without formatting.")
+    title = if title == [] { "" } else { title.text.trim() }
+  }
+  assert(type(title) == str, message: name + " expects a title string.")
+  let args = rest.pos()
+  if args.len() > 0 and type(args.first()) == label {
+    assert(target == none, message: "Provide the " + name + " target only once.")
+    target = args.remove(0)
+  }
+  assert(args.len() <= 1 and rest.named().len() == 0,
+    message: "Use " + name + "(title, <label>)[text] or " + name + "(title, target: <label>)[text].")
   assert(target == none or type(target) in (str, label),
     message: "target must be a label or string.")
-  html.elem("a", attrs: (
-    "data-note": file,
+  let body = args.at(0, default: none)
+  let automatic = body == none or body == []
+  let attrs = (
     "data-note-target": if target == none { "" } else { str(target) },
-    "data-note-auto": if body == none { "true" } else { "false" },
-  ), if body == none { [] } else { body })
+    "data-note-auto": if automatic { "true" } else { "false" },
+  )
+  attrs.insert("data-" + kind, title)
+  html.elem("a", attrs: attrs, if automatic { [] } else { body })
 }
 
-// GeoPedia links resolve by the globally unique title.
-#let geopedia(title, target: none, ..rest) = {
-  assert(type(title) == str, message: "geopedia expects a title string.")
-  assert(rest.pos().len() <= 1 and rest.named().len() == 0,
-    message: "Write custom link text as geopedia(...)[text].")
-  assert(target == none or type(target) in (str, label),
-    message: "target must be a label or string.")
-  let body = rest.pos().at(0, default: none)
-  html.elem("a", attrs: (
-    "data-object": title,
-    "data-note-target": if target == none { "" } else { str(target) },
-    "data-note-auto": if body == none { "true" } else { "false" },
-  ), if body == none { [] } else { body })
-}
+#let note-ref = page-ref.with("note")
+#let pedia = page-ref.with("object")
 
 // Native figure counters preserve labels and references. The browser adapter
 // moves this semantic caption above the statement body.
@@ -321,3 +327,4 @@
 
 #import "function-plot.typ": function-plot, implicit-plot
 #import "abbrev.typ" : *
+#import "refs.typ": Stack, HA, HTT, Kerodon

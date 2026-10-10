@@ -2,7 +2,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createNote } from './new-note.mjs';
 
-export const createObject = (root, title) => createNote(root, title, 'geopedia');
+export const createObject = (root, title) => createNote(root, title, 'pedia');
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {

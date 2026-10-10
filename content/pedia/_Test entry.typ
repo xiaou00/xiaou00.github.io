@@ -10,4 +10,4 @@ Write any definition, explanation, or formula here. There are no required sectio
 
 $ ZZ = {dots, -2, -1, 0, 1, 2, dots} $
 
-For a working note with a theorem and proof, see #note-ref("Examples/Test note", target: <even-integer>).
+For a working note with a theorem and proof, see #note-ref("Test note", <even-integer>).

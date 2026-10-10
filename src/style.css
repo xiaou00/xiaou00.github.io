@@ -58,7 +58,8 @@ h1,h2,h3,p{margin:0}
 .profile-interests,.profile-links{list-style:none;padding:0;margin:0;font-size:var(--body-size);overflow-wrap:anywhere}
 .profile-interests li+li{margin-top:5px}
 .profile-explore a{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:22px}
-.profile-explore a+a{border-top:.5pt solid var(--rule);padding:22px 0 0}
+.profile-explore a+a{border-top:.5pt solid var(--rule);padding-top:22px}
+.profile-explore a:last-child{padding-bottom:0}
 .profile-explore h3{font-size:22px;font-weight:600;line-height:1.4}
 .profile-explore svg{width:18px;color:var(--muted)}
 .profile-explore a:hover h3,.profile-links a:hover{text-decoration:underline;text-decoration-thickness:.5pt;text-underline-offset:4px}
@@ -180,9 +181,12 @@ h1,h2,h3,p{margin:0}
 .typst-content>figure{margin:1.15em 0 1.05em}
 .typst-content>figure:not(.math-env) figcaption{font: .83em/1.65 var(--sans);text-align:center;color:var(--muted)}
 .typst-content [role=doc-bibliography]{font-size:.9em}
-/* MathML row borders scale with the formula, including nested scripts. */
-.math-overline{border-top:.055em solid currentColor;padding-top:.04em}
-.math-underline{border-bottom:.055em solid currentColor;padding-bottom:.04em}
+/* Keep rules close to the MathML glyph box, including small scripts. */
+.math-overline{border-top:.055em solid currentColor}
+.math-underline{border-bottom:.055em solid currentColor}
+/* Separate repeated rules so double overlines/underlines remain distinct. */
+.math-overline:has(>mrow>.math-overline){padding-top:.04em}
+.math-underline:has(>mrow>.math-underline){padding-bottom:.04em}
 .typst-content .note-fold{margin:1.15em 0;border-block:.5pt solid var(--rule)}
 .note-fold>summary{padding:10px 0;cursor:pointer;color:var(--muted)}
 .note-fold>summary::marker{font-size:.8em}
@@ -220,12 +224,53 @@ h1,h2,h3,p{margin:0}
 .not-found>p:not(.eyebrow){color:var(--muted)}
 .not-found>a{display:flex;align-items:center;gap:15px;font:var(--ui-size) var(--sans);margin-top:35px}
 
+/* The graph loads its simulation only on /graph/. */
+.graph-page{padding:48px 0 56px}
+.graph-page .collection-heading{padding-bottom:24px}
+.graph-page .collection-heading p{color:var(--muted);margin-top:8px}
+.graph-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:.5pt solid var(--rule)}
+.graph-toolbar .search-field{width:min(260px,55%)}
+.graph-controls{display:flex;align-items:center;gap:8px;font:var(--meta-size)/1.5 var(--sans)}
+.graph-controls button{min-height:36px;min-width:36px;padding:6px 10px;border:1px solid var(--rule);border-radius:3px;white-space:nowrap}
+.graph-controls button:hover{background:var(--wash)}
+.graph-stage{border:.5pt solid var(--rule);border-radius:3px;overflow:hidden;background:var(--paper)}
+.graph-canvas{display:block;width:100%;height:clamp(360px,65vh,680px);touch-action:none;cursor:grab}
+.graph-canvas:active{cursor:grabbing}
+.graph-edge{stroke:var(--rule);stroke-width:1;vector-effect:non-scaling-stroke}
+.graph-node{cursor:pointer;outline:none}
+.graph-hit{fill:transparent;pointer-events:all}
+.graph-dot{fill:var(--ink);stroke:var(--paper);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.graph-node-pedia .graph-dot{fill:#678aa3}
+.graph-label{fill:var(--ink);font:11px var(--sans);paint-order:stroke;stroke:var(--paper);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.graph-canvas.is-focused .graph-node{opacity:.16}
+.graph-canvas.is-focused .graph-edge{opacity:.15}
+.graph-canvas.is-focused .graph-node.is-neighbor{opacity:.85}
+.graph-canvas.is-focused .graph-node.is-active,.graph-canvas.is-focused .graph-edge.is-neighbor{opacity:1}
+.graph-node.is-active .graph-dot,.graph-node:focus-visible .graph-dot{stroke:var(--ink);stroke-width:2.5}
+.graph-node.is-active .graph-label,.graph-node:focus-visible .graph-label{font-weight:600}
+.graph-hide-labels .graph-label{display:none}
+.graph-hide-labels .is-neighbor .graph-label,.graph-hide-labels .graph-node:focus-visible .graph-label{display:block}
+.graph-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 0 8px;color:var(--muted);font:var(--meta-size)/1.7 var(--sans)}
+.graph-legend{display:flex;gap:20px}
+.graph-legend span{display:flex;align-items:center;gap:7px}
+.graph-legend span::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.graph-legend .graph-legend-pedia::before{background:#678aa3}
+.graph-help{font:var(--meta-size)/1.7 var(--sans);color:var(--muted)}
+.graph-directory{margin-top:26px;border-top:.5pt solid var(--rule);font:var(--ui-size)/1.7 var(--sans)}
+.graph-directory summary{padding:16px 0;cursor:pointer}
+.graph-directory ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:8px 24px}
+.graph-directory li{display:flex;flex-direction:column;align-items:flex-start;overflow-wrap:anywhere;min-width:0;padding:8px 0}
+.graph-directory a{font:var(--body-size)/1.5 var(--serif)}
+.graph-directory a:hover{text-decoration:underline;text-underline-offset:3px}
+.graph-directory li span{color:var(--muted);font-size:var(--meta-size)}
+.graph-empty{padding:60px 0;color:var(--muted)}
+
 @media(max-width:1000px){.reading-main{--toc-width:148px;--reading-gap:36px}}
 @media(max-width:760px){
   :root{--body-size:16px;--title-size:30px;--h2-size:23px;--h3-size:19px;--h4-size:17px;--header-height:64px}
   .content-width,.header-inner,.site-footer{width:calc(100% - 48px)}
   .wordmark{font-size:20px}.site-header nav{gap:20px}
-  .profile,.collection{padding:40px 0 55px}
+  .profile,.collection,.graph-page{padding:40px 0 55px}
   .profile-intro{padding-bottom:28px}
   .profile-section{grid-template-columns:1fr;gap:14px;padding:24px 0}
   .profile-explore h3{font-size:21px}
@@ -249,6 +294,7 @@ h1,h2,h3,p{margin:0}
   .toc ol{columns:1}
   .directory-toolbar{flex-wrap:wrap}.directory-browser .search-field{width:100%}.search-field kbd{display:none}
   .directory-footer{flex-wrap:wrap}.directory-actions{gap:8px}
+  .graph-toolbar{flex-wrap:wrap;gap:8px}.graph-toolbar .search-field{width:100%}.graph-controls{margin-left:auto}
 }
 @media(max-width:380px){.note-connections{grid-template-columns:1fr;gap:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}

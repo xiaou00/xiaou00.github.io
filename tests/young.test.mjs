@@ -28,7 +28,7 @@ Original paragraph. $a + b$
 #young(2, 2)
 `;
   try {
-    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'refs.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
     const fontPath = await prepareTypstFonts(resolve('.'));
     const flags = ['--features', 'html', '--root', root, '--ignore-system-fonts', '--font-path', fontPath];
     await writeFile(shape, '#let partition = (3, 2)\n#let labels = (1, 2, 3, 4, 5)');
@@ -55,7 +55,11 @@ Original paragraph. $a + b$
     assert.equal(restored.cached, true, 'SVG output is restored from disk after restarting the compiler');
     assert.equal(restored.html, first.html);
 
-    await watcher.compile(input, flags);
+    assert.equal((await watcher.compile(input, flags)).cached, true);
+    assert.equal(watcher.workers.size, 0, 'cached diagrams do not need a watch process until edited');
+    await writeFile(input, source.replace('Original paragraph.', 'First edit.'));
+    const firstEdit = await watcher.compile(input, flags);
+    assert.deepEqual(diagrams(firstEdit.html).map(svg => svg.outerHTML), svgs.map(svg => svg.outerHTML));
     await writeFile(input, source.replace('Original paragraph.', 'Edited paragraph.'));
     const proseEdit = await watcher.compile(input, flags);
     assert.equal(proseEdit.incremental, true);

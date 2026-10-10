@@ -13,7 +13,7 @@ test('assets-image resolves nested image paths without specifying a display size
   const compiler = new TypstCompiler({ cwd: root });
   const input = join(root, 'note.typ');
   try {
-    for (const name of ['template.typ', 'abbrev.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
+    for (const name of ['template.typ', 'abbrev.typ', 'refs.typ', 'function-plot.typ']) await copyFile(resolve('content', name), join(root, name));
     assert.deepEqual(await discoverAssetsImages(root), []);
     const folder = join(root, 'assets/几何');
     await mkdir(folder, { recursive: true });
