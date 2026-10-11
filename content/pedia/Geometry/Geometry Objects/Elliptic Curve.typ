@@ -36,19 +36,12 @@
     Here, since $E$ is smooth and proper with $k$-point, it is automatically projective over $k$. So we can replace the condition "proper" with "projective" in the definition above.
 ]
 
-#lemma(title:[#Stack("047I")])[
-    Let $(G,e)$ be a group scheme over $S$, $f$ be the structure morphism $f:G->S$, then
-    $ Omega^1_(G/S) simeq f^* e^* Omega_(G/S) $
-    specially, if $S=Spec k$, we have
-    $ Omega^1_(G/S) simeq cal(O)_G times.o_k e^* Omega^1_(G/k) $
-] <lemma-1>
-
 #theorem(title:[Equivalence of Definitions])[
     A $k$-elliptic curve $(E,e)$ is equivalent to an object in $Ell/Spec k$.
 ]
 
 #proof[
-    Suppose we have a $E in Ell/k$, we only have to show that $E$ has genus 1, the $k$-point automatically given by the identity section $e: Spec k -> E$. By @lemma-1, we have
+    Suppose we have a $E in Ell/k$, we only have to show that $E$ has genus 1, the $k$-point automatically given by the identity section $e: Spec k -> E$. By #pedia("Invariant Differential", <differentials>)[the lemma on invariant differentials], we have
     $ Omega^1_(E/k) simeq cal(O)_E times.o_k e^* Omega^1_(E/k) $
     since $dim E=1$, $e^* Omega^1_(E/k)$ is a rank 1 locally free sheaf over $Spec k$, which 1-dimensional $k$-vector space, so $e^* Omega^1_(E/k) simeq k$, hence
     $ omega_E simeq Omega^1_(E/k) simeq cal(O)_E $
