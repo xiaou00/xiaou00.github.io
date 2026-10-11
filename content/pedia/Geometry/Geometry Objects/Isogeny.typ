@@ -35,6 +35,18 @@
     A morphism preserving the origins is automatically a group homomorphism, by the #pedia("Rigidity Lemma", <homomorphisms>)[rigidity lemma]. A nonconstant morphism between smooth proper curves is finite and surjective, so its scheme-theoretic kernel is finite. The converse follows from the definition.
 ]
 
+#proposition(title: [Tate Modules])[
+    Let $f: E -> E'$ be an isogeny of degree $d$ and $ell != char(k)$ a prime. On #pedia("Tate Module")[Tate modules], $T_ell f$ is injective with finite cokernel killed by $d$, and
+    $ V_ell f: V_ell E ->^simeq V_ell E'. $
+    If $ell$ does not divide $d$, then $T_ell f$ is also an isomorphism. All maps are Galois equivariant.
+] <tate-modules>
+
+#proof[
+    The #pedia("Dual Isogeny", <dual-identities>)[dual identities] give
+    $ (T_ell hat(f)) compose (T_ell f) = d id, quad (T_ell f) compose (T_ell hat(f)) = d id. $
+    Since Tate modules are finite free, these imply injectivity and a finite cokernel killed by $d$. Inverting $d$ gives the inverse $d^(-1) T_ell hat(f)$.
+]
+
 = Special Isogenies
 
 == Multiplication Isogenies

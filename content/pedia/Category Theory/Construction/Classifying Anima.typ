@@ -11,9 +11,9 @@
 ] <definition>
 
 #remark(title: [Discrete Groups])[
-    For an ordinary group $G$, the bar construction is the nerve of the groupoid with one object and automorphism group $G$. It is a #pedia("Kan Complex")[Kan complex], and
+    For an ordinary #pedia("Group")[group] $G$, the bar construction is the #pedia("Nerve")[nerve] of the groupoid with one object and automorphism group $G$. It is a #pedia("Kan Complex")[Kan complex], and
     $ pi_1 (B G,*) simeq G, quad pi_n (B G,*) = 0 quad (n >= 2). $
-    Thus $B G$ is the Eilenberg-Mac Lane anima $K(G,1)$.
+    Thus $B G$ is the Eilenberg-Mac Lane anima $K(G,1)$. Functors out of $B G$ define #pedia("Group Representation")[group representations].
 ] <discrete>
 
 #remark(title: [Profinite Groups])[

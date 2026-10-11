@@ -38,3 +38,15 @@ The objects of $cal(O)$ are _colors_; its arrows are unary operations. The Segal
 ] <operations>
 
 Composition gives substitution of operations. For $n=0$, these are nullary operations, whose space may be empty even though the empty list is unique up to equivalence.
+
+= Morphisms
+
+An arrow in $cal(O)^tens$ is _inert_ if it is $p$-coCartesian over an inert map in $Fin_*$.
+
+#definition(title: [Morphism of Infinity Operads])[
+    A _morphism of $oo$-operads_ is a functor
+    $ F: cal(O)^tens -> cal(P)^tens $
+    over $Ner(Fin_*)$ that preserves inert arrows.
+] <morphisms>
+
+See #HA[Definition 2.1.2.7]. Such morphisms define #pedia("Algebra")[operadic algebras].
