@@ -16,9 +16,9 @@ Let $p: cal(E) -> cal(B)$ be an #pedia("Inner Fibration")[inner fibration] of #p
         node((0, 1), [$Map_(cal(B))(t,p(z))$])
         node((1, 1), [$Map_(cal(B))(s,p(z))$])
         edge((0, 0), (1, 0), [$- compose u$], "->")
-        edge((0, 1), (1, 1), [$- compose alpha$], "->")
+        edge((0, 1), (1, 1), [$- compose alpha$], label-side: right, "->")
         edge((0, 0), (0, 1), [$p$], "->")
-        edge((1, 0), (1, 1), [$p$], "->")
+        edge((1, 0), (1, 1), [$p$], label-side: left, "->")
     }))
 
     Equivalently, the opposite edge is $p^opp$-#pedia("Cartesian Fibration", <cartesian-edge>)[Cartesian].

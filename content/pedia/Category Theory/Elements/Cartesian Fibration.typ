@@ -22,9 +22,9 @@ Let $p: cal(E) -> cal(B)$ be an #pedia("Inner Fibration")[inner fibration] of $o
         node((0, 1), [$Map_(cal(B))(p(z),s)$])
         node((1, 1), [$Map_(cal(B))(p(z),t)$])
         edge((0, 0), (1, 0), [$u compose -$], "->")
-        edge((0, 1), (1, 1), [$alpha compose -$], "->")
+        edge((0, 1), (1, 1), [$alpha compose -$], label-side: right, "->")
         edge((0, 0), (0, 1), [$p$], "->")
-        edge((1, 0), (1, 1), [$p$], "->")
+        edge((1, 0), (1, 1), [$p$], label-side: left, "->")
     }))
 
     This is the mapping-space characterization of #HTT[Proposition 2.4.4.3].

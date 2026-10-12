@@ -41,3 +41,5 @@ $ rho_(A,ell): G_k -> Aut_(ZZ_ell)(T_ell A) simeq "GL"_(2g)(ZZ_ell), $
 where the last identification requires a basis. Continuity follows because all torsion points at each level are defined over a finite Galois extension. Coordinate projections and maps $T_ell f$ are Galois equivariant.
 
 For elliptic curves, #pedia("Isogeny", <tate-modules>)[isogenies induce isomorphisms on rational Tate modules].
+
+The same construction for the multiplicative group gives #pedia("Tate Twist", <galois>)[$T_ell GG_m = ZZ_ell (1)$].
