@@ -12,14 +12,15 @@ const searchIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><cir
 const folderIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7V5.5A1.5 1.5 0 0 1 4.5 4H9l2 3h8.5A1.5 1.5 0 0 1 21 8.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5V7Z" stroke="currentColor" stroke-width="1.2"/><path d="M3 8h18" stroke="currentColor" stroke-width="1.2"/></svg>';
 const chevron = '<svg class="directory-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>';
 const href = (site, path = '') => `${site.base}${path}`;
+const hasCollection = (site, name) => !site.collections || site.collections.includes(name);
 
 function header(site, section) {
   return `<header class="site-header"><div class="header-inner">
     <a class="wordmark" href="${href(site)}" aria-label="${e(site.title)} home">${e(site.title)}</a>
     <nav aria-label="Main navigation">
       <a href="${href(site)}" ${section === 'home' ? 'aria-current="page"' : ''}>Home</a>
-      <a href="${href(site, 'notes/')}" ${section === 'notes' ? 'aria-current="page"' : ''}>Notes</a>
-      <a href="${href(site, 'pedia/')}" ${section === 'pedia' ? 'aria-current="page"' : ''}>Encyclopedia</a>
+      ${hasCollection(site, 'notes') ? `<a href="${href(site, 'notes/')}" ${section === 'notes' ? 'aria-current="page"' : ''}>Notes</a>` : ''}
+      ${hasCollection(site, 'pedia') ? `<a href="${href(site, 'pedia/')}" ${section === 'pedia' ? 'aria-current="page"' : ''}>Encyclopedia</a>` : ''}
       <a href="${href(site, 'graph/')}" ${section === 'graph' ? 'aria-current="page"' : ''}>Graph</a>
     </nav>
   </div></header>`;
@@ -86,8 +87,8 @@ export function homePage(site, dev) {
     ${profile.about?.length ? `<section class="profile-section" aria-labelledby="about-title"><h2 id="about-title">About</h2><div class="profile-prose">${profile.about.map(paragraph => `<p>${e(paragraph)}</p>`).join('')}</div></section>` : ''}
     ${profile.interests?.length ? `<section class="profile-section" aria-labelledby="interests-title"><h2 id="interests-title">Interests</h2><ul class="profile-interests">${profile.interests.map(interest => `<li>${e(interest)}</li>`).join('')}</ul></section>` : ''}
     <section class="profile-section" aria-labelledby="explore-title"><h2 id="explore-title">Explore</h2><div class="profile-explore">
-      <a href="${href(site, 'notes/')}"><h3>Notes</h3>${arrow}</a>
-      <a href="${href(site, 'pedia/')}"><h3>Encyclopedia</h3>${arrow}</a>
+      ${hasCollection(site, 'notes') ? `<a href="${href(site, 'notes/')}"><h3>Notes</h3>${arrow}</a>` : ''}
+      ${hasCollection(site, 'pedia') ? `<a href="${href(site, 'pedia/')}"><h3>Encyclopedia</h3>${arrow}</a>` : ''}
       <a href="${href(site, 'graph/')}"><h3>Graph</h3>${arrow}</a>
     </div></section>
     ${profile.links?.length ? `<section class="profile-section" aria-labelledby="links-title"><h2 id="links-title">Elsewhere</h2><ul class="profile-links">${profile.links.map(link => `<li><a href="${e(link.url)}">${e(link.label)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul></section>` : ''}
@@ -174,14 +175,14 @@ export function graphPage(site, entries, dev) {
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
   return layout(site, { title: 'Graph', section: 'graph', path: 'graph/', dev, script: 'graph.js', body: `
     <main id="main" class="graph-page content-width">
-      <header class="collection-heading"><h1>Graph</h1><p>Connections between notes and encyclopedia entries.</p></header>
+      <header class="collection-heading"><h1>Graph</h1><p>Connections between pages.</p></header>
       <div class="graph-toolbar" hidden>
         <label class="search-field">${searchIcon}<input id="graph-search" type="search" placeholder="Find a page..." aria-label="Find a page" autocomplete="off"></label>
         <div class="graph-controls"><button type="button" data-graph-zoom="in" aria-label="Zoom in">+</button><button type="button" data-graph-zoom="out" aria-label="Zoom out">−</button><button type="button" data-graph-fit>Fit view</button></div>
       </div>
       <div class="graph-stage" hidden><svg class="graph-canvas" role="group" aria-label="Page connections" aria-describedby="graph-help" tabindex="0"></svg></div>
-      ${data.nodes.length ? '<noscript><p>Enable JavaScript to explore the graph, or browse the pages below.</p></noscript>' : '<p class="graph-empty">No notes or encyclopedia entries yet.</p>'}
-      <div class="graph-footer"><div class="graph-legend"><span class="graph-legend-notes">Notes</span><span class="graph-legend-pedia">Encyclopedia</span></div><p>${data.nodes.length} ${data.nodes.length === 1 ? 'page' : 'pages'} · ${data.links.length} ${data.links.length === 1 ? 'connection' : 'connections'}</p></div>
+      ${data.nodes.length ? '<noscript><p>Enable JavaScript to explore the graph, or browse the pages below.</p></noscript>' : '<p class="graph-empty">No pages yet.</p>'}
+      <div class="graph-footer"><div class="graph-legend">${hasCollection(site, 'notes') ? '<span class="graph-legend-notes">Notes</span>' : ''}${hasCollection(site, 'pedia') ? '<span class="graph-legend-pedia">Encyclopedia</span>' : ''}</div><p>${data.nodes.length} ${data.nodes.length === 1 ? 'page' : 'pages'} · ${data.links.length} ${data.links.length === 1 ? 'connection' : 'connections'}</p></div>
       <p id="graph-help" class="graph-help" hidden>Drag nodes to arrange, or the background to pan. Scroll or pinch to zoom. Click a node to open its page.</p>
       <p class="sr-only" data-graph-status role="status" aria-live="polite"></p>
       <details class="graph-directory" open><summary>All pages (${data.nodes.length})</summary><ul>${data.nodes.map(node => `<li><a href="${e(node.url)}">${e(node.title)}</a><span>${node.collection === 'pedia' ? 'Encyclopedia' : 'Note'}${node.collection === 'notes' && node.path.includes('/') ? ` · ${e(posix.dirname(node.path))}` : ''}</span></li>`).join('')}</ul><p data-graph-no-results hidden>No matching pages.</p></details>
@@ -190,5 +191,5 @@ export function graphPage(site, entries, dev) {
 }
 
 export function notFoundPage(site, dev) {
-  return layout(site, { title: 'Page not found', dev, body: `<main id="main" class="not-found"><p class="eyebrow">404</p><h1>This page has not been written yet.</h1><p>The page may have moved, or the address may be incorrect.</p><a href="${href(site, 'notes/')}">Back to notes ${arrow}</a></main>` });
+  return layout(site, { title: 'Page not found', dev, body: `<main id="main" class="not-found"><p class="eyebrow">404</p><h1>This page has not been written yet.</h1><p>The page may have moved, or the address may be incorrect.</p><a href="${href(site)}">Back to home ${arrow}</a></main>` });
 }

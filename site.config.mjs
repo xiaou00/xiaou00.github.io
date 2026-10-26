@@ -1,7 +1,7 @@
 export default {
   title: 'Liber 777',
   author: 'xiaou0',
-  description: 'Personal website, mathematical notes, and an encyclopedia.',
+  description: 'Personal website of xiaou0.',
   // Public origin for canonical URLs. Use '/repository-name/' for a subdirectory.
   url: 'https://xiaou00.github.io',
   base: '/',

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, rename, rm } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rename, rm } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseHTML } from 'linkedom';
@@ -142,6 +142,10 @@ async function buildSite({ dev, session, fresh }) {
   if (!match || (Number(match[1]) === 0 && Number(match[2]) < 15)) throw new Error('Native MathML requires Typst >= 0.15.0; 0.15.1 is recommended.');
   const { default: config } = await import(`${pathToFileURL(join(ROOT, 'site.config.mjs')).href}?t=${Date.now()}`);
   const site = { ...config };
+  // Removing a collection directory also removes its pages and navigation.
+  site.collections = (await readdir(contentRoot, { withFileTypes: true }))
+    .filter(entry => entry.isDirectory() && ['notes', 'pedia'].includes(entry.name))
+    .map(entry => entry.name);
   if (typeof site.base !== 'string' || !/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(site.base)) throw new Error('site.base must be / or /repository-name/.');
   const { homePage, notesPage, notePage, pediaPage, graphPage, notFoundPage } = await import(`${pathToFileURL(join(ROOT, 'src/render.mjs')).href}?t=${Date.now()}`);
   const filenames = await discoverNoteFiles(join(contentRoot, 'notes'));
@@ -194,8 +198,8 @@ async function buildSite({ dev, session, fresh }) {
   await output.write('typst.css', [...new Set(entries.flatMap(note => note.styles))].join('\n'));
   await output.write('index.html', homePage(site, dev));
   await output.write('404.html', notFoundPage(site, dev));
-  await output.write('notes/index.html', notesPage(site, notes, dev));
-  await output.write('pedia/index.html', pediaPage(site, objects, dev));
+  if (site.collections.includes('notes')) await output.write('notes/index.html', notesPage(site, notes, dev));
+  if (site.collections.includes('pedia')) await output.write('pedia/index.html', pediaPage(site, objects, dev));
   await output.write('graph/index.html', graphPage(site, entries, dev));
   const neighbors = new Map();
   for (const entry of entries) {

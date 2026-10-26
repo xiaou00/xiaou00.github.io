@@ -133,6 +133,7 @@
 #let Ch = $sans("Ch")$
 #let dgCat = $sans("dgCat")$
 #let Kcat = $sans("K")$
+#let KK = $bb(K)$
 #let Dcat = $sans("D")$
 #let Fin = $sans("Fin")$
 #let Op = $sans("Op")$

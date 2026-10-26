@@ -33,6 +33,6 @@ test('graph page safely embeds titles, uses the deployment base and has a no-Jav
   assert.ok(page.querySelector('script[src="/blog/graph.js"]'));
   assert.equal(parseHTML(homePage(site)).document.querySelector('script[src$="graph.js"]'), null);
   const empty = parseHTML(graphPage(site, [])).document;
-  assert.equal(empty.querySelector('.graph-empty').textContent, 'No notes or encyclopedia entries yet.');
+  assert.equal(empty.querySelector('.graph-empty').textContent, 'No pages yet.');
   assert.deepEqual(JSON.parse(empty.getElementById('graph-data').textContent), { nodes: [], links: [] });
 });
