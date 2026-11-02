@@ -1,4 +1,5 @@
 #let colim = $limits(op("colim"))$
+#let ord = $op("ord")$
 #let Spec = $op("Spec")$
 #let Specm = $op("Specm")$
 #let Frac = $op("Frac")$

@@ -121,8 +121,11 @@ export function prepareDocument(source, { filename } = {}) {
     element.replaceWith(wrapper);
     wrapper.append(element);
   }
+  const title = document.querySelector('[data-document-title]');
+  const titleData = title ? { titleHtml: title.innerHTML, titleText: title.textContent } : {};
+  title?.remove();
   const text = document.body.textContent.replace(/\s+/g, ' ').trim();
-  return { html: document.body.innerHTML, text, toc, styles };
+  return { html: document.body.innerHTML, text, toc, styles, ...titleData };
 }
 
 export async function build({ dev = false, compilerSession = null, fresh = false } = {}) {

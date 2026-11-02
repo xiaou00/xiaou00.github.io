@@ -1,6 +1,6 @@
 # Liber 777
 
-A small personal website with **Home** and **Graph**. The Notes and Encyclopedia collections have been removed. Their routes and navigation are omitted when `content/notes/` and `content/pedia/` are absent. The Typst authoring tools documented below remain available if collections are added again. There is no browser framework or client-side math compiler.
+A small personal website with **Home**, **Notes**, and **Graph**. Notes supports Typst authoring and currently starts with an empty collection. Encyclopedia is removed; its routes and navigation are omitted while `content/pedia/` is absent. There is no browser framework or client-side math compiler.
 
 ## Run locally
 
@@ -30,11 +30,12 @@ During a preview session, unchanged documents reuse their parsed content and ref
 
 Edit `site.config.mjs`. The `profile` object contains the name, role, About paragraphs, interests, and external links. The bracketed text is placeholder content to replace with your own details. Empty optional lists are omitted from the page.
 
-The site currently has two routes:
+The site currently has three routes:
 
 | Route | Content |
 | --- | --- |
 | `/` | Personal home page |
+| `/notes/` | Searchable notebook directory |
 | `/graph/` | Page connections (currently empty) |
 
 The homepage uses text and links. It has no image dependency.

@@ -7,6 +7,9 @@ export function escapeHtml(value = '') {
 }
 
 const e = escapeHtml;
+// HTML comes from the same Typst compilation as the body; raw names remain IDs.
+const displayTitle = entry => entry.titleHtml ?? e(entry.title);
+const plainTitle = entry => entry.titleText ?? entry.title;
 const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" stroke="currentColor" stroke-width="1.2"/></svg>';
 const searchIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.4"/></svg>';
 const folderIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7V5.5A1.5 1.5 0 0 1 4.5 4H9l2 3h8.5A1.5 1.5 0 0 1 21 8.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5V7Z" stroke="currentColor" stroke-width="1.2"/><path d="M3 8h18" stroke="currentColor" stroke-width="1.2"/></svg>';
@@ -59,7 +62,7 @@ function fileTree(site, notes, { flat = false } = {}) {
     }
     current.files.push(note);
   }
-  const renderFile = note => `<li class="file-node" data-file="${e(`${note.slug}.typ`)}" data-search="${e(`${note.title} ${note.slug}.typ ${note.text || ''}`.normalize('NFKC').toLocaleLowerCase())}"><a class="file-link" href="${e(documentUrl(site, note))}"><span class="file-name">${e(note.title)}</span><span class="file-arrow">${arrow}</span></a></li>`;
+  const renderFile = note => `<li class="file-node" data-file="${e(`${note.slug}.typ`)}" data-search="${e(`${note.title} ${plainTitle(note)} ${note.slug}.typ ${note.text || ''}`.normalize('NFKC').toLocaleLowerCase())}"><a class="file-link" href="${e(documentUrl(site, note))}"><span class="file-name">${displayTitle(note)}</span><span class="file-arrow">${arrow}</span></a></li>`;
   const render = directory => `<ul class="file-tree">${[...directory.directories.values()].sort((a, b) => compareNames(a.name, b.name)).map(child => `<li class="directory-node"><details data-directory="${e(child.path)}"><summary>${chevron}<span class="directory-name">${e(child.name)}</span></summary>${render(child)}</details></li>`).join('')}${directory.files.sort((a, b) => compareNames(a.title, b.title)).map(renderFile).join('')}</ul>`;
   return render(root);
 }
@@ -121,20 +124,20 @@ export function notePage(site, note, notes, dev, adjacency) {
     { title: 'References', direction: 'outgoing', notes: note.outgoing },
     { title: 'Referenced by', direction: 'incoming', notes: note.incoming },
   ].filter(group => group.notes.length);
-  return layout(site, { title: note.title, note: true, section: isObject ? 'pedia' : 'notes', dev, path, body: `
+  return layout(site, { title: plainTitle(note), note: true, section: isObject ? 'pedia' : 'notes', dev, path, body: `
   <div class="reading-progress" aria-hidden="true"><span></span></div><main id="main" class="reading-main content-width">
-    <div class="breadcrumb"><a href="${returnUrl}">${returnTitle}</a><span>/</span><span>${e(isObject ? note.title : note.slug.split('/').join(' / '))}</span></div>
+    <div class="breadcrumb"><a href="${returnUrl}">${returnTitle}</a><span>/</span><span>${!isObject && folder !== '.' ? `${e(folder.split('/').join(' / '))} / ` : ''}${displayTitle(note)}</span></div>
     <header class="article-header">${note.notebook ? `<div class="article-notebook">${folderIcon}<span>${e(note.notebook)}</span></div>` : ''}
-      <h1>${e(note.title)}</h1>
+      <h1>${displayTitle(note)}</h1>
     </header>
     <div class="reading-grid"><aside class="toc-aside"><details class="toc" open><summary>On this page</summary><nav aria-label="Table of contents"><ol>${note.toc.map(item => `<li class="toc-level-${item.level}"><a href="#${e(item.id)}">${e(item.text)}</a></li>`).join('')}</ol></nav></details>
       <a class="source-link" href="${href(site, `sources/${sourcePath}`)}" download><span>Typst source</span><span aria-hidden="true">↓</span></a><button class="print-button" hidden>Print / Save PDF <span aria-hidden="true">↗</span></button>
-    </aside><div class="article-column"><article class="typst-content" aria-label="${e(note.title)}">${note.html}</article>
+    </aside><div class="article-column"><article class="typst-content" aria-label="${e(plainTitle(note))}">${note.html}</article>
       <div class="article-bottom"><a href="${returnUrl}">← Back to ${returnTitle}</a></div>
-      ${references.length ? `<section class="note-connections" aria-label="Connections">${references.map(group => `<div class="connection-group" data-direction="${group.direction}"><h2>${group.title}<span>${group.notes.length}</span></h2><ul>${group.notes.map(other => `<li><a href="${e(documentUrl(site, other))}"><span>${e(other.title)}</span>${arrow}</a></li>`).join('')}</ul></div>`).join('')}</section>` : ''}
+      ${references.length ? `<section class="note-connections" aria-label="Connections">${references.map(group => `<div class="connection-group" data-direction="${group.direction}"><h2>${group.title}<span>${group.notes.length}</span></h2><ul>${group.notes.map(other => `<li><a href="${e(documentUrl(site, other))}"><span>${displayTitle(other)}</span>${arrow}</a></li>`).join('')}</ul></div>`).join('')}</section>` : ''}
       ${previous || next ? `<nav class="note-pagination" aria-label="${isObject ? 'Adjacent encyclopedia entries' : 'Adjacent notes'}">
-        ${previous ? `<a rel="prev" href="${e(documentUrl(site, previous))}"><span class="note-pagination-label">← Previous</span><span>${e(previous.title)}</span></a>` : ''}
-        ${next ? `<a rel="next" href="${e(documentUrl(site, next))}"><span class="note-pagination-label">Next →</span><span>${e(next.title)}</span></a>` : ''}
+        ${previous ? `<a rel="prev" href="${e(documentUrl(site, previous))}"><span class="note-pagination-label">← Previous</span><span>${displayTitle(previous)}</span></a>` : ''}
+        ${next ? `<a rel="next" href="${e(documentUrl(site, next))}"><span class="note-pagination-label">Next →</span><span>${displayTitle(next)}</span></a>` : ''}
       </nav>` : ''}
     </div></div>
   </main>` });
@@ -152,6 +155,7 @@ export function graphData(site, entries) {
   const indices = new Map(entries.map((entry, index) => [documentUrl(site, entry), index]));
   const nodes = entries.map(entry => ({
     url: documentUrl(site, entry), title: entry.title,
+    titleHtml: entry.titleHtml, titleText: entry.titleText,
     collection: entry.collection === 'pedia' ? 'pedia' : 'notes',
     path: entry.slug,
   }));
@@ -185,7 +189,7 @@ export function graphPage(site, entries, dev) {
       <div class="graph-footer"><div class="graph-legend">${hasCollection(site, 'notes') ? '<span class="graph-legend-notes">Notes</span>' : ''}${hasCollection(site, 'pedia') ? '<span class="graph-legend-pedia">Encyclopedia</span>' : ''}</div><p>${data.nodes.length} ${data.nodes.length === 1 ? 'page' : 'pages'} · ${data.links.length} ${data.links.length === 1 ? 'connection' : 'connections'}</p></div>
       <p id="graph-help" class="graph-help" hidden>Drag nodes to arrange, or the background to pan. Scroll or pinch to zoom. Click a node to open its page.</p>
       <p class="sr-only" data-graph-status role="status" aria-live="polite"></p>
-      <details class="graph-directory" open><summary>All pages (${data.nodes.length})</summary><ul>${data.nodes.map(node => `<li><a href="${e(node.url)}">${e(node.title)}</a><span>${node.collection === 'pedia' ? 'Encyclopedia' : 'Note'}${node.collection === 'notes' && node.path.includes('/') ? ` · ${e(posix.dirname(node.path))}` : ''}</span></li>`).join('')}</ul><p data-graph-no-results hidden>No matching pages.</p></details>
+      <details class="graph-directory" open><summary>All pages (${data.nodes.length})</summary><ul>${data.nodes.map(node => `<li><a href="${e(node.url)}">${displayTitle(node)}</a><span>${node.collection === 'pedia' ? 'Encyclopedia' : 'Note'}${node.collection === 'notes' && node.path.includes('/') ? ` · ${e(posix.dirname(node.path))}` : ''}</span></li>`).join('')}</ul><p data-graph-no-results hidden>No matching pages.</p></details>
       <script type="application/json" id="graph-data">${json}</script>
     </main>` });
 }

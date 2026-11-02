@@ -147,7 +147,7 @@ h1,h2,h3,p{margin:0}
 .typst-content a:hover{text-decoration-color:var(--muted)}
 .typst-content em{font-style:italic}
 .typst-content strong{font-weight:700}
-.typst-content math{font-family:'Libertinus Math','Notebook Yoneda','Source Han Serif',math;font-size:1em;color:inherit}
+math{font-family:'Libertinus Math','Notebook Yoneda','Source Han Serif',math;font-size:1em;color:inherit}
 .math-block{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:9px 2px;margin:.7em 0;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
 .math-block math{width:max-content;min-width:fit-content;margin-inline:auto}
 .numbered-equation{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1em;margin:.7em 0}
@@ -242,6 +242,8 @@ h1,h2,h3,p{margin:0}
 .graph-dot{fill:var(--ink);stroke:var(--paper);stroke-width:1.5;vector-effect:non-scaling-stroke}
 .graph-node-pedia .graph-dot{fill:#678aa3}
 .graph-label{fill:var(--ink);font:11px var(--sans);paint-order:stroke;stroke:var(--paper);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.graph-label-html{overflow:visible;stroke:none}
+.graph-label-html>div{display:flex;align-items:center;width:max-content;height:100%;white-space:nowrap;color:var(--ink);font:inherit;text-shadow:0 0 3px var(--paper)}
 .graph-canvas.is-focused .graph-node{opacity:.16}
 .graph-canvas.is-focused .graph-edge{opacity:.15}
 .graph-canvas.is-focused .graph-node.is-neighbor{opacity:.85}

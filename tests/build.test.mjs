@@ -17,6 +17,7 @@ import './stickers.test.mjs';
 import './assets-image.test.mjs';
 import './pedia.test.mjs';
 import './note-links.test.mjs';
+import './titles.test.mjs';
 import './pages.test.mjs';
 import './graph.test.mjs';
 import './slate.test.mjs';

@@ -29,6 +29,21 @@
 // Only an explicit lr(...) opts into content-sized delimiters.
 #let lr = math.lr.with(size: 100%)
 
+#import "abbrev.typ" as _title-abbrev
+
+// Parse only paired $...$ as math; punctuation and markup outside stay literal.
+// Compile titles in the document's existing pass, with the shared math scope.
+#let _title-content(title) = {
+  let scope = dictionary(_title-abbrev) + (frac: frac, lr: lr)
+  let start = 0
+  for part in title.matches(regex("\\$[^$]+\\$")) {
+    title.slice(start, part.start)
+    math.equation(block: false, eval(part.text.slice(1, -1).trim(), mode: "math", scope: scope))
+    start = part.end
+  }
+  title.slice(start)
+}
+
 #let note(doc) = {
   set document(title: sys.inputs.at("note-title", default: ""), author: "xiaou0")
   set text(font: (fonts.body, "Source Han Serif"), size: 11pt, fill: slate.ink, lang: "en")
@@ -79,6 +94,9 @@
   show math.overline: it => _math-line(it, over: true)
   [#metadata(none) <note>]
   html.elem("span", attrs: ("data-note-template": "", hidden: ""), [])
+  if "note-title" in sys.inputs {
+    html.elem("span", attrs: ("data-document-title": ""), _title-content(sys.inputs.at("note-title")))
+  }
   doc
 }
 
@@ -107,7 +125,14 @@
     "data-note-auto": if automatic { "true" } else { "false" },
   )
   attrs.insert("data-" + kind, title)
-  html.elem("a", attrs: attrs, if automatic { [] } else { body })
+  html.elem("a", attrs: attrs, if automatic {
+    html.elem("span", attrs: ("data-note-caption": ""), _title-content(title))
+    if kind == "note" {
+      let basename = title.split("/").last()
+      if basename.ends-with(".typ") { basename = basename.slice(0, -4) }
+      html.elem("span", attrs: ("data-note-path-caption": ""), _title-content(basename))
+    }
+  } else { body })
 }
 
 #let note-ref = page-ref.with("note")

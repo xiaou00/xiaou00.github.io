@@ -24,7 +24,7 @@
     const angle = index * Math.PI * (3 - Math.sqrt(5));
     const radius = 65 * Math.sqrt(index);
     return { ...node, index, x: Math.cos(angle) * radius, y: Math.sin(angle) * radius,
-      vx: 0, vy: 0, fixed: false, neighbors: new Set(), search: normalize(`${node.title} ${node.path}`) };
+      vx: 0, vy: 0, fixed: false, neighbors: new Set(), search: normalize(`${node.title} ${node.titleText || ''} ${node.path}`) };
   });
   const links = graph.links.map(({ source, target }) => {
     const a = nodes[source], b = nodes[target];
@@ -34,14 +34,24 @@
   });
   for (const node of nodes) {
     const kind = node.collection === 'pedia' ? 'Encyclopedia' : 'Note';
+    const title = node.titleText ?? node.title;
     node.element = create('a', { href: node.url, class: `graph-node graph-node-${node.collection}`,
-      'data-node': node.index, 'aria-label': `${node.title} — ${kind}`, tabindex: '0' }, nodeLayer);
-    create('title', {}, node.element).textContent = `${node.title}\n${kind} · ${node.path}\n${node.neighbors.size} connections`;
+      'data-node': node.index, 'aria-label': `${title} — ${kind}`, tabindex: '0' }, nodeLayer);
+    create('title', {}, node.element).textContent = `${title}\n${kind} · ${node.path}\n${node.neighbors.size} connections`;
     // A generous invisible hit area makes small nodes usable on touch screens.
     create('circle', { class: 'graph-hit', r: 18 }, node.element);
     const radius = 4 + Math.min(5, Math.sqrt(node.neighbors.size));
     create('circle', { class: 'graph-dot', r: radius }, node.element);
-    create('text', { class: 'graph-label', x: radius + 7, y: 4 }, node.element).textContent = node.title;
+    if (node.titleHtml?.includes('<math')) {
+      const label = create('foreignObject', { class: 'graph-label graph-label-html', x: radius + 7, y: -24, width: 320, height: 48 }, node.element);
+      const container = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+      const caption = document.createElement('span');
+      caption.innerHTML = node.titleHtml;
+      container.append(caption);
+      label.append(container);
+    } else {
+      create('text', { class: 'graph-label', x: radius + 7, y: 4 }, node.element).textContent = title;
+    }
   }
 
   let width = 0, height = 0;
@@ -121,7 +131,7 @@
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for (const node of nodes) {
       minX = Math.min(minX, node.x - 25);
-      maxX = Math.max(maxX, node.x + Math.min(220, node.title.length * 7 + 25));
+      maxX = Math.max(maxX, node.x + Math.min(220, (node.titleText ?? node.title).length * 7 + 25));
       minY = Math.min(minY, node.y - 25); maxY = Math.max(maxY, node.y + 25);
     }
     camera.k = clamp(Math.min((width - 40) / (maxX - minX), (height - 40) / (maxY - minY)), 0.04, 1.5);

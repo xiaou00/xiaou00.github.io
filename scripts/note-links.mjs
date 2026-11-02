@@ -12,7 +12,9 @@ function inspectLinks(html) {
   const references = [...document.querySelectorAll('a[data-note], a[data-object]')].map(link => {
     const isObject = link.hasAttribute('data-object');
     return { isObject, file: link.getAttribute(isObject ? 'data-object' : 'data-note'),
-      target: link.getAttribute('data-note-target') || '', auto: link.getAttribute('data-note-auto') === 'true' };
+      target: link.getAttribute('data-note-target') || '', auto: link.getAttribute('data-note-auto') === 'true',
+      captionHtml: link.querySelector('[data-note-caption]')?.innerHTML,
+      pathCaptionHtml: link.querySelector('[data-note-path-caption]')?.innerHTML };
   });
   return { source: html, html: document.body.innerHTML, text: document.body.textContent.replace(/\s+/g, ' ').trim(), anchors, references };
 }
@@ -38,7 +40,7 @@ export function resolveNoteLinks(notes, { base = '/' } = {}, objects = [], cache
 
   for (const note of entries) {
     const record = cache.get(key(note));
-    const resolutions = record.references.map(({ isObject, file, target, auto }) => {
+    const resolutions = record.references.map(({ isObject, file, target, auto, captionHtml, pathCaptionHtml }) => {
       const kind = isObject ? 'object' : 'note';
       const name = isObject ? 'Encyclopedia entry' : 'Note';
       const fail = message => { throw new Error(`${note.filename || `${note.slug}.typ`}: ${message}`); };
@@ -67,23 +69,27 @@ export function resolveNoteLinks(notes, { base = '/' } = {}, objects = [], cache
       const destination = registry.get(destinationKey);
       if (!destination) {
         return { missing: true, auto, caption: isObject ? file : noteIdentity(`${slug}.typ`).title,
+          captionHtml: isObject ? captionHtml : pathCaptionHtml,
           message: `${name} does not exist or is unpublished` };
       }
       let caption = isObject || namedNote ? file : destination.title;
+      captionHtml = isObject || namedNote ? captionHtml : destination.titleHtml ?? pathCaptionHtml;
+      let suffix = '';
       if (target) {
         const label = cache.get(destinationKey).anchors.get(target);
         if (label === undefined) {
-          if (isObject) return { missing: true, auto, caption: `${caption} / ${target}`,
+          if (isObject) return { missing: true, auto, caption: `${caption} / ${target}`, captionHtml, suffix: ` / ${target}`,
             message: `${name} "${file}" has no label <${target}>` };
           fail(`${name} "${file}" has no label <${target}>.`);
         }
-        caption += ` / ${label}`;
+        suffix = ` / ${label}`;
+        caption += suffix;
       }
       if (destination !== note) {
         outgoing.get(key(note)).add(destinationKey);
         incoming.get(destinationKey).add(key(note));
       }
-      return { href: `${documentUrl({ base }, destination)}${target ? `#${encodeURIComponent(target)}` : ''}`, auto, caption };
+      return { href: `${documentUrl({ base }, destination)}${target ? `#${encodeURIComponent(target)}` : ''}`, auto, caption, captionHtml, suffix };
     });
     const signature = JSON.stringify(resolutions);
     if (record.signature !== signature) {
@@ -91,18 +97,25 @@ export function resolveNoteLinks(notes, { base = '/' } = {}, objects = [], cache
       else {
         const { document } = parseHTML(`<html><body>${record.html}</body></html>`);
         const links = [...document.querySelectorAll('a[data-note], a[data-object]')];
+        const setCaption = (element, result) => {
+          if (result.captionHtml === undefined) element.textContent = result.caption;
+          else {
+            element.innerHTML = result.captionHtml;
+            element.append(document.createTextNode(result.suffix || ''));
+          }
+        };
         resolutions.forEach((result, index) => {
           const link = links[index];
           if (result.missing) {
             const text = document.createElement('span');
             text.className = 'note-reference-missing';
             text.title = result.message;
-            if (result.auto) text.textContent = result.caption;
+            if (result.auto) setCaption(text, result);
             else text.append(...link.childNodes);
             link.replaceWith(text);
           } else {
             link.setAttribute('href', result.href);
-            if (result.auto) link.textContent = result.caption;
+            if (result.auto) setCaption(link, result);
             link.classList.add('note-reference');
             for (const attribute of ['data-note', 'data-object', 'data-note-target', 'data-note-auto']) link.removeAttribute(attribute);
           }

@@ -27,6 +27,19 @@ For example, `Algebra/Vector space.typ` has the title `Vector space` and the URL
 
 Titles cannot be blank, contain `/`, `\`, NUL, or invalid Unicode, or equal `.` or `..`. Files and folders starting with `_` or `.` are unpublished drafts.
 
+### Mathematics in titles
+
+Both note and encyclopedia filenames support inline Typst math between `$...$`, for example `Milnor $K_n$-theory.typ` or `$oo$-Category.typ`. Formulas render in page headings, directories, references, navigation, and the graph. They use the shared definitions in `content/abbrev.typ`, including `KK`; ordinary text outside `$...$` stays literal. An unmatched `$` stays literal too. Invalid math reports a Typst error during the build.
+
+Use the original title, including dollar signs, when linking:
+
+```typst
+#pedia("Milnor $K_n$-theory")
+#note-ref("Notes on $KK$")
+```
+
+URLs and title lookup still use the filename. Formula syntax is Typst, and filename restrictions still apply: use `frac(a,b)` instead of `/` for a fraction in a filename. For shell commands, single quotes preserve dollar signs: `npm run new:object -- 'Milnor $K_n$-theory'`.
+
 ## References
 
 ```typst
