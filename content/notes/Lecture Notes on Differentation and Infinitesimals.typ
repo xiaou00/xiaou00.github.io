@@ -1,4 +1,5 @@
 #import "../template.typ": *
+#import "@preview/fletcher:0.5.8": diagram, node, edge
 
 #show:note
 
@@ -161,3 +162,291 @@ Now we have the Zariski cotangent space, one thing we might ask is, why we are u
   $ 0 -> I -> A' -> A -> 0 $
   where $I^2 = 0$ and $I$ is an $A$-module via the map $A' -> A$.
 ]
+
+== Derivations
+
+Let $k -> A$ be a homomorphism of commutative rings and let $M$ be an $A$-module.
+
+#definition(title:[Derivation])[
+  A _$k$-derivation_ is a $k$-linear map $D:A -> M$ satisfying the Leibniz rule
+  $ D(a b) = a D(b) + b D(a) $
+  These form an $A$-module $Der_k (A,M)$ under pointwise addition and scalar multiplication.
+] <derivation>
+
+#proposition(title:[Derivations as Sections])[
+  Give $A plus.o M$ its trivial square-zero multiplication and the $k$-algebra structure $c |-> (c,0)$. Write $pi:A plus.o M -> A$ for the projection. There is a natural bijection between $Der_k (A,M)$ and the $k$-algebra sections of $pi$, given by
+  $ D |-> s_D, quad s_D (a) := (a,D(a)), quad pi compose s_D = id_A $
+] <derivations-as-sections>
+
+#proof[
+  Every section has the unique form $s(a) = (a,D(a))$. Additivity and compatibility with $k$ give $k$-linearity of $D$, while
+  $ s(a) s(b) = (a b, a D(b) + b D(a)) $
+  shows that multiplicativity is exactly the Leibniz rule. Conversely, the Leibniz rule gives $D(1)=0$, so a $k$-derivation defines a unital $k$-algebra section.
+]
+
+Thus a derivation is a first-order perturbation of the canonical section $a |-> (a,0)$.
+
+#remark(title:[Other Square-zero Extensions])[
+  For any square-zero extension of $k$-algebras $0 -> I -> A' -> A -> 0$, two $k$-algebra sections differ by an element of $Der_k (A,I)$. If one section $s$ exists, all sections are uniquely $s+D$ for $D in Der_k (A,I)$. This follows by expanding products and using $I^2=0$.
+]
+
+= Kähler Differentials
+
+== Representability
+
+Fix a homomorphism of commutative rings $k -> A$. Derivations are functorial in their target: an $A$-linear map $M -> N$ sends a derivation $A -> M$ to one with values in $N$.
+
+#definition(title:[Kähler Differentials])[
+  The _module of Kähler differentials_ $Omega^1_(A/k)$ represents the functor $M |-> Der_k (A,M)$. Explicitly, it is an $A$-module with a _universal derivation_ $d:A -> Omega^1_(A/k)$ such that
+  $ Hom_A (Omega^1_(A/k),M) simeq Der_k (A,M), quad phi |-> phi compose d $
+  naturally in every $A$-module $M$.
+
+  Thus every derivation $D:A -> M$ factors uniquely as $D = phi compose d$ with $phi$ $A$-linear. The pair $(Omega^1_(A/k),d)$ is unique up to unique isomorphism.
+] <kahler-differentials>
+
+#remark(title:[Universal First-order Perturbation])[
+  By @derivations-as-sections, the section $s_d (a) = (a,d a)$ of $A plus.o Omega^1_(A/k) -> A$ is universal: every section $s_D$ of $A plus.o M -> A$ is uniquely
+  $ s_D = (id_A plus.o phi) compose s_d $
+]
+
+== Generators and Relations
+
+#construction[
+  Take the free $A$-module on symbols $d a$, for $a in A$, and impose the relations
+  $ d(a+b) = d a + d b, quad d(a b) = a d b + b d a, quad d c = 0 $
+  for $a,b in A$ and $c$ in the image of $k$. The resulting module is $Omega^1_(A/k)$: giving an $A$-linear map out of it is exactly giving values $d a |-> D(a)$ satisfying the derivation rules. This proves existence.
+]
+
+#example[
+  For $A = k[x_1,...,x_n]$,
+  $ Omega^1_(A/k) = plus.o.big_(i=1)^n A d x_i, quad d f = sum_(i=1)^n frac(partial f, partial x_i) d x_i $
+  Indeed, a derivation on a polynomial ring is uniquely determined by its values on the variables.
+]
+
+== The Diagonal
+
+Let $B = A tens_k A$, let $mu:B -> A$ send $a tens b$ to $a b$, and put $I = ker(mu)$.
+
+#proposition(title:[Conormal Module of the Diagonal])[
+  There is a canonical isomorphism of $A$-modules
+  $ Omega^1_(A/k) simeq I/I^2, quad d a |-> overline(1 tens a - a tens 1) $
+  Here $A = B/I$ acts on $I/I^2$; the actions through the two factors of $B$ agree.
+] <differentials-diagonal>
+
+#proof[
+  The displayed formula defines a derivation modulo $I^2$. For any $D in Der_k (A,M)$, the map
+  $ I -> M, quad sum_i a_i tens b_i |-> sum_i a_i D(b_i) $
+  kills $I^2$ by the Leibniz rule. It induces the unique $A$-linear map $I/I^2 -> M$ sending $overline(1 tens a - a tens 1)$ to $D(a)$, since these classes generate $I/I^2$. Hence $I/I^2$ has the same universal property.
+]
+
+Geometrically, $I$ defines the diagonal $Spec A -> Spec A times_(Spec k) Spec A$. The quotient $B/I^2$ describes its first infinitesimal neighborhood: $d a$ measures the difference between the two pullbacks of $a$ to first order.
+
+== The Sheaf of Differentials
+
+#definition(title:[Relative Differentials])[
+  For a morphism of schemes $f:X -> S$, the _sheaf of differentials_ $Omega^1_(X/S)$ has a universal $S$-derivation $d:cal(O)_X -> Omega^1_(X/S)$, characterized by
+  $ Hom_(cal(O)_X)(Omega^1_(X/S),cal(F)) simeq Der_S (cal(O)_X,cal(F)) $
+  Here an $S$-derivation is an additive map of sheaves satisfying the Leibniz rule and vanishing on the image of $f^(-1) cal(O)_S$.
+] <sheaf-of-differentials>
+
+On affine opens $U = Spec A$ and $V = Spec R$ with $f(U) subset V$, we have
+$ Omega^1_(X/S)|_U simeq tilde(Omega^1_(A/R)) $
+The algebraic construction commutes with localization, so these modules glue to a quasi-coherent sheaf. Equivalently, this is the conormal sheaf of the diagonal $X -> X times_S X$.
+
+#remark(title:[Recovering the Cotangent Space])[
+  Let $X$ be a scheme over a field $k$, and let $x$ be a $k$-rational point. Put $R = cal(O)_(X,x)$ and $frak(m) = frak(m)_(X,x)$. Then
+  $ frak(m)/frak(m)^2 simeq Omega^1_(X/k,x) tens_R k, quad [a] |-> d a tens 1 $
+  Indeed, $a |-> [a-a(x)]$ is a $k$-derivation into $frak(m)/frak(m)^2$ and induces the inverse. Dualizing gives
+  $ T_(X,x) simeq Der_k (R,k) simeq Hom_k (Omega^1_(X/k,x) tens_R k,k) $
+]
+
+For the algebraic and sheaf constructions, see #Stack("00RM") and #Stack("01UM").
+
+#remark[
+  Kähler differentials are the algebraic analogue of differential 1-forms. When $X/k$ is smooth, $Omega^1_(X/k)$ is locally free and is the sheaf of sections of the cotangent bundle. On a smooth affine scheme, it corresponds to a finite projective module, the algebraic counterpart of the Serre–Swan correspondence.
+]
+
+= Applications and Further Directions
+
+== Smooth and Étale
+
+Smoothness describes the existence of infinitesimal lifts; étaleness adds uniqueness.
+
+#definition(title:[Infinitesimal Lifting])[
+  Let $f:X -> S$ be locally of finite presentation. Consider every commutative square with $T$ affine and $i:T_0 -> T$ a closed immersion defined by an ideal $cal(I)$ satisfying $cal(I)^2=0$:
+
+  #web-diagram(diagram(spacing: 28pt, {
+    node((0, 0), $T_0$)
+    node((1, 0), $X$)
+    node((0, 1), $T$)
+    node((1, 1), $S$)
+    edge((0, 0), (1, 0), $u_0$, "->")
+    edge((0, 0), (0, 1), $i$, label-side: right, "->")
+    edge((1, 0), (1, 1), $f$, label-side: left, "->")
+    edge((0, 1), (1, 1), "->")
+    edge((0, 1), (1, 0), $u$, "->", stroke: (dash: "dashed"))
+  }))
+
+  We call $f$ _smooth_ if a lift $u$ exists, and _étale_ if it exists uniquely. Without the finite presentation hypothesis, these conditions define _formally smooth_ and _formally étale_ morphisms. For a general $T$, smoothness guarantees lifts locally on $T$.
+] <smooth-etale>
+
+#proposition(title:[Differentials and Local Coordinates])[
+  A smooth morphism is locally an étale morphism to some $AA^n_S$ followed by the projection to $S$. On such a neighborhood,
+  $ Omega^1_(X/S) simeq cal(O)_X^(plus.o n) $
+  In particular, it is locally free of rank $n$, the relative dimension. An étale morphism is exactly a smooth morphism of relative dimension zero; equivalently,
+  $ f " is étale" quad <==> quad f " is smooth and " Omega^1_(X/S)=0 $
+]
+
+#remark[
+  If a lift $u$ exists, any other lift differs from it by an element of
+  $ Hom_(cal(O)_(T_0))(u_0^* Omega^1_(X/S),cal(I)) $
+  This is the sheaf version of the derivation calculation above. Thus $Omega^1$ controls the choices of a lift; its vanishing alone does not guarantee existence.
+]
+
+#example[
+  The projection $AA^n_S -> S$ is smooth: on affine opens, lift the $n$ coordinate functions independently. For $B=R[t]/(g)$ with $g$ monic,
+  $ Omega^1_(B/R) simeq (B/(g'(t))) d t $
+  If $g'(t)$ is a unit in $B$, then $Spec B -> Spec R$ is étale. Across a square-zero extension, any lift $b$ of a root is corrected uniquely to $b-g(b)/g'(b)$; the Taylor expansion has no higher-order terms.
+]
+
+== Ramification
+
+#definition(title:[Unramified Morphisms])[
+  A morphism $f:X -> S$ locally of finite type is _unramified_ if every square-zero lifting problem above has at most one solution. Equivalently, $Omega^1_(X/S)=0$: differences of lifts are derivations, and the universal derivation detects all such differences.
+
+  Pointwise, $f$ is unramified at $x$ precisely when
+  $ Omega^1_(X/S,x)=0 quad <==> quad Omega^1_(X/S,x) tens_(cal(O)_(X,x)) kappa(x)=0 $
+  The equivalence follows from Nakayama's lemma. For a finite generically étale morphism, its _ramification locus_ is therefore $"Supp"(Omega^1_(X/S))$.
+] <unramified-morphisms>
+
+#proposition(title:[Local Criterion])[
+  Put $s=f(x)$. Then $f$ is unramified at $x$ if and only if
+  $ frak(m)_s cal(O)_(X,x)=frak(m)_x, quad kappa(x)/kappa(s) " is finite separable" $
+  Thus the local fibre is a separable field, with no infinitesimal thickening. For morphisms locally of finite presentation, étale is equivalent to flat and unramified.
+] <unramified-local-criterion>
+
+#example(title:[A Ramified Cover of the Line])[
+  Let $n>=2$ be invertible in $k$. The map $AA^1_k -> AA^1_k$ given by $t=u^n$ has
+  $ Omega^1_(k[u]/k[t]) simeq (k[u]/(n u^(n-1))) d u $
+  Indeed, the relation $d t=0$ becomes $n u^(n-1) d u=0$. Hence the map is étale away from $u=0$ and ramified at $0$, where the fibre is $Spec k[u]/(u^n)$.
+]
+
+=== Number-theoretic Interpretation
+
+Let $ell/k$ be a finite extension of number fields, with $A=cal(O)_k$ and $B=cal(O)_ell$. The morphism $f:Spec B -> Spec A$ is finite and flat. For nonzero primes $frak(q)$ above $frak(p)$, the _ramification index_ $e_(frak(q)/frak(p))$ is characterized by
+$ frak(p) B_(frak(q)) = (frak(q) B_(frak(q)))^(e_(frak(q)/frak(p))) $
+
+#proposition(title:[Arithmetic and Geometric Ramification])[
+  Since $kappa(frak(q))/kappa(frak(p))$ is an extension of finite fields, it is separable. The local criterion therefore gives
+  $ f " is étale at " frak(q) quad <==> quad (Omega^1_(B/A))_(frak(q))=0 quad <==> quad e_(frak(q)/frak(p))=1 $
+  Thus geometric and number-theoretic unramifiedness agree. The residue field degree may still exceed one: an unramified prime need not split completely.
+] <arithmetic-ramification>
+
+#remark(title:[Different and Discriminant])[
+  In this setting, the _different_ and _discriminant_ ideals can be described by
+  $ frak(D)_(B/A)=Ann_B (Omega^1_(B/A)), quad frak(d)_(B/A)=Nm_(ell/k)(frak(D)_(B/A)) $
+  The different cuts out the ramification locus in $Spec B$; the discriminant detects the primes of $A$ over which ramification occurs. If $B=A[alpha]$ with minimal polynomial $g$, then
+  $ Omega^1_(B/A) simeq (B/(g'(alpha))) d alpha, quad frak(D)_(B/A)=(g'(alpha)) $
+  This is the same derivative calculation as for $t=u^n$.
+]
+
+#example(title:[Gaussian Integers])[
+  For $B=ZZ[i]=ZZ[t]/(t^2+1)$, we obtain
+  $ Omega^1_(B/ZZ) simeq (B/(2i)) d i, quad frak(D)_(B/ZZ)=(2), quad frak(d)_(B/ZZ)=(4) $
+  Only $2$ ramifies: $(2)=(1+i)^2$ as ideals, so the prime $(1+i)$ has ramification index $2$. After inverting $2$, the map becomes finite étale.
+]
+
+For the local criterion and arithmetic interpretation, see #Stack("02GF") and #Stack("024Z").
+
+== Serre Duality
+
+Let $X$ be smooth and proper over a field $k$, of pure dimension $n$.
+
+#definition(title:[Canonical Bundle])[
+  Write $Omega^p_(X/k) := Lambda^p_(cal(O)_X) Omega^1_(X/k)$ for the sheaf of differential $p$-forms. The _canonical bundle_ is the line bundle
+  $ omega_X := Omega^n_(X/k) = det(Omega^1_(X/k)) $
+]
+
+#theorem(title:[Serre Duality])[
+  There is a canonical trace $tr_X:H^n (X,omega_X) -> k$. For every finite locally free sheaf $cal(E)$, cup product, evaluation, and trace give a perfect pairing
+  $ H^i(X,cal(E)) tens_k H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) -> k $
+  Equivalently, writing $V^or := Hom_k (V,k)$ for a vector space,
+  $ H^i(X,cal(E))^or simeq H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) $
+] <serre-duality>
+
+#example(title:[Curves])[
+  For a smooth proper geometrically connected curve $C/k$, we have $omega_C=Omega^1_(C/k)$ and
+  $ H^0(C,omega_C) simeq H^1(C,cal(O)_C)^or, quad H^1(C,omega_C) simeq k $
+  Thus the genus $g := h^1(C,cal(O)_C)$ also counts regular differentials: $h^0(C,omega_C)=g$. Here $h^i := dim_k H^i$.
+]
+
+== de Rham Cohomology Theory
+
+Let $X$ be a smooth scheme over a field $k$. Put $Omega^0_(X/k)=cal(O)_X$ and $Omega^p_(X/k)=Lambda^p_(cal(O)_X) Omega^1_(X/k)$.
+
+#definition(title:[de Rham Complex])[
+  The universal derivation extends to the _exterior derivative_ $d:Omega^p_(X/k) -> Omega^(p+1)_(X/k)$, determined locally by
+  $ d(a_0 d a_1 and dots and d a_p) = d a_0 and d a_1 and dots and d a_p $
+  It satisfies $d^2=0$ and the graded Leibniz rule
+  $ d(alpha and beta) = d alpha and beta + (-1)^p alpha and d beta, quad alpha in Omega^p_(X/k) $
+  Hence we obtain the _de Rham complex_
+  $ Omega^bullet_(X/k) := (cal(O)_X -> Omega^1_(X/k) -> Omega^2_(X/k) -> dots) $
+  with $Omega^p$ in degree $p$ and arrows given by $d$. The differential is $k$-linear, generally not $cal(O)_X$-linear.
+] <de-rham-complex>
+
+#definition(title:[de Rham Cohomology])[
+  The _algebraic de Rham cohomology_ is
+  $ H^r_dR (X/k) := bb(H)^r (X,Omega^bullet_(X/k)) $
+  where $bb(H)$ denotes hypercohomology. For $X=Spec A$, this is simply $H^r (Omega^bullet_(A/k))$; in general, hypercohomology also accounts for the gluing of local forms. Pullback of forms makes these groups contravariant in $X$.
+] <de-rham-cohomology>
+
+#example[
+  If $char k=0$, the complex for $AA^1_k$ is $k[t] -> k[t] d t$, with $f |-> f' d t$. Polynomial integration gives
+  $ H^0_dR (AA^1_k/k)=k, quad H^r_dR (AA^1_k/k)=0 quad (r>0) $
+  On $Spec k[t,t^(-1)]$, the form $d t/t$ is closed but not exact and generates $H^1_dR$. In characteristic $p>0$, already $d(t^p)=0$, so the calculation for $AA^1$ changes.
+]
+
+#theorem(title:[de Rham Comparison])[
+  For a smooth separated scheme $X$ of finite type over $CC$, integration gives a natural isomorphism
+  $ H^r_dR (X/CC) simeq H^r (X(CC),CC) $
+  where the right side is singular cohomology for the usual complex topology.
+]
+
+== Hodge Theory
+
+Let $X/k$ be smooth and proper. The de Rham complex records both the degree of a form and its sheaf cohomology degree.
+
+#definition(title:[Hodge Filtration])[
+  Let $Omega^(>=p)_(X/k)$ be the subcomplex obtained by setting degrees below $p$ to zero and retaining the original degrees. The _Hodge filtration_ is
+  $ F^p H^r_dR (X/k) := "im"(bb(H)^r (X,Omega^(>=p)_(X/k)) -> H^r_dR (X/k)) $
+  Its spectral sequence is
+  $ E_1^(p,q)=H^q (X,Omega^p_(X/k)) ==> H^(p+q)_dR (X/k) $
+  The dimensions $h^(p,q)(X) := h^q(X,Omega^p_(X/k))$ are the _Hodge numbers_.
+] <hodge-filtration>
+
+#theorem(title:[Hodge-to-de Rham Degeneration])[
+  If $char k=0$, this spectral sequence degenerates at $E_1$. Consequently,
+  $ gr_F^p H^r_dR (X/k) simeq H^(r-p)(X,Omega^p_(X/k)) $
+  where $gr_F^p=F^p/F^(p+1)$. In particular, $dim_k H^r_dR (X/k)=sum_(p+q=r) h^(p,q)(X)$. This gives the associated graded, without a preferred splitting over $k$.
+] <hodge-degeneration>
+
+#theorem(title:[Complex Hodge Decomposition])[
+  If $X$ is smooth and projective over $CC$, there is a canonical decomposition
+  $ H^r (X(CC),CC) = plus.o.big_(p+q=r) H^(p,q)(X), quad H^(p,q)(X) simeq H^q (X,Omega^p_(X/CC)) $
+  with $overline(H^(p,q)(X))=H^(q,p)(X)$. Under de Rham comparison, $F^p$ is the sum of the terms $H^(a,b)$ with $a>=p$.
+
+  Analytically, a Kähler metric gives each cohomology class a unique harmonic representative, and these split by type $(p,q)$. Together with Serre duality, this gives
+  $ h^(p,q)=h^(q,p)=h^(n-p,n-q), quad n=dim X $
+] <hodge-decomposition>
+
+#remark[
+  A finite-dimensional $QQ$-vector space $V$ with a decomposition $V tens_QQ CC=plus.o.big_(p+q=r) V^(p,q)$ satisfying $overline(V^(p,q))=V^(q,p)$ is a _pure rational Hodge structure of weight $r$_. Thus $H^r (X(CC),QQ)$ carries such a structure for smooth projective $X/CC$.
+]
+
+#example(title:[A Complex Curve])[
+  For a smooth projective connected curve $C/CC$ of genus $g$,
+  $ H^1(C(CC),CC) simeq H^0(C,Omega^1_(C/CC)) plus.o H^1(C,cal(O)_C) $
+  Each summand has dimension $g$, so the first Betti number is $2g$. Its Hodge numbers are $h^(0,0)=h^(1,1)=1$ and $h^(1,0)=h^(0,1)=g$; all others vanish.
+]
+
+For further reading, see #link("https://math.stanford.edu/~vakil/216blog/FOAGjun2711publicimperfect.pdf")[Vakil's notes, §23.4] for differentials, Hodge numbers, and duality, and #link("https://www.math.columbia.edu/~dejong/courses/schemes-spring-2019.html")[de Jong's Lecture XXII] for de Rham cohomology and degeneration.
