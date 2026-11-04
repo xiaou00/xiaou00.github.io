@@ -369,9 +369,9 @@ Let $X$ be smooth and proper over a field $k$, of pure dimension $n$.
 
 #theorem(title:[Serre Duality])[
   There is a canonical trace $tr_X:H^n (X,omega_X) -> k$. For every finite locally free sheaf $cal(E)$, cup product, evaluation, and trace give a perfect pairing
-  $ H^i(X,cal(E)) tens_k H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) -> k $
+  $ H^i (X,cal(E)) tens_k H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) -> k $
   Equivalently, writing $V^or := Hom_k (V,k)$ for a vector space,
-  $ H^i(X,cal(E))^or simeq H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) $
+  $ H^i (X,cal(E))^or simeq H^(n-i)(X,cal(E)^or tens_(cal(O)_X) omega_X) $
 ] <serre-duality>
 
 #example(title:[Curves])[
